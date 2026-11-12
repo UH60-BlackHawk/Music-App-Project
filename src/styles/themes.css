@@ -1,0 +1,207 @@
+/*
+ * Aux themes = design tokens. Every colour, font, radius, texture, icon stroke and motion curve
+ * in base.css reads from these variables, so adding a theme means adding one block here
+ * (plus an entry in THEMES in components/Brand.tsx). Tokens are scoped by [data-theme], which
+ * also lets Settings render live mini-previews by nesting a different data-theme.
+ */
+:root,
+[data-theme='nobles'] {
+  color-scheme: light;
+  --bg: #ffffff; --bg-image: none; --page-bg: #e6ecf5;
+  --surface: #f4f7fb; --surface-2: #e4ebf6; --field-bg: #ffffff;
+  --text: #0d1b30; --muted: #566379;
+  --accent: #0b3b8c; --accent-ink: #ffffff; --accent-text: #0b3b8c; --accent-2: #b8922a; --accent-3: #6f8fc7;
+  --good: #1b7f4b; --danger: #b3261e; --star: #b07d10;
+  --border: #d7dfec; --border-w: 1px; --border-style: solid;
+  --radius: 16px; --radius-sm: 10px; --btn-radius: 999px;
+  --font-head: 'Newsreader', Georgia, serif; --font-body: 'Inter', system-ui, -apple-system, sans-serif; --font-accent: 'Inter', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+  --head-weight: 700; --head-transform: none; --head-spacing: -0.01em; --head-scale: 1;
+  --kicker-size: 11px; --kicker-spacing: 0.12em; --kicker-transform: uppercase; --kicker-weight: 700; --kicker-bg: none; --kicker-pad: 0;
+  --btn-font: var(--font-body); --btn-transform: none; --btn-spacing: 0; --btn-shadow: none;
+  --shadow: 0 1px 2px rgba(13, 27, 48, 0.06), 0 6px 20px rgba(13, 27, 48, 0.06); --card-blur: none;
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1); --dur: 0.2s; --screen-anim: fade-up; --screen-dur: 0.28s; --press: 0.97;
+  --icon-stroke: 1.8; --icon-cap: round; --icon-join: round; --icon-fill: none;
+  --cover-filter: none; --tilt: 0deg;
+  --hero-bg: linear-gradient(155deg, #0b3b8c, #1a56a8); --hero-ink: #ffffff; --hero-muted: #cfdcf2; --hero-accent: #ffffff; --hero-accent-ink: #0b3b8c;
+  --trophy-a: #f8dc82; --trophy-b: #d9a520; --trophy-c: #f3c94f; --trophy-line: #6b4b05; --trophy-stroke: 2.5;
+  --wm-font: 'Newsreader', Georgia, serif; --wm-weight: 700; --wm-style: italic; --wm-transform: none; --wm-spacing: -0.03em; --wm-color: #0b3b8c;
+  --wm-grad: none; --wm-clip: border-box; --wm-shadow: none; --wm-filter: none; --wm-rotate: 0deg; --wm-pad: 0; --wm-border: 0 solid transparent;
+}
+
+/* Sleek Modern — monochrome, one accent, glass cards, geometric sans */
+[data-theme='sleek'] {
+  color-scheme: light;
+  --bg: #f1f1f3;
+  --bg-image: radial-gradient(60% 40% at 85% 0%, rgba(67, 56, 255, 0.16), transparent 70%), radial-gradient(50% 35% at 0% 30%, rgba(0, 0, 0, 0.07), transparent 70%);
+  --page-bg: #dcdce0;
+  --surface: rgba(255, 255, 255, 0.58); --surface-2: rgba(10, 10, 10, 0.06); --field-bg: rgba(255, 255, 255, 0.8);
+  --text: #0a0a0a; --muted: #57575d;
+  --accent: #4338ff; --accent-ink: #ffffff; --accent-text: #3329d6; --accent-2: #0a0a0a; --accent-3: #9d9da6;
+  --good: #1b7f4b; --danger: #b3261e; --star: #4338ff;
+  --border: rgba(10, 10, 10, 0.1); --border-w: 1px; --border-style: solid;
+  --radius: 24px; --radius-sm: 14px; --btn-radius: 999px;
+  --font-head: 'Outfit', 'Helvetica Neue', sans-serif; --font-body: 'Outfit', 'Helvetica Neue', sans-serif; --font-accent: 'Outfit', sans-serif;
+  --head-weight: 600; --head-transform: none; --head-spacing: -0.02em; --head-scale: 1;
+  --kicker-size: 11px; --kicker-spacing: 0.22em; --kicker-transform: uppercase; --kicker-weight: 400; --kicker-bg: none; --kicker-pad: 0;
+  --btn-font: var(--font-body); --btn-transform: none; --btn-spacing: 0.01em; --btn-shadow: none;
+  --shadow: 0 10px 40px rgba(10, 10, 10, 0.07); --card-blur: blur(18px) saturate(1.4);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1); --dur: 0.35s; --screen-anim: glass-in; --screen-dur: 0.45s; --press: 0.98;
+  --icon-stroke: 1.25; --icon-cap: round; --icon-join: round; --icon-fill: none;
+  --cover-filter: saturate(0.85); --tilt: 0deg;
+  --hero-bg: linear-gradient(160deg, #0a0a0a, #25252b); --hero-ink: #ffffff; --hero-muted: #c4c4cc; --hero-accent: #ffffff; --hero-accent-ink: #0a0a0a;
+  --trophy-a: #ffffff; --trophy-b: #d6d6dc; --trophy-c: #f4f4f6; --trophy-line: #0a0a0a; --trophy-stroke: 1.6;
+  --wm-font: 'Outfit', sans-serif; --wm-weight: 300; --wm-style: normal; --wm-transform: lowercase; --wm-spacing: 0.2em; --wm-color: #0a0a0a;
+  --wm-grad: none; --wm-clip: border-box; --wm-shadow: none; --wm-filter: none; --wm-rotate: 0deg; --wm-pad: 0; --wm-border: 0 solid transparent;
+}
+
+/* Fantasy Grunge — dark fairytale × '90s grunge: moss, plum, parchment, distressed, celestial */
+[data-theme='fantasy'] {
+  color-scheme: dark;
+  --bg: #171a14;
+  --bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .93 0 0 0 0 .89 0 0 0 0 .8 0 0 0 .11 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(1.5px 1.5px at 12% 8%, #ece3cc 50%, transparent 51%), radial-gradient(1px 1px at 78% 14%, #ece3cc 50%, transparent 51%), radial-gradient(1.5px 1.5px at 55% 4%, #b78ad6 50%, transparent 51%),
+    radial-gradient(70% 30% at 100% 0%, rgba(92, 58, 110, 0.55), transparent 70%);
+  --page-bg: #0d0f0b;
+  --surface: #222a1d; --surface-2: #33273c; --field-bg: #171a14;
+  --text: #ece3cc; --muted: #b6ac8f;
+  --accent: #b9c77a; --accent-ink: #171a14; --accent-text: #c9d68a; --accent-2: #b78ad6; --accent-3: #d9b56a;
+  --good: #9fd68a; --danger: #ff8f7d; --star: #e3c26a;
+  --border: #46503a; --border-w: 3px; --border-style: double;
+  --radius: 4px; --radius-sm: 3px; --btn-radius: 3px;
+  --font-head: 'IM Fell English SC', 'Palatino Linotype', serif; --font-body: 'Spectral', Georgia, serif; --font-accent: 'IM Fell English SC', serif;
+  --head-weight: 400; --head-transform: none; --head-spacing: 0.02em; --head-scale: 1.06;
+  --kicker-size: 12px; --kicker-spacing: 0.18em; --kicker-transform: none; --kicker-weight: 400; --kicker-bg: none; --kicker-pad: 0;
+  --btn-font: 'IM Fell English SC', serif; --btn-transform: none; --btn-spacing: 0.06em; --btn-shadow: inset 0 0 12px rgba(0, 0, 0, 0.35);
+  --shadow: 0 8px 28px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(0, 0, 0, 0.25); --card-blur: none;
+  --ease: cubic-bezier(0.4, 0, 0.2, 1); --dur: 0.4s; --screen-anim: ink-in; --screen-dur: 0.7s; --press: 0.98;
+  --icon-stroke: 1.5; --icon-cap: butt; --icon-join: miter; --icon-fill: none;
+  --cover-filter: sepia(0.35) saturate(0.75) contrast(1.05); --tilt: 0deg;
+  --hero-bg: radial-gradient(1.5px 1.5px at 20% 22%, #ece3cc 50%, transparent 51%), radial-gradient(1px 1px at 70% 12%, #ece3cc 50%, transparent 51%), radial-gradient(1px 1px at 88% 60%, #ece3cc 50%, transparent 51%), linear-gradient(160deg, #46305a, #232a1e 75%);
+  --hero-ink: #f1e8d2; --hero-muted: #cdbfdc; --hero-accent: #b9c77a; --hero-accent-ink: #171a14;
+  --trophy-a: #e9d08a; --trophy-b: #a8893a; --trophy-c: #6f7a3d; --trophy-line: #1c1a10; --trophy-stroke: 2.5;
+  --wm-font: 'Cinzel Decorative', 'IM Fell English SC', serif; --wm-weight: 700; --wm-style: normal; --wm-transform: none; --wm-spacing: 0.04em; --wm-color: #ece3cc;
+  --wm-grad: none; --wm-clip: border-box; --wm-shadow: 0 0 14px rgba(183, 138, 214, 0.75), 1px 1px 0 #46503a; --wm-filter: none; --wm-rotate: 0deg; --wm-pad: 0; --wm-border: 0 solid transparent;
+}
+
+/* Urban / Performative — streetwear editorial: concrete, condensed type, stickers, matcha */
+[data-theme='urban'] {
+  color-scheme: light;
+  --bg: #dcdcd8;
+  --bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .16 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --page-bg: #b9b9b5;
+  --surface: #f3f3ef; --surface-2: #cfcfca; --field-bg: #ffffff;
+  --text: #0b0b0b; --muted: #454542;
+  --accent: #a5cc5b; --accent-ink: #0b0b0b; --accent-text: #36500e; --accent-2: #0b0b0b; --accent-3: #e6e0cf;
+  --good: #2e6b12; --danger: #b3261e; --star: #0b0b0b;
+  --border: #0b0b0b; --border-w: 2px; --border-style: solid;
+  --radius: 0px; --radius-sm: 0px; --btn-radius: 0px;
+  --font-head: 'Anton', 'Arial Narrow', Impact, sans-serif; --font-body: 'Archivo', 'Helvetica Neue', Arial, sans-serif; --font-accent: 'Space Mono', ui-monospace, monospace;
+  --head-weight: 400; --head-transform: uppercase; --head-spacing: 0.01em; --head-scale: 1.12;
+  --kicker-size: 10.5px; --kicker-spacing: 0.08em; --kicker-transform: uppercase; --kicker-weight: 700; --kicker-bg: #a5cc5b; --kicker-pad: 2px 6px;
+  --btn-font: 'Anton', 'Arial Narrow', Impact, sans-serif; --btn-transform: uppercase; --btn-spacing: 0.05em; --btn-shadow: 3px 3px 0 #0b0b0b;
+  --shadow: 4px 4px 0 #0b0b0b; --card-blur: none;
+  --ease: steps(4, end); --dur: 0.12s; --screen-anim: slam; --screen-dur: 0.22s; --press: 0.96;
+  --icon-stroke: 2.6; --icon-cap: square; --icon-join: miter; --icon-fill: none;
+  --cover-filter: grayscale(0.45) contrast(1.15); --tilt: -1.5deg;
+  --hero-bg: #0b0b0b; --hero-ink: #f3f3ef; --hero-muted: #bdbdb8; --hero-accent: #a5cc5b; --hero-accent-ink: #0b0b0b;
+  --trophy-a: #f1f1ec; --trophy-b: #c9c9c3; --trophy-c: #a5cc5b; --trophy-line: #0b0b0b; --trophy-stroke: 3.5;
+  --wm-font: 'Anton', Impact, sans-serif; --wm-weight: 400; --wm-style: normal; --wm-transform: uppercase; --wm-spacing: 0.02em; --wm-color: #0b0b0b;
+  --wm-grad: linear-gradient(#a5cc5b, #a5cc5b); --wm-clip: border-box; --wm-shadow: none; --wm-filter: drop-shadow(3px 3px 0 #0b0b0b); --wm-rotate: -3deg; --wm-pad: 0 0.22em; --wm-border: 2px solid #0b0b0b;
+}
+
+/* Fleur — soft romantic floral: pastel pink, sage, cream, script accents, rounded */
+[data-theme='fleur'] {
+  color-scheme: light;
+  --bg: #fbf5ee;
+  --bg-image: radial-gradient(45% 28% at 100% 0%, rgba(240, 190, 200, 0.55), transparent 70%), radial-gradient(40% 25% at 0% 22%, rgba(170, 196, 160, 0.4), transparent 70%), radial-gradient(50% 30% at 90% 70%, rgba(246, 225, 228, 0.7), transparent 70%);
+  --page-bg: #f0e2de;
+  --surface: #fffaf6; --surface-2: #f6e1e4; --field-bg: #fffdfb;
+  --text: #45363a; --muted: #6f5c61;
+  --accent: #ad5069; --accent-ink: #ffffff; --accent-text: #9c4460; --accent-2: #8fa586; --accent-3: #e9b9c3;
+  --good: #4f7046; --danger: #a8323d; --star: #a8771c;
+  --border: #ecd3d7; --border-w: 1px; --border-style: solid;
+  --radius: 26px; --radius-sm: 16px; --btn-radius: 999px;
+  --font-head: 'Cormorant Garamond', 'Times New Roman', serif; --font-body: 'Nunito', system-ui, sans-serif; --font-accent: 'Parisienne', 'Snell Roundhand', cursive;
+  --head-weight: 700; --head-transform: none; --head-spacing: 0; --head-scale: 1.14;
+  --kicker-size: 18px; --kicker-spacing: 0; --kicker-transform: none; --kicker-weight: 400; --kicker-bg: none; --kicker-pad: 0;
+  --btn-font: var(--font-body); --btn-transform: none; --btn-spacing: 0.01em; --btn-shadow: 0 4px 14px rgba(173, 80, 105, 0.18);
+  --shadow: 0 6px 24px rgba(173, 80, 105, 0.1); --card-blur: none;
+  --ease: cubic-bezier(0.33, 1, 0.68, 1); --dur: 0.4s; --screen-anim: bloom; --screen-dur: 0.6s; --press: 0.97;
+  --icon-stroke: 1.5; --icon-cap: round; --icon-join: round; --icon-fill: none;
+  --cover-filter: saturate(0.8) brightness(1.06); --tilt: 0deg;
+  --hero-bg: radial-gradient(60% 60% at 100% 0%, #f3c9d2, transparent 70%), linear-gradient(160deg, #f8e4e7, #e3ecd9);
+  --hero-ink: #45363a; --hero-muted: #6b575c; --hero-accent: #ad5069; --hero-accent-ink: #ffffff;
+  --trophy-a: #f6dcc0; --trophy-b: #d99a8a; --trophy-c: #f1c9b5; --trophy-line: #7a4a4a; --trophy-stroke: 2;
+  --wm-font: 'Parisienne', 'Snell Roundhand', cursive; --wm-weight: 400; --wm-style: normal; --wm-transform: none; --wm-spacing: 0; --wm-color: #9c4460;
+  --wm-grad: none; --wm-clip: border-box; --wm-shadow: none; --wm-filter: none; --wm-rotate: -2deg; --wm-pad: 0; --wm-border: 0 solid transparent;
+}
+
+/* Hyperpop — maximalist neon, chrome gradients, Y2K bubble type, bouncy motion */
+[data-theme='hyperpop'] {
+  color-scheme: dark;
+  --bg: #0d0221;
+  --bg-image: linear-gradient(rgba(61, 240, 255, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(61, 240, 255, 0.07) 1px, transparent 1px),
+    radial-gradient(50% 30% at 100% 0%, rgba(255, 61, 240, 0.45), transparent 70%), radial-gradient(45% 28% at 0% 35%, rgba(61, 240, 255, 0.28), transparent 70%), radial-gradient(50% 30% at 80% 85%, rgba(182, 255, 61, 0.18), transparent 70%);
+  --bg-size: 28px 28px, 28px 28px, auto, auto, auto;
+  --page-bg: #05010f;
+  --surface: #1b0b3a; --surface-2: #2c1460; --field-bg: #0d0221;
+  --text: #ffffff; --muted: #cdbfff;
+  --accent: #ff3df0; --accent-ink: #14001f; --accent-text: #ff8af7; --accent-2: #b6ff3d; --accent-3: #3df0ff;
+  --good: #b6ff3d; --danger: #ff8fa3; --star: #b6ff3d;
+  --border: #6a3df0; --border-w: 2px; --border-style: solid;
+  --radius: 28px; --radius-sm: 18px; --btn-radius: 999px;
+  --font-head: 'Baloo 2', 'Arial Rounded MT Bold', sans-serif; --font-body: 'Rubik', system-ui, sans-serif; --font-accent: 'Baloo 2', sans-serif;
+  --head-weight: 800; --head-transform: none; --head-spacing: 0; --head-scale: 1.08;
+  --kicker-size: 12px; --kicker-spacing: 0.1em; --kicker-transform: uppercase; --kicker-weight: 800; --kicker-bg: none; --kicker-pad: 0;
+  --btn-font: 'Baloo 2', sans-serif; --btn-transform: none; --btn-spacing: 0.02em; --btn-shadow: 0 0 0 2px #14001f, 0 0 18px rgba(255, 61, 240, 0.7);
+  --shadow: 0 0 0 1px rgba(255, 61, 240, 0.5), 0 10px 34px rgba(255, 61, 240, 0.22); --card-blur: none;
+  --ease: cubic-bezier(0.34, 1.7, 0.5, 1); --dur: 0.32s; --screen-anim: glitch; --screen-dur: 0.42s; --press: 0.9;
+  --icon-stroke: 2.3; --icon-cap: round; --icon-join: round; --icon-fill: rgba(255, 61, 240, 0.28);
+  --cover-filter: saturate(1.5) contrast(1.1); --tilt: 0deg;
+  --hero-bg: linear-gradient(135deg, #ff7df5, #b6ff3d 58%, #3df0ff); --hero-ink: #14001f; --hero-muted: #3a1150; --hero-accent: #14001f; --hero-accent-ink: #ffffff;
+  --trophy-a: #ffffff; --trophy-b: #ff8af7; --trophy-c: #3df0ff; --trophy-line: #14001f; --trophy-stroke: 3;
+  --wm-font: 'Rubik Bubbles', 'Baloo 2', 'Arial Rounded MT Bold', sans-serif; --wm-weight: 400; --wm-style: normal; --wm-transform: none; --wm-spacing: 0.02em; --wm-color: transparent;
+  --wm-grad: linear-gradient(100deg, #ff3df0, #fff 35%, #3df0ff 60%, #b6ff3d); --wm-clip: text; --wm-shadow: none; --wm-filter: drop-shadow(2px 3px 0 #6a3df0); --wm-rotate: -3deg; --wm-pad: 0; --wm-border: 0 solid transparent;
+}
+
+/* Alternative Emo — black, charcoal, deep red/purple, scratchy handwriting, safety pins, MySpace */
+[data-theme='emo'] {
+  color-scheme: dark;
+  --bg: #0c0c0d;
+  --bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),
+    radial-gradient(60% 30% at 100% 0%, rgba(141, 91, 214, 0.22), transparent 70%), radial-gradient(50% 30% at 0% 100%, rgba(194, 31, 58, 0.2), transparent 70%);
+  --page-bg: #000000;
+  --surface: #19191c; --surface-2: #2a1d2e; --field-bg: #0c0c0d;
+  --text: #eeeaea; --muted: #aaa2ab;
+  --accent: #c21f3a; --accent-ink: #ffffff; --accent-text: #ff6f87; --accent-2: #8d5bd6; --accent-3: #eeeaea;
+  --good: #8fe0a8; --danger: #ff8f8f; --star: #ff4d6a;
+  --border: #46404c; --border-w: 2px; --border-style: dashed;
+  --radius: 2px; --radius-sm: 2px; --btn-radius: 2px;
+  --font-head: 'Permanent Marker', 'Marker Felt', 'Comic Sans MS', cursive; --font-body: 'Karla', system-ui, sans-serif; --font-accent: 'Rock Salt', 'Marker Felt', cursive;
+  --head-weight: 400; --head-transform: none; --head-spacing: 0.01em; --head-scale: 1;
+  --kicker-size: 9.5px; --kicker-spacing: 0.04em; --kicker-transform: lowercase; --kicker-weight: 400; --kicker-bg: none; --kicker-pad: 0;
+  --btn-font: 'Special Elite', 'Courier New', monospace; --btn-transform: lowercase; --btn-spacing: 0.04em; --btn-shadow: 2px 2px 0 #000;
+  --shadow: 3px 3px 0 #000; --card-blur: none;
+  --ease: cubic-bezier(0.7, 0, 0.3, 1); --dur: 0.18s; --screen-anim: flicker; --screen-dur: 0.4s; --press: 0.97;
+  --icon-stroke: 2.1; --icon-cap: square; --icon-join: bevel; --icon-fill: none;
+  --cover-filter: saturate(0.55) contrast(1.2) brightness(0.9); --tilt: 1deg;
+  --hero-bg: repeating-linear-gradient(135deg, #1c1c20 0 14px, #131316 14px 28px); --hero-ink: #eeeaea; --hero-muted: #b5adb6; --hero-accent: #c21f3a; --hero-accent-ink: #ffffff;
+  --trophy-a: #d8d2d2; --trophy-b: #8a8389; --trophy-c: #c21f3a; --trophy-line: #000000; --trophy-stroke: 3; --trophy-eye: #c21f3a;
+  --wm-font: 'Rock Salt', 'Permanent Marker', cursive; --wm-weight: 400; --wm-style: normal; --wm-transform: none; --wm-spacing: 0; --wm-color: #eeeaea;
+  --wm-grad: none; --wm-clip: border-box; --wm-shadow: 2px 2px 0 #c21f3a, -1px -1px 0 #8d5bd6; --wm-filter: none; --wm-rotate: -4deg; --wm-pad: 0; --wm-border: 0 solid transparent;
+}
+
+/* ---------- Theme motion ---------- */
+@keyframes fade-up { from { opacity: 0; transform: translateY(8px); } }
+@keyframes glass-in { from { opacity: 0; filter: blur(10px); transform: scale(1.015); } }
+@keyframes ink-in { from { opacity: 0; filter: blur(3px) sepia(1); } }
+@keyframes slam { from { transform: translateX(-28px); opacity: 0; } }
+@keyframes bloom { from { opacity: 0; transform: scale(0.96); filter: blur(4px); } }
+@keyframes glitch {
+  0% { opacity: 0; transform: translateX(-14px) skewX(8deg); filter: hue-rotate(90deg) saturate(3); clip-path: inset(0 0 60% 0); }
+  25% { opacity: 1; transform: translateX(10px) skewX(-6deg); clip-path: inset(30% 0 10% 0); }
+  50% { transform: translateX(-5px); filter: hue-rotate(-60deg); clip-path: inset(0 0 0 0); }
+  75% { transform: translateX(3px) scale(1.01); filter: none; }
+}
+@keyframes flicker { 0% { opacity: 0; } 12% { opacity: 0.9; } 20% { opacity: 0.2; } 34% { opacity: 1; } 42% { opacity: 0.55; } 60% { opacity: 1; } }
