@@ -2,16 +2,15 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run Aux (Chrome)",
-      "type": "chrome",
+      "name": "Run Aux",
+      "type": "node-terminal",
       "request": "launch",
-      "url": "http://localhost:5173/",
-      "webRoot": "${workspaceFolder}",
-      "preLaunchTask": "Aux: start"
+      "command": "npm install && npm run dev -- --port 5173 --strictPort --open",
+      "cwd": "${workspaceFolder}"
     },
     {
-      "name": "Run Aux (Edge)",
-      "type": "msedge",
+      "name": "Run Aux (Chrome, with debugger)",
+      "type": "chrome",
       "request": "launch",
       "url": "http://localhost:5173/",
       "webRoot": "${workspaceFolder}",

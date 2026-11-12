@@ -14,7 +14,7 @@ npm install
 npm run dev
 ```
 
-Or in VS Code: open this folder and press F5 ("Run Aux"). It installs dependencies, starts the dev server and opens the app in Chrome.
+Or in VS Code: open this folder and press F5 ("Run Aux"). It installs dependencies, starts the dev server and opens the app in your default browser.
 
 Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 digits work as the code. "Reset demo data" in Settings starts over.
 
