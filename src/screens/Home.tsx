@@ -89,7 +89,6 @@ export default function Home() {
         <Wordmark />
         <ThemeDecor />
         <div className="topbar-right">
-          <Link className="iconbtn" to="/party" aria-label="Listening parties"><Icon name="headphones" /></Link>
           <Link className="iconbtn" to="/settings" aria-label="Settings"><Icon name="settings" /></Link>
         </div>
       </header>

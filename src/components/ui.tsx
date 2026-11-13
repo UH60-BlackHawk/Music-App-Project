@@ -167,7 +167,7 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
   )
 }
 
-/** Search-and-pick sheet for tracks or albums; reused by recommend, nominate, party, and admin flows. */
+/** Search-and-pick sheet for tracks or albums; reused by recommend, nominate, and admin flows. */
 export function Picker({ open, onClose, onPick, type = 'track', title }: { open: boolean; onClose: () => void; onPick: (id: ID) => void; type?: ItemType; title?: string }) {
   const [q, setQ] = useState('')
   const ql = q.toLowerCase()

@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Data, ID, ItemType, NmaPhase, Party, Privacy, Report, ThemeId, User } from './types'
+import type { Data, ID, ItemType, NmaPhase, Privacy, Report, ThemeId, User } from './types'
 import { buildSeed, DAY, genListens, ME_TASTES, mulberry32, seedNominations, uid } from './data/seed'
-import { tid, trackList, tracks } from './data/catalog'
+import { tid } from './data/catalog'
 
 interface Actions {
   signIn(email: string, name: string, classYear: number): void
@@ -36,28 +36,13 @@ interface Actions {
   addNominee(eventId: ID, categoryId: ID, nominee: string): void
   setWinner(eventId: ID, categoryId: ID, nominee: string | null): void
   toggleLock(eventId: ID): void
-  createParty(name: string): ID
-  joinParty(id: ID): void
-  leaveParty(id: ID): void
-  addToQueue(partyId: ID, trackId: ID): void
-  voteQueue(partyId: ID, itemId: ID, dir: 1 | -1): void
-  nextTrack(partyId: ID): void
-  partyTick(partyId: ID): void
 }
 export type Store = Data & Actions
-
-const score = (votes: Record<ID, number>) => Object.values(votes).reduce((a, b) => a + b, 0)
-const advance = (p: Party): Party => {
-  if (!p.queue.length) return { ...p, now: null }
-  const sorted = [...p.queue].sort((a, b) => score(b.votes) - score(a.votes))
-  return { ...p, now: { trackId: sorted[0].trackId, startedAt: Date.now() }, queue: p.queue.filter((q) => q.id !== sorted[0].id) }
-}
 
 export const useStore = create<Store>()(
   persist(
     (set, get) => {
       const me = (patch: Partial<User>) => set((s) => ({ users: { ...s.users, me: { ...s.users.me, ...patch } } }))
-      const party = (id: ID, fn: (p: Party) => Party) => set((s) => ({ parties: s.parties.map((p) => (p.id === id ? fn(p) : p)) }))
       const badge = (b: string) => { const u = get().users.me; if (!u.badges.includes(b)) me({ badges: [...u.badges, b] }) }
       return {
         ...buildSeed(),
@@ -217,58 +202,10 @@ export const useStore = create<Store>()(
           events: s.events.map((e) => (e.id !== eventId ? e : { ...e, categories: e.categories.map((c) => (c.id !== categoryId ? c : { ...c, winner })) })),
         })),
         toggleLock: (eventId) => set((s) => ({ events: s.events.map((e) => (e.id === eventId ? { ...e, locked: !e.locked } : e)) })),
-
-        // ---- Listening party ----
-        createParty: (name) => {
-          const id = uid()
-          const code = Math.random().toString(36).slice(2, 7).toUpperCase()
-          set((s) => ({ parties: [{ id, name, hostId: 'me', code, members: ['me', 'u1', 'u3', 'u6'], queue: [], now: null }, ...s.parties] }))
-          return id
-        },
-        joinParty: (id) => party(id, (p) => (p.members.includes('me') ? p : { ...p, members: [...p.members, 'me'] })),
-        leaveParty: (id) => set((s) => ({
-          parties: s.parties.flatMap((p) => (p.id !== id ? [p] : p.hostId === 'me' ? [] : [{ ...p, members: p.members.filter((m) => m !== 'me') }])),
-        })),
-        addToQueue: (partyId, trackId) => party(partyId, (p) =>
-          p.queue.some((q) => q.trackId === trackId) ? p : { ...p, queue: [...p.queue, { id: uid(), trackId, addedBy: 'me', votes: { me: 1 } }] }),
-        voteQueue: (partyId, itemId, dir) => party(partyId, (p) => ({
-          ...p,
-          queue: p.queue.map((q) => {
-            if (q.id !== itemId) return q
-            const votes = { ...q.votes }
-            if (votes.me === dir) delete votes.me
-            else votes.me = dir
-            return { ...q, votes }
-          }),
-        })),
-        nextTrack: (partyId) => party(partyId, advance),
-        partyTick: (partyId) => party(partyId, (p) => {
-          // Simulates other members so the prototype feels live; a real build would sync over websockets.
-          if (!p.now || Date.now() - p.now.startedAt > tracks[p.now.trackId].dur * 1000) {
-            if (p.queue.length) return advance(p)
-          }
-          const bots = p.members.filter((m) => m !== 'me')
-          if (!bots.length) return p
-          const bot = bots[Math.floor(Math.random() * bots.length)]
-          const r = Math.random()
-          if (r < 0.5 && p.queue.length) {
-            const open = p.queue.filter((q) => q.votes[bot] === undefined)
-            if (!open.length) return p
-            const q = open[Math.floor(Math.random() * open.length)]
-            return { ...p, queue: p.queue.map((x) => (x.id === q.id ? { ...x, votes: { ...x.votes, [bot]: Math.random() < 0.8 ? 1 : -1 } } : x)) }
-          }
-          if (r > 0.82 && p.queue.length < 7) {
-            const t = trackList[Math.floor(Math.random() * trackList.length)]
-            if (p.queue.some((q) => q.trackId === t.id) || p.now?.trackId === t.id) return p
-            return { ...p, queue: [...p.queue, { id: uid(), trackId: t.id, addedBy: bot, votes: { [bot]: 1 } }] }
-          }
-          return p
-        }),
       }
     },
     { name: 'aux-v1' },
   ),
 )
 
-export const queueScore = score
 export type { Privacy }

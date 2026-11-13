@@ -225,17 +225,5 @@ export function buildSeed(now = Date.now()): Data {
       const noms = { song: ['Espresso', 'Juna', 'tv off', 'Apple'].map(lbl), album: ['Charm', 'GNX', 'BRAT'].map(albl), video: ['Taste', 'DENIAL IS A RIVER', 'Sticky'].map(lbl) }
       return others.flatMap((userId) => cats.map(([categoryId, n]) => ({ eventId: 'demo26', categoryId, userId, nominee: noms[categoryId][Math.floor(r() * n)] })))
     })(),
-    parties: [
-      {
-        id: 'party1', name: 'Senior Lounge Aux', hostId: 'u2', code: 'DAWGS', members: ['u2', 'u1', 'u6', 'u3', 'u11'],
-        now: { trackId: tid('squabble up'), startedAt: now - 40e3 },
-        queue: [
-          { id: 'q1', trackId: tid('Sticky'), addedBy: 'u6', votes: { u6: 1, u2: 1, u1: 1 } },
-          { id: 'q2', trackId: tid('Espresso'), addedBy: 'u3', votes: { u3: 1, u11: -1 } },
-          { id: 'q3', trackId: tid('Misery Business'), addedBy: 'u11', votes: { u11: 1, u1: 1 } },
-          { id: 'q4', trackId: tid('Juna'), addedBy: 'u1', votes: { u1: 1 } },
-        ],
-      },
-    ],
   }
 }

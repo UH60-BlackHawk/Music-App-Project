@@ -59,9 +59,6 @@ export interface PredCategory { id: ID; name: string; nominees: string[]; winner
 export interface PredEvent { id: ID; name: string; note: string; startsAt: number; locked: boolean; categories: PredCategory[] }
 export interface Pick { eventId: ID; categoryId: ID; userId: ID; nominee: string }
 
-export interface QueueItem { id: ID; trackId: ID; addedBy: ID; votes: Record<ID, number> }
-export interface Party { id: ID; name: string; hostId: ID; code: string; members: ID[]; queue: QueueItem[]; now: { trackId: ID; startedAt: number } | null }
-
 export interface Data {
   seededAt: number
   signedIn: boolean
@@ -81,5 +78,4 @@ export interface Data {
   nma: Nma
   events: PredEvent[]
   picks: Pick[]
-  parties: Party[]
 }

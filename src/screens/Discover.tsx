@@ -78,11 +78,6 @@ export default function Discover() {
             </div>
           </Section>
 
-          <Link to="/party" className="card promo">
-            <Icon name="headphones" size={28} />
-            <span><b>Listening Party</b><small>Share a queue. Vote on what plays next.</small></span>
-          </Link>
-
           <Section title="Classmates">
             <div className="list">
               {people.map((u) => (

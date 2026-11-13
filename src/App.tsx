@@ -11,7 +11,6 @@ import Predictions from './screens/Predictions'
 import Profile from './screens/Profile'
 import { AlbumPage, TrackPage } from './screens/Detail'
 import Recommend from './screens/Recommend'
-import { PartyList, PartyRoom } from './screens/Party'
 import Settings from './screens/Settings'
 import Admin from './screens/Admin'
 
@@ -44,8 +43,6 @@ function Shell() {
           <Route path="/track/:id" element={<TrackPage />} />
           <Route path="/album/:id" element={<AlbumPage />} />
           <Route path="/recommend/:id?" element={<Recommend />} />
-          <Route path="/party" element={<PartyList />} />
-          <Route path="/party/:id" element={<PartyRoom />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<Home />} />

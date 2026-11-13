@@ -32,7 +32,6 @@ Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 di
 | Nobles Leaderboard (week / month / all time, Trending) | Working, opted-in users only, aggregate counts only |
 | NMAs: nominations, voting, animated reveal, Castle Hall of Fame, badges | Working. Classmates' nominations and votes are simulated. |
 | Award predictions with free points | Working, with sample nominees entered through Admin |
-| Listening Party (shared queue, up/down votes) | Working, other listeners simulated |
 | Report, block, basic language filter, admin dashboard | Working |
 | Seven themes with instant switching | Working |
 
@@ -43,7 +42,7 @@ Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 di
 - React Router with hash routing, so the build can be hosted on any static host
 - Plain CSS driven by design tokens
 
-Suggested production backend: Supabase (Postgres, email auth restricted to the school domain, row-level security enforcing the privacy rules, realtime for parties).
+Suggested production backend: Supabase (Postgres, email auth restricted to the school domain, row-level security enforcing the privacy rules).
 
 ## Layout
 
@@ -73,7 +72,6 @@ src/
 - **DailyConfig**: manual or automatic, metric (most shared / highest rated in 24h)
 - **Nma**: season, phase, categories, nominations, votes, proposals, ballot, winners, hall of fame, integrity flags
 - **PredEvent / Pick**: events, categories, nominees, winner; picks lock at start time
-- **Party**: host, members, queue items with per-user votes, now playing
 
 ## Themes
 
