@@ -124,11 +124,11 @@ export const useStore = create<Store>()(
             nma: {
               ...s.nma,
               proposals: s.nma.proposals.map((x) => (x.id === id ? { ...x, status: approve ? ('approved' as const) : ('declined' as const) } : x)),
-              categories: approve ? [...s.nma.categories, { id: uid(), name: p.name, type: 'track' as const, emoji: '✨', active: true }] : s.nma.categories,
+              categories: approve ? [...s.nma.categories, { id: uid(), name: p.name, type: 'track' as const, icon: 'sparkle', active: true }] : s.nma.categories,
             },
           }
         }),
-        addCategory: (name, type) => set((s) => ({ nma: { ...s.nma, categories: [...s.nma.categories, { id: uid(), name, type, emoji: '✨', active: true }] } })),
+        addCategory: (name, type) => set((s) => ({ nma: { ...s.nma, categories: [...s.nma.categories, { id: uid(), name, type, icon: 'sparkle', active: true }] } })),
         toggleCategory: (id) => set((s) => ({ nma: { ...s.nma, categories: s.nma.categories.map((c) => (c.id === id ? { ...c, active: !c.active } : c)) } })),
         setPhase: (phase) => {
           const s = get()
@@ -172,7 +172,7 @@ export const useStore = create<Store>()(
               if (mine) calledIt = true
               const nominatorId = mine ? 'me' : noms[0]?.userId ?? null
               winners[c.id] = { itemId, nominatorId }
-              hall.unshift({ id: `h-${n.season}-${c.id}`, season: n.season, category: c.name, emoji: c.emoji, itemType: c.type, itemId, nominatorId })
+              hall.unshift({ id: `h-${n.season}-${c.id}`, season: n.season, category: c.name, icon: c.icon, itemType: c.type, itemId, nominatorId })
             }
             set({ nma: { ...n, phase, winners, hall } })
             if (calledIt) badge('Called It')
@@ -195,7 +195,7 @@ export const useStore = create<Store>()(
         toggleLock: (eventId) => set((s) => ({ events: s.events.map((e) => (e.id === eventId ? { ...e, locked: !e.locked } : e)) })),
       }
     },
-    { name: 'aux-v1' },
+    { name: 'aux-v2' },
   ),
 )
 

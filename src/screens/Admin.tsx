@@ -3,7 +3,7 @@ import { useStore } from '../store'
 import type { ItemType } from '../types'
 import { albums, itemTitle, tracks } from '../data/catalog'
 import { dailyPick } from '../lib/select'
-import { Empty, Picker, Section, Seg, TopBar } from '../components/ui'
+import { Empty, Icon, Picker, Section, Seg, TopBar } from '../components/ui'
 
 type Tab = 'daily' | 'nma' | 'pred' | 'mod'
 
@@ -60,7 +60,7 @@ export default function Admin() {
             <div className="card stack">
               {s.nma.categories.map((c) => (
                 <div className="toggle-row" key={c.id}>
-                  <span><b>{c.emoji} {c.name}</b><small>{c.type === 'track' ? 'Song' : 'Album'} · {c.active ? 'active' : 'retired'}</small></span>
+                  <span><b className="with-icon"><Icon name={c.icon} size={16} /> {c.name}</b><small>{c.type === 'track' ? 'Song' : 'Album'} · {c.active ? 'active' : 'retired'}</small></span>
                   <button className="btn sm" onClick={() => s.toggleCategory(c.id)}>{c.active ? 'Retire' : 'Restore'}</button>
                 </div>
               ))}
@@ -107,7 +107,7 @@ export default function Admin() {
                 {c.nominees.map((n) => (
                   <div className="toggle-row" key={n}>
                     <span><b>{n}</b>{c.winner === n && <small>Winner</small>}</span>
-                    <button className={`btn sm ${c.winner === n ? 'primary' : ''}`} onClick={() => s.setWinner(ev.id, c.id, c.winner === n ? null : n)}>{c.winner === n ? 'Winner ✓' : 'Set winner'}</button>
+                    <button className={`btn sm ${c.winner === n ? 'primary' : ''}`} onClick={() => s.setWinner(ev.id, c.id, c.winner === n ? null : n)}>{c.winner === n ? <><Icon name="check" size={14} /> Winner</> : 'Set winner'}</button>
                   </div>
                 ))}
                 <form className="comment-form" onSubmit={(e) => { e.preventDefault(); const v = nominee[ev.id + c.id]?.trim(); if (v) { s.addNominee(ev.id, c.id, v); setNominee({ ...nominee, [ev.id + c.id]: '' }) } }}>

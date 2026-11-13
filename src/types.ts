@@ -34,11 +34,11 @@ export interface Comment { id: ID; userId: ID; targetId: ID; text: string; at: n
 export interface Report { id: ID; reporterId: ID; kind: 'comment' | 'review' | 'user' | 'rec'; targetId: ID; reason: string; at: number; status: 'open' | 'removed' | 'dismissed' }
 export interface DailyConfig { mode: 'manual' | 'auto'; metric: 'shared' | 'rated'; trackId: ID; albumId: ID }
 
-export interface NmaCategory { id: ID; name: string; type: ItemType; emoji: string; active: boolean }
+export interface NmaCategory { id: ID; name: string; type: ItemType; icon: string; active: boolean }
 export interface Nomination { id: ID; categoryId: ID; itemId: ID; userId: ID; at: number }
 export interface Vote { categoryId: ID; userId: ID; itemId: ID }
 export interface Proposal { id: ID; userId: ID; name: string; status: 'open' | 'approved' | 'declined' }
-export interface HallEntry { id: ID; season: string; category: string; emoji: string; itemType: ItemType; itemId: ID; nominatorId: ID | null }
+export interface HallEntry { id: ID; season: string; category: string; icon: string; itemType: ItemType; itemId: ID; nominatorId: ID | null }
 export interface Flag { id: ID; text: string; detail: string; status: 'open' | 'cleared' | 'voided' }
 export type NmaPhase = 'nominations' | 'voting' | 'reveal'
 export interface Nma {

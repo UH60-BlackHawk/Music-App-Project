@@ -35,7 +35,7 @@ function Daily() {
       </Link>
       <div className="daily-actions">
         <QuickRate type={tab} id={id} />
-        <button className="chip" onClick={() => setOpen(!open)}>💬 <b>{nComments}</b></button>
+        <button className="chip" onClick={() => setOpen(!open)} aria-label={`${nComments} comments`}><Icon name="comment" size={15} /> <b>{nComments}</b></button>
       </div>
       {open && <Comments targetId={target} />}
     </section>

@@ -78,15 +78,15 @@ const PEOPLE: [User, Tastes][] = [
 ]
 
 export const DEFAULT_CATEGORIES: NmaCategory[] = [
-  { id: 'soty', name: 'Song of the Year', type: 'track', emoji: '🏆', active: true },
-  { id: 'aoty', name: 'Album of the Year', type: 'album', emoji: '💿', active: true },
-  { id: 'discovery', name: 'Best New Discovery', type: 'track', emoji: '🔭', active: true },
-  { id: 'underrated', name: 'Most Underrated', type: 'track', emoji: '💎', active: true },
-  { id: 'study', name: 'Best Study Song', type: 'track', emoji: '📚', active: true },
-  { id: 'gameday', name: 'Best Game Day Song', type: 'track', emoji: '🏟️', active: true },
-  { id: 'bus', name: 'Best Bus Ride Song', type: 'track', emoji: '🚌', active: true },
-  { id: 'breakup', name: 'Best Breakup Song', type: 'track', emoji: '💔', active: true },
-  { id: 'throwback', name: 'Best Throwback', type: 'track', emoji: '📼', active: true },
+  { id: 'soty', name: 'Song of the Year', type: 'track', icon: 'trophy', active: true },
+  { id: 'aoty', name: 'Album of the Year', type: 'album', icon: 'disc', active: true },
+  { id: 'discovery', name: 'Best New Discovery', type: 'track', icon: 'compass', active: true },
+  { id: 'underrated', name: 'Most Underrated', type: 'track', icon: 'gem', active: true },
+  { id: 'study', name: 'Best Study Song', type: 'track', icon: 'book', active: true },
+  { id: 'gameday', name: 'Best Game Day Song', type: 'track', icon: 'megaphone', active: true },
+  { id: 'bus', name: 'Best Bus Ride Song', type: 'track', icon: 'bus', active: true },
+  { id: 'breakup', name: 'Best Breakup Song', type: 'track', icon: 'heartbreak', active: true },
+  { id: 'throwback', name: 'Best Throwback', type: 'track', icon: 'cassette', active: true },
 ]
 
 const CANDIDATES: Record<ID, ID[]> = {
@@ -153,7 +153,7 @@ export function buildSeed(now = Date.now()): Data {
     ['study', 'Pink + White', 'u9'], ['gameday', 'SICKO MODE', 'u6'], ['bus', 'Stick Season', 'u5'], ['breakup', 'Kill Bill', 'u7'], ['throwback', 'Dreams', 'u8'],
   ] as const).map(([cid, title, nom]) => {
     const c = DEFAULT_CATEGORIES.find((x) => x.id === cid)!
-    return { id: `h-s26-${cid}`, season: 'Spring 2026', category: c.name, emoji: c.emoji, itemType: c.type, itemId: c.type === 'track' ? tid(title) : alid(title), nominatorId: nom }
+    return { id: `h-s26-${cid}`, season: 'Spring 2026', category: c.name, icon: c.icon, itemType: c.type, itemId: c.type === 'track' ? tid(title) : alid(title), nominatorId: nom }
   })
 
   const dailyTrack = tid('Juna')

@@ -9,6 +9,7 @@ import { moderate } from '../lib/select'
 import { Trophy } from '../components/Brand'
 import { Cover, Empty, Icon, Picker, Section, Seg } from '../components/ui'
 
+export const BADGE_ICON: Record<string, string> = { 'Called It': 'sparkle', Voter: 'ballot', Nominator: 'pen' }
 const PHASES: [NmaPhase, string][] = [['nominations', 'Nominations'], ['voting', 'Voting'], ['reveal', 'Reveal']]
 const closes = (at: number) => {
   const left = at - Date.now()
@@ -52,7 +53,7 @@ function Nominations() {
           const auto = new Set(noms.filter((n) => n.userId === 'auto').map((n) => n.itemId))
           return (
             <div className="card stack" key={c.id}>
-              <div className="cat-head"><span className="cat-emoji">{c.emoji}</span><h3>{c.name}</h3><span className="pill">{c.type === 'track' ? 'Song' : 'Album'}</span></div>
+              <div className="cat-head"><span className="cat-icon"><Icon name={c.icon} size={20} /></span><h3>{c.name}</h3><span className="pill">{c.type === 'track' ? 'Song' : 'Album'}</span></div>
               {mine
                 ? <ItemLine c={c} id={mine.itemId} right={<button className="btn sm" onClick={() => setPickFor(c)}>Change</button>} />
                 : <button className="btn primary block" onClick={() => setPickFor(c)}><Icon name="plus" size={16} /> Nominate</button>}
@@ -90,7 +91,7 @@ function Voting() {
         const mine = myVotes.find((v) => v.categoryId === c.id)?.itemId
         return (
           <div className="card stack" key={c.id}>
-            <div className="cat-head"><span className="cat-emoji">{c.emoji}</span><h3>{c.name}</h3></div>
+            <div className="cat-head"><span className="cat-icon"><Icon name={c.icon} size={20} /></span><h3>{c.name}</h3></div>
             {s.nma.ballot[c.id].map((id) => (
               <button key={id} className={`ballot ${mine === id ? 'on' : ''}`} disabled={closed} onClick={() => s.vote(c.id, id)} aria-pressed={mine === id}>
                 <ItemLine c={c} id={id} right={<span className="tick">{mine === id && <Icon name="check" size={16} />}</span>} />
@@ -118,7 +119,7 @@ function Hall() {
                 <Trophy size={30} />
                 <Cover id={h.itemId} size={46} />
                 <span className="row-text">
-                  <span className="kicker">{h.emoji} {h.category}</span>
+                  <span className="kicker">{h.category}</span>
                   <span className="row-title">{itemTitle(h.itemType, h.itemId)}</span>
                   <span className="row-sub">{itemArtist(h.itemType, h.itemId)}{h.nominatorId && users[h.nominatorId] ? ` · nominated by ${users[h.nominatorId].name}` : ''}</span>
                 </span>
@@ -181,7 +182,7 @@ export default function Awards() {
 
           <Section title="Your badges">
             <div className="chips">
-              {s.users.me.badges.length ? s.users.me.badges.map((b) => <span key={b} className="chip static badge">🏅 {b}</span>) : <Empty>Nominate or vote to earn your first badge. Get “Called It” when your nomination wins.</Empty>}
+              {s.users.me.badges.length ? s.users.me.badges.map((b) => <span key={b} className="chip static badge"><Icon name={BADGE_ICON[b] ?? 'medal'} size={15} /> {b}</span>) : <Empty>Nominate or vote to earn your first badge. Get “Called It” when your nomination wins.</Empty>}
             </div>
           </Section>
         </>
@@ -224,7 +225,8 @@ export function Ceremony() {
       {c && (
         <div className="cer-stage" key={c.id}>
           <div className="kicker">Award {i + 1} of {cats.length}</div>
-          <h2 className="cer-cat">{c.emoji} {c.name}</h2>
+          <span className="cer-icon"><Icon name={c.icon} size={30} /></span>
+          <h2 className="cer-cat">{c.name}</h2>
           {stage === 'drum' ? (
             <div className="envelope" aria-label="Opening the envelope"><span>And the Golden Bulldog goes to…</span></div>
           ) : (
@@ -238,7 +240,7 @@ export function Ceremony() {
                 <h1>{itemTitle(c.type, s.nma.winners[c.id].itemId)}</h1>
                 <p className="detail-sub">{itemArtist(c.type, s.nma.winners[c.id].itemId)}</p>
                 {s.nma.winners[c.id].nominatorId && (
-                  <p className="pill big">{s.nma.winners[c.id].nominatorId === 'me' ? '🔮 You called it!' : `Nominated by ${s.users[s.nma.winners[c.id].nominatorId!]?.name}`}</p>
+                  <p className="pill big">{s.nma.winners[c.id].nominatorId === 'me' ? <><Icon name="sparkle" size={15} /> You called it!</> : `Nominated by ${s.users[s.nma.winners[c.id].nominatorId!]?.name}`}</p>
                 )}
               </div>
               <button className="btn primary big" onClick={() => setI(i + 1)}>{i + 1 < cats.length ? 'Next award' : 'Finish'}</button>

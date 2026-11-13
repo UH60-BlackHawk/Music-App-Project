@@ -21,12 +21,13 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 - **NMAs**: results stay hidden until the reveal; one vote per student per category; winners get a Golden Bulldog shown on the item page and the nominator's profile.
 - **Predictions** award free points only. No money or purchasable currency, ever.
 - **No emoji reactions.** They were removed on request. Song of the Day and recommendation cards carry an inline star rating (`QuickRate`) instead; the full rating and review form stays on the song / album page.
+- **No emoji characters anywhere in the UI.** Use the `Icon` component (`ICONS` in `src/components/ui.tsx`) so icons follow the theme's stroke style. Award categories and badges store an icon name, not an emoji. The ★ rating glyphs are the one exception.
 - **Cover art is generated** (`Cover` in `src/components/ui.tsx`). Do not add real album artwork.
 - **No school API is assumed.** `?embed=1` drops the phone frame for future embedding in the Nobles app.
 
 ## What is simulated
 
-- Everything runs in the browser; state is a Zustand store persisted to `localStorage` under `aux-v1` (`src/store.ts`). There is no backend, so nothing is shared between devices. Suggested next step is Supabase.
+- Everything runs in the browser; state is a Zustand store persisted to `localStorage` under `aux-v2` (`src/store.ts`). There is no backend, so nothing is shared between devices. Suggested next step is Supabase.
 - The other students, their listens, nominations, votes and prediction picks are seeded (`src/data/seed.ts`).
 - Connecting Spotify imports sample listens unless `VITE_SPOTIFY_CLIENT_ID` is set. The real adapter (`src/services/spotify.ts`) has not been tested against a live Spotify app, and its data only appears under "Live from your Spotify" in Settings; it does not yet feed profiles, charts or recommendations.
 - Admin mode is a Settings toggle, on by default, so the awards phases can be advanced in the demo.

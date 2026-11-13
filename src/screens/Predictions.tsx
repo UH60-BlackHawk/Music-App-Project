@@ -32,7 +32,7 @@ export default function Predictions() {
               {c.nominees.map((n) => (
                 <button key={n} className={`ballot text ${mine === n ? 'on' : ''} ${c.winner === n ? 'won' : ''}`} disabled={locked} onClick={() => s.pick(ev.id, c.id, n)} aria-pressed={mine === n}>
                   <span>{n}</span>
-                  <span className="tick">{c.winner === n ? '🏆' : mine === n ? <Icon name="check" size={16} /> : null}</span>
+                  <span className="tick">{c.winner === n ? <Icon name="trophy" size={16} /> : mine === n ? <Icon name="check" size={16} /> : null}</span>
                 </button>
               ))}
             </div>

@@ -7,8 +7,8 @@ import type { ID } from '../types'
 import { Trophy } from '../components/Brand'
 import { Avatar, Cover, Empty, Icon, ReportButton, Section, Sheet, Stars, TopBar, TrackRow } from '../components/ui'
 import { FollowButton } from './Discover'
+import { BADGE_ICON } from './Awards'
 
-const BADGE_ICON: Record<string, string> = { 'Called It': '🔮', Voter: '🗳️', Nominator: '✍️' }
 
 export default function Profile() {
   const { id = 'me' } = useParams()
@@ -67,7 +67,7 @@ export default function Profile() {
               </Link>
             ))}
           </div>
-          <div className="chips">{u.badges.map((b) => <span className="chip static badge" key={b}>{BADGE_ICON[b] ?? '🏅'} {b}</span>)}</div>
+          <div className="chips">{u.badges.map((b) => <span className="chip static badge" key={b}><Icon name={BADGE_ICON[b] ?? 'medal'} size={15} /> {b}</span>)}</div>
         </Section>
       )}
 
