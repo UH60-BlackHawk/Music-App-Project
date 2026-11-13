@@ -101,7 +101,7 @@ export const useStore = create<Store>()(
         }),
         setDaily: (patch) => set((s) => ({ daily: { ...s.daily, ...patch } })),
 
-        // ---- Noble Music Awards ----
+        // ---- Nobles Music Awards ----
         nominate: (categoryId, itemId) => {
           set((s) => ({
             nma: {

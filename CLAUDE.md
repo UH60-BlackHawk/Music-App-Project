@@ -17,6 +17,7 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 - **Best-part clips** store a track id and start second only. Never store or bundle audio.
 - **Leaderboard** uses opted-in users only and shows aggregate counts, never who listened to what.
 - **Privacy** goes through one function, `canSee` in `src/lib/select.ts`. Any new surface that shows a person's activity must use it. Follower / following lists are visible on every profile (blocked users hidden).
+- **Naming**: the school's nickname is "Nobles", never "Noble". The awards are the "Nobles Music Awards" (NMAs). Only the full name "Noble and Greenough School" uses the singular.
 - **NMAs**: results stay hidden until the reveal; one vote per student per category; winners get a Golden Bulldog shown on the item page and the nominator's profile.
 - **Predictions** award free points only. No money or purchasable currency, ever.
 - **No emoji reactions.** They were removed on request. Song of the Day and recommendation cards carry an inline star rating (`QuickRate`) instead; the full rating and review form stays on the song / album page.

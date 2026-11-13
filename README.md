@@ -1,6 +1,6 @@
 # Aux
 
-A social music app prototype for students at Noble and Greenough School. Whoever has the aux picks the music: share what you're listening to, discover songs through friends, recommend a track with its 30-second "best part", rate and review, climb the Nobles charts, and run the Noble Music Awards (NMAs).
+A social music app prototype for students at Noble and Greenough School. Whoever has the aux picks the music: share what you're listening to, discover songs through friends, recommend a track with its 30-second "best part", rate and review, climb the Nobles charts, and run the Nobles Music Awards (NMAs).
 
 This is a mobile-first web prototype. It runs entirely in the browser on seeded sample data, so it feels alive before any real accounts are connected.
 

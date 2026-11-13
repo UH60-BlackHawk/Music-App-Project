@@ -141,7 +141,7 @@ export default function Awards() {
     <>
       <header className="pagehead awards-head">
         <div>
-          <div className="kicker">The Noble Music Awards</div>
+          <div className="kicker">The Nobles Music Awards</div>
           <h1>{s.nma.season} NMAs</h1>
         </div>
         <Trophy size={54} />
@@ -217,7 +217,7 @@ export function Ceremony() {
         <div className="cer-stage intro">
           <div className="kicker">Live from the Castle</div>
           <Trophy size={150} />
-          <h1>The {s.nma.season}<br />Noble Music Awards</h1>
+          <h1>The {s.nma.season}<br />Nobles Music Awards</h1>
           <button className="btn primary big" onClick={() => setI(0)}>Begin</button>
         </div>
       )}

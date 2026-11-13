@@ -104,7 +104,7 @@ export default function Welcome() {
         </div>
       )}
 
-      <div className="welcome-foot"><Trophy size={44} /><span className="fine">Home of the Noble Music Awards</span></div>
+      <div className="welcome-foot"><Trophy size={44} /><span className="fine">Home of the Nobles Music Awards</span></div>
     </main>
   )
 }
