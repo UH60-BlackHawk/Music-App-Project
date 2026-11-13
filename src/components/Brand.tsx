@@ -2,25 +2,33 @@ import { useId } from 'react'
 import type { ThemeId } from '../types'
 import { useStore } from '../store'
 
-export const THEMES: { id: ThemeId; name: string; blurb: string }[] = [
-  { id: 'nobles', name: 'Nobles', blurb: 'Clean white, Nobles blue' },
-  { id: 'sleek', name: 'Sleek Modern', blurb: 'Glass, mono, one accent' },
-  { id: 'fantasy', name: 'Fantasy Grunge', blurb: 'Moss, plum, parchment' },
-  { id: 'urban', name: 'Urban / Performative', blurb: 'Concrete, stickers, matcha' },
-  { id: 'fleur', name: 'Fleur', blurb: 'Pressed flowers, pastel' },
-  { id: 'hyperpop', name: 'Hyperpop', blurb: 'Neon, chrome, Y2K' },
-  { id: 'emo', name: 'Alternative Emo', blurb: 'Black, red, safety pins' },
-  { id: 'vintage', name: 'Vintage Jukebox', blurb: '1940s–60s diner and vinyl' },
-  { id: 'ocean', name: 'Ocean', blurb: 'Deep water, aqua, coral' },
-  { id: 'garden', name: 'Garden', blurb: 'Leafy greens and blooms' },
-  { id: 'country', name: 'Country', blurb: 'Dirt road, rust, denim' },
-  { id: 'poppunk', name: 'Pop Punk', blurb: 'Neon, checkerboard, spray paint' },
-  { id: 'typewriter', name: 'Typewriter', blurb: 'Black ink on paper' },
-  { id: 'darkfantasy', name: 'Dark Fantasy', blurb: 'Soot, blood, iron, bone' },
-  { id: 'medieval', name: 'Medieval', blurb: 'Parchment and gold leaf' },
-  { id: 'wizard', name: 'Wizarding School', blurb: 'Candlelit castle at midnight' },
-  { id: 'glass', name: 'Liquid Glass', blurb: 'Sky, clouds, translucency' },
-  { id: 'cartoon', name: 'Ink & Paint', blurb: 'Hand-drawn 1930s cartoon' },
+export const THEME_CATEGORIES = ['Classic', 'Music scenes', 'Fantasy & storybook', 'Nature', 'Seasonal'] as const
+export type ThemeCategory = (typeof THEME_CATEGORIES)[number]
+
+export const THEMES: { id: ThemeId; category: ThemeCategory; name: string; blurb: string }[] = [
+  { id: 'nobles', category: 'Classic', name: 'Nobles', blurb: 'Clean white, Nobles blue' },
+  { id: 'sleek', category: 'Classic', name: 'Sleek Modern', blurb: 'Glass, mono, one accent' },
+  { id: 'fantasy', category: 'Fantasy & storybook', name: 'Fantasy Grunge', blurb: 'Moss, plum, parchment' },
+  { id: 'urban', category: 'Music scenes', name: 'Urban / Performative', blurb: 'Concrete, stickers, matcha' },
+  { id: 'fleur', category: 'Nature', name: 'Fleur', blurb: 'Pressed flowers, pastel' },
+  { id: 'hyperpop', category: 'Music scenes', name: 'Hyperpop', blurb: 'Neon, chrome, Y2K' },
+  { id: 'emo', category: 'Music scenes', name: 'Alternative Emo', blurb: 'Black, red, safety pins' },
+  { id: 'vintage', category: 'Music scenes', name: 'Vintage Jukebox', blurb: '1940s–60s diner and vinyl' },
+  { id: 'ocean', category: 'Nature', name: 'Ocean', blurb: 'Deep water, aqua, coral' },
+  { id: 'garden', category: 'Nature', name: 'Garden', blurb: 'Leafy greens and blooms' },
+  { id: 'country', category: 'Music scenes', name: 'Country', blurb: 'Dirt road, rust, denim' },
+  { id: 'poppunk', category: 'Music scenes', name: 'Pop Punk', blurb: 'Neon, checkerboard, spray paint' },
+  { id: 'typewriter', category: 'Classic', name: 'Typewriter', blurb: 'Black ink on paper' },
+  { id: 'darkfantasy', category: 'Fantasy & storybook', name: 'Dark Fantasy', blurb: 'Soot, blood, iron, bone' },
+  { id: 'medieval', category: 'Fantasy & storybook', name: 'Medieval', blurb: 'Parchment and gold leaf' },
+  { id: 'wizard', category: 'Fantasy & storybook', name: 'Wizarding School', blurb: 'Candlelit castle at midnight' },
+  { id: 'glass', category: 'Classic', name: 'Liquid Glass', blurb: 'Sky, clouds, translucency' },
+  { id: 'cartoon', category: 'Fantasy & storybook', name: 'Ink & Paint', blurb: 'Hand-drawn 1930s cartoon' },
+  { id: 'jazz', category: 'Music scenes', name: 'Jazz Club', blurb: 'Smoke, brass, midnight blue' },
+  { id: 'spring', category: 'Seasonal', name: 'Spring', blurb: 'Lilac, mint, blossom' },
+  { id: 'summer', category: 'Seasonal', name: 'Summer', blurb: 'Sun, turquoise, coral' },
+  { id: 'fall', category: 'Seasonal', name: 'Autumn', blurb: 'Burnt orange and maroon' },
+  { id: 'winter', category: 'Seasonal', name: 'Winter', blurb: 'Snow, ice blue, pine' },
 ]
 
 /** The "Aux" wordmark. Styling comes entirely from theme tokens (see themes.css `.wordmark`). */
@@ -82,7 +90,7 @@ export function Trophy({ size = 64, theme: forced }: { size?: number; theme?: Th
           <path d="M26 130c-6-8-4-18 2-22M94 130c6-8 4-18-2-22" fill="none" stroke="var(--accent)" strokeWidth="2" />
         </g>
       )}
-      {(theme === 'fleur' || theme === 'garden') && (
+      {(theme === 'fleur' || theme === 'garden' || theme === 'spring') && (
         <g>
           {[[36, 26], [48, 19], [60, 16], [72, 19], [84, 26]].map(([x, y], i) => (
             <g key={i} transform={`translate(${x} ${y})`}>
@@ -114,10 +122,23 @@ export function Trophy({ size = 64, theme: forced }: { size?: number; theme?: Th
       {(theme === 'medieval' || theme === 'darkfantasy') && (
         <path d="M40 22l6-14 7 9 7-13 7 13 7-9 6 14z" fill="var(--accent-3)" stroke="var(--trophy-line)" strokeWidth="2" strokeLinejoin="round" />
       )}
-      {(theme === 'vintage' || theme === 'country') && (
+      {(theme === 'vintage' || theme === 'country' || theme === 'jazz') && (
         <path d="M60 110l2.6 5.4 6 .8-4.4 4.1 1.1 5.9-5.3-2.9-5.3 2.9 1.1-5.9-4.4-4.1 6-.8z" fill="var(--accent-2)" stroke="var(--trophy-line)" strokeWidth="1.2" transform="translate(0 6)" />
       )}
       {theme === 'ocean' && <path d="M22 148q9.500-7 19 0t19 0 19 0 19 0" fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" />}
+      {theme === 'winter' && (
+        <g>
+          <path d="M34 34c4-14 16-20 30-17 9 2 16 7 20 14-9-5-17-6-26-5-9 1-17 4-24 8z" fill="var(--accent-2)" stroke="var(--trophy-line)" strokeWidth="2" strokeLinejoin="round" />
+          <path d="M33 34c16-9 36-10 53-2" fill="none" stroke="#fff" strokeWidth="6" strokeLinecap="round" />
+          <circle cx="88" cy="20" r="6" fill="#fff" stroke="var(--trophy-line)" strokeWidth="1.5" />
+        </g>
+      )}
+      {theme === 'summer' && (
+        <g fill="var(--trophy-line)">
+          <rect x="34" y="50" width="20" height="12" rx="5" /><rect x="66" y="50" width="20" height="12" rx="5" /><rect x="52" y="53" width="16" height="3" />
+        </g>
+      )}
+      {theme === 'fall' && <path d="M96 96c8-2 14 2 16 9-7 3-13 1-16-3-1 5-5 9-11 9 0-6 4-11 9-12z" fill="var(--accent)" stroke="var(--trophy-line)" strokeWidth="1.5" strokeLinejoin="round" />}
       {theme === 'sleek' && <path d="M26 148h68" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" />}
     </svg>
   )
@@ -138,6 +159,7 @@ export function ThemeDecor() {
           <path d="M40 36c6-8 14-8 20-2" stroke="var(--accent)" strokeWidth="1.4" fill="none" />
         </svg>
       )
+    case 'spring':
     case 'garden':
     case 'fleur':
       return (
@@ -215,6 +237,40 @@ export function ThemeDecor() {
         <svg {...common}>
           <g fill="none" stroke="var(--text)" strokeWidth="1.4">{[10, 28, 46].map((x) => <circle key={x} cx={x + 8} cy="14" r="7" />)}{[19, 37].map((x) => <circle key={x} cx={x + 8} cy="28" r="7" />)}</g>
           <g fontFamily="var(--font-head)" fontSize="9" fill="var(--text)" textAnchor="middle"><text x="18" y="17">A</text><text x="36" y="17">U</text><text x="54" y="17">X</text></g>
+        </svg>
+      )
+    case 'jazz':
+      return (
+        <svg {...common}>
+          <g fill="var(--accent)"><ellipse cx="16" cy="30" rx="7" ry="5" transform="rotate(-20 16 30)" /><ellipse cx="42" cy="26" rx="7" ry="5" transform="rotate(-20 42 26)" /></g>
+          <path d="M22 29V8l26-4v21" fill="none" stroke="var(--accent)" strokeWidth="2.5" strokeLinejoin="round" /><path d="M22 14l26-4" stroke="var(--accent)" strokeWidth="4" />
+          <path d="M62 8l1.800 5 5 1.800-5 1.800-1.800 5-1.800-5-5-1.800 5-1.800z" fill="var(--accent-3)" />
+        </svg>
+      )
+    case 'winter':
+      return (
+        <svg {...common}>
+          {[[22, 20, 1], [52, 14, 0.6], [62, 30, 0.45]].map(([x, y, sc], i) => (
+            <g key={i} transform={`translate(${x} ${y}) scale(${sc})`} stroke="var(--accent)" strokeWidth="2.2" strokeLinecap="round" fill="none">
+              {[0, 60, 120].map((r) => <path key={r} d="M0-15V15M-5-10l5 4 5-4M-5 10l5-4 5 4" transform={`rotate(${r})`} />)}
+            </g>
+          ))}
+        </svg>
+      )
+    case 'summer':
+      return (
+        <svg {...common}>
+          <g stroke="var(--accent-3)" strokeWidth="3" strokeLinecap="round">{[0, 45, 90, 135, 180, 225, 270, 315].map((r) => <path key={r} d="M24 4v5" transform={`rotate(${r} 24 20)`} />)}</g>
+          <circle cx="24" cy="20" r="9" fill="var(--accent-3)" />
+          <path d="M44 28q5-6 10 0t10 0 10 0" fill="none" stroke="var(--accent-2)" strokeWidth="2.5" strokeLinecap="round" />
+        </svg>
+      )
+    case 'fall':
+      return (
+        <svg {...common}>
+          {[[18, 22, -20, 'var(--accent)'], [42, 16, 25, 'var(--accent-3)'], [62, 26, -5, 'var(--accent-2)']].map(([x, y, r, c], i) => (
+            <g key={i} transform={`translate(${x} ${y}) rotate(${r})`}><path d="M0-12c8 2 10 10 6 18-4 3-8 3-12 0-4-8-2-16 6-18z" fill={c as string} /><path d="M0-8v22" stroke="var(--bg)" strokeWidth="1.2" /></g>
+          ))}
         </svg>
       )
     case 'sleek':

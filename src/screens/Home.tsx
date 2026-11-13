@@ -5,7 +5,7 @@ import { albums, artists, tracks } from '../data/catalog'
 import { avgRating, dailyPick, feed, inbox, timeAgo, type FeedItem } from '../lib/select'
 import { forYou } from '../lib/recs'
 import { ThemeDecor, Wordmark } from '../components/Brand'
-import { Avatar, Comments, Cover, Empty, Icon, Reactions, RecCard, Section, Seg, Stars, TrackRow, UserLink } from '../components/ui'
+import { Avatar, Comments, Cover, Empty, Icon, QuickRate, RecCard, Section, Seg, Stars, TrackRow, UserLink } from '../components/ui'
 
 function Daily() {
   const s = useStore()
@@ -34,7 +34,7 @@ function Daily() {
         </div>
       </Link>
       <div className="daily-actions">
-        <Reactions targetId={target} />
+        <QuickRate type={tab} id={id} />
         <button className="chip" onClick={() => setOpen(!open)}>💬 <b>{nComments}</b></button>
       </div>
       {open && <Comments targetId={target} />}

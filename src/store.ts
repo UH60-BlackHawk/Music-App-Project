@@ -19,7 +19,6 @@ interface Actions {
   unblock(id: ID): void
   rate(itemType: ItemType, itemId: ID, stars: number, review: string): void
   recommend(trackId: ID, toId: ID | null, clipStart: number, note: string): void
-  react(targetId: ID, emoji: string): void
   comment(targetId: ID, text: string): void
   report(kind: Report['kind'], targetId: ID, reason: string): void
   resolveReport(id: ID, remove: boolean): void
@@ -86,10 +85,6 @@ export const useStore = create<Store>()(
           ],
         })),
         recommend: (trackId, toId, clipStart, note) => set((s) => ({ recs: [{ id: uid(), fromId: 'me', toId, trackId, clipStart, note, at: Date.now() }, ...s.recs] })),
-        react: (targetId, emoji) => set((s) => {
-          const has = s.reactions.some((r) => r.userId === 'me' && r.targetId === targetId && r.emoji === emoji)
-          return { reactions: has ? s.reactions.filter((r) => !(r.userId === 'me' && r.targetId === targetId && r.emoji === emoji)) : [...s.reactions, { userId: 'me', targetId, emoji }] }
-        }),
         comment: (targetId, text) => set((s) => ({ comments: [...s.comments, { id: uid(), userId: 'me', targetId, text, at: Date.now() }] })),
         report: (kind, targetId, reason) => set((s) => ({ reports: [{ id: uid(), reporterId: 'me', kind, targetId, reason, at: Date.now(), status: 'open' }, ...s.reports] })),
         resolveReport: (id, remove) => set((s) => {

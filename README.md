@@ -28,12 +28,12 @@ Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 di
 | For You + Your Friends Are Into, each with a reason | Working, computed from in-app data only (`src/lib/recs.ts`) |
 | Recommend a song with a 30s best-part scrubber | Working. Stores track id + start second only. Playback is simulated in sample mode, with an "Open in Spotify" link. |
 | Ratings and reviews (half stars), Nobles averages | Working |
-| Song / Album of the Day (manual or automatic), reactions, comments | Working |
+| Song / Album of the Day (manual or automatic), inline rating, comments | Working |
 | Nobles Leaderboard (week / month / all time, Trending) | Working, opted-in users only, aggregate counts only |
 | NMAs: nominations, voting, animated reveal, Castle Hall of Fame, badges | Working. Classmates' nominations and votes are simulated. |
 | Award predictions with free points | Working, with sample nominees entered through Admin |
 | Report, block, basic language filter, admin dashboard | Working |
-| Eighteen themes with instant switching | Working |
+| 23 themes in five categories, with instant switching | Working |
 
 ## Stack
 
@@ -75,7 +75,7 @@ src/
 
 ## Themes
 
-Each theme is one block of CSS variables in `src/styles/themes.css` covering colour, type, radius, texture, icon stroke, motion, the wordmark and the trophy. The first block holds the defaults; every other theme only overrides what differs. To add one, add a block, add its id to `ThemeId` in `src/types.ts`, and add an entry to `THEMES` in `src/components/Brand.tsx`.
+Each theme is one block of CSS variables in `src/styles/themes.css` covering colour, type, radius, texture, icon stroke, motion, the wordmark and the trophy. The first block holds the defaults; every other theme only overrides what differs. To add one, add a block, add its id to `ThemeId` in `src/types.ts`, and add an entry (with its category) to `THEMES` in `src/components/Brand.tsx`.
 
 ## Embedding
 

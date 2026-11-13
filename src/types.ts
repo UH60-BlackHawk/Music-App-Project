@@ -2,6 +2,7 @@ export type ID = string
 export type Privacy = 'school' | 'friends' | 'private'
 export type ThemeId = 'nobles' | 'sleek' | 'fantasy' | 'urban' | 'fleur' | 'hyperpop' | 'emo'
   | 'vintage' | 'ocean' | 'garden' | 'country' | 'poppunk' | 'typewriter' | 'darkfantasy' | 'medieval' | 'wizard' | 'glass' | 'cartoon'
+  | 'jazz' | 'fall' | 'winter' | 'spring' | 'summer'
 export type ItemType = 'track' | 'album'
 
 export interface Artist { id: ID; name: string; genre: string }
@@ -30,7 +31,6 @@ export interface Rating { id: ID; userId: ID; itemType: ItemType; itemId: ID; st
 /** A recommendation stores only the track id and clip start (seconds) — never audio. */
 export interface Rec { id: ID; fromId: ID; toId: ID | null; trackId: ID; clipStart: number; note: string; at: number; hidden?: boolean }
 export interface Comment { id: ID; userId: ID; targetId: ID; text: string; at: number; hidden?: boolean }
-export interface Reaction { userId: ID; targetId: ID; emoji: string }
 export interface Report { id: ID; reporterId: ID; kind: 'comment' | 'review' | 'user' | 'rec'; targetId: ID; reason: string; at: number; status: 'open' | 'removed' | 'dismissed' }
 export interface DailyConfig { mode: 'manual' | 'auto'; metric: 'shared' | 'rated'; trackId: ID; albumId: ID }
 
@@ -72,7 +72,6 @@ export interface Data {
   ratings: Rating[]
   recs: Rec[]
   comments: Comment[]
-  reactions: Reaction[]
   reports: Report[]
   daily: DailyConfig
   nma: Nma

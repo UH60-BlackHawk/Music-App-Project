@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore } from '../store'
-import { THEMES, Trophy, Wordmark } from '../components/Brand'
+import { THEME_CATEGORIES, THEMES, Trophy, Wordmark } from '../components/Brand'
 import { Avatar, Icon, Section, Toggle, TopBar } from '../components/ui'
 import { beginSpotifyAuth, recentlyPlayed, spotifyConfigured, spotifyLive, spotifyLogout, type LiveTrack } from '../services/spotify'
 import { PRIVACY_OPTIONS } from './Welcome'
@@ -23,16 +23,21 @@ export default function Settings() {
       <TopBar title="Settings" />
 
       <Section title="Theme" kicker="Reskins everything, instantly">
-        <div className="theme-grid">
-          {THEMES.map((t) => (
-            <button key={t.id} data-theme={t.id} className={`theme-swatch ${s.theme === t.id ? 'on' : ''}`} onClick={() => s.setTheme(t.id)} aria-pressed={s.theme === t.id}>
-              <span className="swatch-top"><Wordmark size={26} /><Trophy size={30} theme={t.id} /></span>
-              <span className="swatch-chips"><i className="a" /><i className="b" /><i className="c" /></span>
-              <b>{t.name}</b>
-              <small>{t.blurb}</small>
-            </button>
-          ))}
-        </div>
+        {THEME_CATEGORIES.map((cat) => (
+          <div key={cat}>
+            <h3 className="theme-cat">{cat}</h3>
+            <div className="theme-grid">
+              {THEMES.filter((t) => t.category === cat).map((t) => (
+                <button key={t.id} data-theme={t.id} className={`theme-swatch ${s.theme === t.id ? 'on' : ''}`} onClick={() => s.setTheme(t.id)} aria-pressed={s.theme === t.id}>
+                  <span className="swatch-top"><Wordmark size={26} /><Trophy size={30} theme={t.id} /></span>
+                  <span className="swatch-chips"><i className="a" /><i className="b" /><i className="c" /></span>
+                  <b>{t.name}</b>
+                  <small>{t.blurb}</small>
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
       </Section>
 
       <Section title="Privacy">

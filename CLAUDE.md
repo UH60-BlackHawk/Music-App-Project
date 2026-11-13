@@ -19,6 +19,7 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 - **Privacy** goes through one function, `canSee` in `src/lib/select.ts`. Any new surface that shows a person's activity must use it. Follower / following lists are visible on every profile (blocked users hidden).
 - **NMAs**: results stay hidden until the reveal; one vote per student per category; winners get a Golden Bulldog shown on the item page and the nominator's profile.
 - **Predictions** award free points only. No money or purchasable currency, ever.
+- **No emoji reactions.** They were removed on request. Song of the Day and recommendation cards carry an inline star rating (`QuickRate`) instead; the full rating and review form stays on the song / album page.
 - **Cover art is generated** (`Cover` in `src/components/ui.tsx`). Do not add real album artwork.
 - **No school API is assumed.** `?embed=1` drops the phone frame for future embedding in the Nobles app.
 
@@ -33,8 +34,8 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 
 - Themes are CSS-variable token blocks in `src/styles/themes.css`. `src/styles/base.css` must only read tokens: no hard-coded colours, fonts or radii there.
 - The first block (`:root, [data-theme]`) is the Nobles default and the fallback for every token. Other themes override what differs.
-- To add a theme: add a block in `themes.css`, add the id to `ThemeId` in `src/types.ts`, add an entry to `THEMES` in `src/components/Brand.tsx`, and load any new fonts in `index.html`. Optionally add a trophy accessory and a header motif in `Brand.tsx`.
-- Settings previews nest a different `data-theme` on each swatch, so theme styling must come from tokens, not from selectors like `[data-theme='x'] .thing` (those leak into the previews).
+- To add a theme: add a block in `themes.css`, add the id to `ThemeId` in `src/types.ts`, add an entry to `THEMES` in `src/components/Brand.tsx` with one of the `THEME_CATEGORIES` (Classic, Music scenes, Fantasy & storybook, Nature, Seasonal), and load any new fonts in `index.html`. Optionally add a trophy accessory and a header motif in `Brand.tsx`.
+- Settings previews nest a different `data-theme` on each swatch, so theme styling must come from tokens. A selector like `[data-theme='x'] .thing` also matches inside a swatch nested under theme x, so only use one for classes that never appear in a swatch.
 - Every theme must keep readable contrast: check body text, muted text, text on `--accent`, and text and stars inside hero cards (`--hero-*`).
 - Themes inspired by existing properties (the wizarding-school and hand-drawn-cartoon ones) borrow a mood only. Do not use their names, logos, characters or lookalike fonts.
 

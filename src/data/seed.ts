@@ -179,13 +179,6 @@ export function buildSeed(now = Date.now()): Data {
       { id: 'c3', userId: 'u2', targetId: `daily-${dailyAlbum}`, text: 'no skips, don’t @ me', at: now - 4 * HOUR },
       { id: 'c4', userId: 'u6', targetId: `daily-${dailyAlbum}`, text: 'played this before every game this fall', at: now - HOUR },
     ],
-    reactions: [
-      ...['u1', 'u5', 'u9', 'u13', 'u4'].map((userId) => ({ userId, targetId: `daily-${dailyTrack}`, emoji: '🔥' })),
-      ...['u3', 'u7'].map((userId) => ({ userId, targetId: `daily-${dailyTrack}`, emoji: '💙' })),
-      ...['u2', 'u6', 'u14', 'u12'].map((userId) => ({ userId, targetId: `daily-${dailyAlbum}`, emoji: '🔥' })),
-      { userId: 'u11', targetId: `daily-${dailyAlbum}`, emoji: '💀' },
-      { userId: 'u1', targetId: 'rec3', emoji: '🔥' }, { userId: 'u7', targetId: 'rec3', emoji: '💙' },
-    ],
     reports: [{ id: 'rp1', reporterId: 'u9', kind: 'comment', targetId: 'c3', reason: 'Spam', at: now - 2 * HOUR, status: 'open' }],
     daily: { mode: 'manual', metric: 'shared', trackId: dailyTrack, albumId: dailyAlbum },
     nma: {

@@ -432,6 +432,113 @@
   --wm-font: 'Luckiest Guy', 'Chewy', 'Comic Sans MS', cursive; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0.02em; --wm-color: #c92a22; --wm-shadow: 3px 3px 0 #1a1a1a; --wm-rotate: -4deg;
 }
 
+/* Jazz Club — smoky midnight room, brass, burgundy, Blue Note blue, marquee lettering */
+[data-theme='jazz'] {
+  color-scheme: dark;
+  --bg: #0f1420; --bg-image: radial-gradient(50% 22% at 15% 0%, rgba(214, 168, 74, 0.2), transparent 70%), radial-gradient(60% 30% at 100% 35%, rgba(63, 110, 165, 0.22), transparent 70%), radial-gradient(60% 30% at 0% 100%, rgba(125, 31, 46, 0.3), transparent 70%); --page-bg: #070a11;
+  --surface: #19202f; --surface-2: #2b2130; --field-bg: #0f1420;
+  --text: #f1e6cf; --muted: #b8ab92;
+  --accent: #d6a84a; --accent-ink: #171208; --accent-text: #e6bd62; --accent-2: #7d1f2e; --accent-3: #3f6ea5;
+  --good: #9fd6a8; --danger: #ff8f8a; --star: #e6bd62;
+  --border: #3a4152;
+  --radius: 4px; --radius-sm: 3px; --btn-radius: 3px;
+  --font-head: 'Limelight', 'Playfair Display', Georgia, serif; --font-body: 'Josefin Sans', 'Century Gothic', sans-serif; --font-accent: 'Playfair Display', Georgia, serif;
+  --head-weight: 400; --head-spacing: 0.02em; --head-scale: 1.04;
+  --kicker-size: 13px; --kicker-spacing: 0.02em; --kicker-transform: none; --kicker-weight: 400;
+  --btn-transform: uppercase; --btn-spacing: 0.12em;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(214, 168, 74, 0.12);
+  --ease: cubic-bezier(0.3, 0, 0.2, 1); --dur: 0.35s; --screen-anim: tide; --screen-dur: 0.6s;
+  --icon-stroke: 1.5;
+  --cover-filter: sepia(0.25) contrast(1.1) saturate(0.85);
+  --hero-bg: radial-gradient(70% 90% at 15% 0%, rgba(230, 189, 98, 0.38), transparent 70%), linear-gradient(160deg, #1d3557, #0f1a2c); --hero-ink: #f6ecd6; --hero-muted: #c9c1ad; --hero-accent: #d6a84a; --hero-accent-ink: #171208;
+  --trophy-a: #f3d488; --trophy-b: #c0902f; --trophy-c: #e6bd62; --trophy-line: #171208;
+  --wm-font: 'Limelight', 'Playfair Display', serif; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0.04em; --wm-color: #e6bd62; --wm-shadow: 0 0 14px rgba(214, 168, 74, 0.55);
+}
+[data-theme='jazz'] .kicker { font-style: italic; }
+
+/* Autumn — burnt orange, maroon, mustard, warm paper */
+[data-theme='fall'] {
+  --bg: #f6ead8; --bg-image: radial-gradient(45% 26% at 100% 0%, rgba(217, 154, 31, 0.3), transparent 70%), radial-gradient(40% 24% at 0% 35%, rgba(179, 71, 15, 0.16), transparent 70%), radial-gradient(45% 26% at 90% 85%, rgba(122, 31, 31, 0.12), transparent 70%); --page-bg: #e2cba6;
+  --surface: #fdf5e8; --surface-2: #f0d9b8; --field-bg: #fffaf2;
+  --text: #3a2214; --muted: #6e5140;
+  --accent: #b3470f; --accent-ink: #ffffff; --accent-text: #963a0a; --accent-2: #7a1f1f; --accent-3: #d99a1f;
+  --good: #55691f; --danger: #9a1f1f; --star: #b3470f;
+  --border: #e2c9a4;
+  --font-head: 'Fraunces', Georgia, serif; --font-body: 'Mulish', system-ui, sans-serif; --font-accent: 'Mulish', sans-serif;
+  --head-scale: 1.04;
+  --shadow: 0 6px 22px rgba(122, 60, 20, 0.13);
+  --ease: cubic-bezier(0.3, 0.7, 0.3, 1); --dur: 0.3s; --screen-anim: drift; --screen-dur: 0.55s;
+  --cover-filter: sepia(0.2) saturate(1.05);
+  --hero-bg: linear-gradient(160deg, #6f1d14, #9c3a0d 55%, #a8520f);
+  --hero-ink: #fff5e6; --hero-muted: #f3d9bd; --hero-accent: #fff5e6; --hero-accent-ink: #6f1d14;
+  --trophy-line: #3a2214;
+  --wm-font: 'Fraunces', Georgia, serif; --wm-color: #963a0a;
+}
+
+/* Winter — snow, icy blue, pine and cranberry */
+[data-theme='winter'] {
+  --bg: #eef3f8; --bg-image: radial-gradient(#ffffff 1.6px, transparent 1.7px), radial-gradient(#ffffff 1.1px, transparent 1.2px), linear-gradient(180deg, #cfe0f0, #eef3f8 420px); --bg-size: 46px 46px, 28px 28px, auto; --page-bg: #c4d4e4;
+  --surface: #fafcfe; --surface-2: #dbe6f0; --field-bg: #ffffff;
+  --text: #14263a; --muted: #4b6076;
+  --accent: #1f5a8a; --accent-ink: #ffffff; --accent-text: #1b4f7a; --accent-2: #a61f2b; --accent-3: #2f6b4f;
+  --good: #2f6b4f; --danger: #a61f2b; --star: #1f5a8a;
+  --border: #cfdbe8;
+  --radius: 18px; --radius-sm: 12px;
+  --font-head: 'Marcellus', 'Optima', serif; --font-body: 'Mulish', system-ui, sans-serif; --font-accent: 'Mulish', sans-serif;
+  --head-weight: 400; --head-spacing: 0.01em; --head-scale: 1.06;
+  --kicker-spacing: 0.16em;
+  --shadow: 0 6px 24px rgba(31, 90, 138, 0.12);
+  --ease: cubic-bezier(0.25, 0.6, 0.25, 1); --dur: 0.4s; --screen-anim: snowfall; --screen-dur: 0.6s;
+  --icon-stroke: 1.5;
+  --cover-filter: saturate(0.85) brightness(1.04);
+  --hero-bg: radial-gradient(rgba(255, 255, 255, 0.3) 1.2px, transparent 1.3px) 0 0 / 46px 46px, radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1.1px) 14px 20px / 30px 30px, linear-gradient(160deg, #132c47, #1f5a8a);
+  --hero-ink: #ffffff; --hero-muted: #d3e2f0; --hero-accent: #ffffff; --hero-accent-ink: #16324f;
+  --trophy-a: #ffffff; --trophy-b: #c9d9e8; --trophy-c: #e6eef6; --trophy-line: #14263a; --trophy-stroke: 2;
+  --wm-font: 'Marcellus', 'Optima', serif; --wm-weight: 400; --wm-style: normal; --wm-transform: uppercase; --wm-spacing: 0.16em; --wm-color: #1f5a8a;
+}
+
+/* Spring — lilac, mint, blossom pink, butter yellow */
+[data-theme='spring'] {
+  --bg: #f7fbf1; --bg-image: radial-gradient(45% 26% at 100% 0%, rgba(205, 180, 240, 0.5), transparent 70%), radial-gradient(40% 24% at 0% 30%, rgba(170, 225, 180, 0.45), transparent 70%), radial-gradient(45% 26% at 85% 80%, rgba(247, 220, 111, 0.3), transparent 70%), radial-gradient(35% 20% at 10% 90%, rgba(242, 167, 195, 0.3), transparent 70%); --page-bg: #dcebd2;
+  --surface: #ffffff; --surface-2: #e3f2d9; --field-bg: #ffffff;
+  --text: #253322; --muted: #566a52;
+  --accent: #7a4fb5; --accent-ink: #ffffff; --accent-text: #6a41a3; --accent-2: #f2a7c3; --accent-3: #f7dc6f;
+  --good: #2f7a3a; --danger: #a8323d; --star: #b57c0a;
+  --border: #d4e8c8;
+  --radius: 24px; --radius-sm: 15px;
+  --font-head: 'Fredoka', 'Arial Rounded MT Bold', sans-serif; --font-body: 'Nunito', system-ui, sans-serif; --font-accent: 'Nunito', sans-serif;
+  --head-weight: 600; --head-spacing: 0;
+  --shadow: 0 6px 22px rgba(122, 79, 181, 0.12);
+  --ease: cubic-bezier(0.34, 1.3, 0.5, 1); --dur: 0.32s; --screen-anim: bloom; --screen-dur: 0.5s;
+  --icon-stroke: 1.9;
+  --hero-bg: linear-gradient(160deg, #e6d6f7, #d6efd9 60%, #fdf0c2); --hero-ink: #2b2140; --hero-muted: #55496b; --hero-accent: #7a4fb5; --hero-accent-ink: #ffffff;
+  --trophy-line: #4a3a12;
+  --wm-font: 'Fredoka', 'Arial Rounded MT Bold', sans-serif; --wm-weight: 600; --wm-style: normal; --wm-spacing: -0.01em; --wm-color: #6a41a3;
+}
+
+/* Summer — sun yellow, turquoise water, coral */
+[data-theme='summer'] {
+  --bg: #fff8e6; --bg-image: radial-gradient(170px 170px at 100% 0%, rgba(255, 194, 51, 0.6), transparent 70%), radial-gradient(60% 30% at 0% 100%, rgba(24, 165, 184, 0.22), transparent 70%); --page-bg: #f6dc9a;
+  --surface: #ffffff; --surface-2: #ffe9b0; --field-bg: #ffffff;
+  --text: #0f2f3d; --muted: #3f5f6c;
+  --accent: #cc3a26; --accent-ink: #ffffff; --accent-text: #b53020; --accent-2: #18a5b8; --accent-3: #ffc233;
+  --good: #1c7a4a; --danger: #b53020; --star: #cc3a26;
+  --border: #f3dca0; --border-w: 2px;
+  --radius: 22px; --radius-sm: 14px;
+  --font-head: 'Baloo 2', 'Arial Rounded MT Bold', sans-serif; --font-body: 'Rubik', system-ui, sans-serif; --font-accent: 'Baloo 2', sans-serif;
+  --head-weight: 800; --head-spacing: 0; --head-scale: 1.06;
+  --kicker-weight: 800;
+  --btn-font: 'Baloo 2', sans-serif; --btn-shadow: 0 4px 0 #8f2416;
+  --shadow: 0 8px 24px rgba(15, 47, 61, 0.1);
+  --ease: cubic-bezier(0.34, 1.5, 0.5, 1); --dur: 0.28s; --screen-anim: boing; --screen-dur: 0.45s; --press: 0.94;
+  --icon-stroke: 2.2;
+  --cover-filter: saturate(1.25);
+  --hero-bg: radial-gradient(70px 70px at 100% 100%, rgba(255, 210, 77, 0.55) 60%, transparent 62%), repeating-linear-gradient(175deg, rgba(255, 255, 255, 0.07) 0 6px, transparent 6px 22px), linear-gradient(180deg, #0e8496, #0a6577);
+  --hero-ink: #ffffff; --hero-muted: #d2eef2; --hero-accent: #ffc233; --hero-accent-ink: #0f2f3d;
+  --trophy-line: #4a2f05;
+  --wm-font: 'Baloo 2', 'Arial Rounded MT Bold', sans-serif; --wm-weight: 800; --wm-style: normal; --wm-spacing: -0.01em; --wm-color: #cc3a26; --wm-shadow: 2px 2px 0 #ffc233;
+}
+
 /* ---------- Theme motion ---------- */
 @keyframes fade-up { from { opacity: 0; transform: translateY(8px); } }
 @keyframes glass-in { from { opacity: 0; filter: blur(10px); transform: scale(1.015); } }
@@ -448,3 +555,5 @@
 @keyframes tide { from { opacity: 0; transform: translateY(18px); filter: blur(3px); } }
 @keyframes type-in { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
 @keyframes boing { 0% { opacity: 0; transform: scale(0.9); } 60% { opacity: 1; transform: scale(1.03); } 100% { transform: scale(1); } }
+@keyframes drift { from { opacity: 0; transform: translate(-10px, -12px) rotate(-1deg); } }
+@keyframes snowfall { from { opacity: 0; transform: translateY(-14px); filter: blur(2px); } }

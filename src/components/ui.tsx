@@ -289,19 +289,15 @@ export function ClipPicker({ track, value, onChange }: { track: Track; value: nu
   )
 }
 
-const EMOJI = ['🔥', '💙', '😭', '🎧', '💀']
-export function Reactions({ targetId }: { targetId: ID }) {
-  const reactions = useStore((s) => s.reactions)
-  const react = useStore((s) => s.react)
-  const mine = reactions.filter((r) => r.targetId === targetId)
+/** Rate a song or album in place, without opening its page. Keeps any review already written there. */
+export function QuickRate({ type, id }: { type: ItemType; id: ID }) {
+  const mine = useStore((s) => s.ratings.find((r) => r.userId === 'me' && r.itemType === type && r.itemId === id))
+  const rate = useStore((s) => s.rate)
   return (
-    <div className="reactions">
-      {EMOJI.map((e) => {
-        const n = mine.filter((r) => r.emoji === e).length
-        const on = mine.some((r) => r.emoji === e && r.userId === 'me')
-        return <button key={e} className={`chip ${on ? 'on' : ''}`} onClick={() => react(targetId, e)} aria-pressed={on}>{e}{n > 0 && <b>{n}</b>}</button>
-      })}
-    </div>
+    <span className="quickrate">
+      <StarInput value={mine?.stars ?? 0} onChange={(v) => rate(type, id, v, mine?.review ?? '')} />
+      <small>{mine ? `You: ${mine.stars.toFixed(1)}` : 'Tap to rate'}</small>
+    </span>
   )
 }
 
@@ -369,7 +365,7 @@ export function RecCard({ rec, showTo }: { rec: Rec; showTo?: boolean }) {
       {rec.note && <p className="note">“{rec.note}”</p>}
       <div className="kicker">The best part</div>
       <ClipPlayer track={t} start={rec.clipStart} />
-      <div className="rec-foot"><Reactions targetId={rec.id} /><OpenIn track={t} /></div>
+      <div className="rec-foot"><QuickRate type="track" id={t.id} /><OpenIn track={t} /></div>
     </article>
   )
 }
