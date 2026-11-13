@@ -94,7 +94,7 @@ export default function Home() {
       </header>
 
       {me.sharingPaused && <Link to="/settings" className="banner">Sharing is paused — friends can’t see your listening. <b>Resume</b></Link>}
-      {!me.spotify && !me.apple && <Link to="/settings" className="banner">Connect Spotify or Apple Music to share what you’re playing. <b>Connect</b></Link>}
+      {!me.spotify && <Link to="/settings" className="banner">Connect Spotify to share what you’re playing. <b>Connect</b></Link>}
 
       <Daily />
 

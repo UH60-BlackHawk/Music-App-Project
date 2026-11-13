@@ -32,9 +32,9 @@ export default function Welcome() {
     if (!/^\d{6}$/.test(code)) return setErr('Enter the 6-digit code.')
     setErr(''); setStep(2)
   }
-  const connect = (p: 'spotify' | 'apple') => {
-    if (p === 'spotify' && spotifyConfigured) return void beginSpotifyAuth()
-    setImported(s.connect(p))
+  const connect = () => {
+    if (spotifyConfigured) return void beginSpotifyAuth()
+    setImported(s.connect())
   }
 
   return (
@@ -79,17 +79,14 @@ export default function Welcome() {
 
       {step === 3 && (
         <div className="card stack">
-          <h2>Connect your music</h2>
+          <h2>Connect Spotify</h2>
           <p className="muted">Aux reads your recently played, top artists and what’s playing now. You control who sees it.</p>
-          <button className={`btn block provider ${me.spotify ? 'done' : ''}`} onClick={() => connect('spotify')} disabled={me.spotify}>
+          <button className={`btn block provider ${me.spotify ? 'done' : ''}`} onClick={connect} disabled={me.spotify}>
             <Icon name={me.spotify ? 'check' : 'headphones'} size={18} /> {me.spotify ? 'Spotify connected' : 'Connect Spotify'}
-          </button>
-          <button className={`btn block provider ${me.apple ? 'done' : ''}`} onClick={() => connect('apple')} disabled={me.apple}>
-            <Icon name={me.apple ? 'check' : 'headphones'} size={18} /> {me.apple ? 'Apple Music connected' : 'Connect Apple Music'}
           </button>
           {imported !== null && imported > 0 && <p className="ok">Imported {imported} recent plays.</p>}
           {!spotifyConfigured && <p className="fine">Prototype: connecting uses sample listening data until a Spotify client ID is configured.</p>}
-          <button className="btn primary block" onClick={() => setStep(4)}>{me.spotify || me.apple ? 'Continue' : 'Skip for now'}</button>
+          <button className="btn primary block" onClick={() => setStep(4)}>{me.spotify ? 'Continue' : 'Skip for now'}</button>
         </div>
       )}
 

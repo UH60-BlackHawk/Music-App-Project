@@ -221,6 +221,7 @@ h3 { font-size: calc(16px * var(--head-scale)); }
 .bio { font-style: italic; }
 .stats { display: flex; gap: 18px; font-size: 13px; color: var(--muted); margin-top: 6px; }
 .stats b { color: var(--text); }
+.stats button { border: 0; background: none; padding: 0; color: inherit; font-size: inherit; text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--text) 30%, transparent); text-underline-offset: 3px; }
 .nowplaying { display: flex; align-items: center; gap: 12px; margin: 6px 0 4px; text-decoration: none; color: inherit; }
 .nowplaying small { display: block; color: var(--muted); font-size: 12px; }
 .eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 16px; }

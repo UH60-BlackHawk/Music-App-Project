@@ -12,8 +12,8 @@ interface Actions {
   setTheme(t: ThemeId): void
   setAdmin(on: boolean): void
   updateMe(patch: Partial<User>): void
-  connect(p: 'spotify' | 'apple'): number
-  disconnect(p: 'spotify' | 'apple'): void
+  connect(): number
+  disconnect(): void
   toggleFollow(id: ID): void
   block(id: ID): void
   unblock(id: ID): void
@@ -57,7 +57,7 @@ export const useStore = create<Store>()(
         setTheme: (theme) => set({ theme }),
         setAdmin: (admin) => set({ admin }),
         updateMe: me,
-        connect: (p) => {
+        connect: () => {
           const s = get()
           let added = 0
           if (!s.listens.some((l) => l.userId === 'me')) {
@@ -66,14 +66,10 @@ export const useStore = create<Store>()(
             added = ls.length
             set({ listens: [...s.listens, ...ls].sort((a, b) => b.at - a.at) })
           }
-          me({ [p]: true, nowPlaying: tid('Pink + White') })
+          me({ spotify: true, nowPlaying: tid('Pink + White') })
           return added
         },
-        disconnect: (p) => {
-          me({ [p]: false })
-          const u = get().users.me
-          if (!u.spotify && !u.apple) me({ nowPlaying: undefined })
-        },
+        disconnect: () => me({ spotify: false, nowPlaying: undefined }),
         toggleFollow: (id) => set((s) => {
           const on = s.follows.some((f) => f[0] === 'me' && f[1] === id)
           return { follows: on ? s.follows.filter((f) => !(f[0] === 'me' && f[1] === id)) : [...s.follows, ['me', id]] }

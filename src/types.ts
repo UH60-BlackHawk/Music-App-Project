@@ -1,6 +1,7 @@
 export type ID = string
 export type Privacy = 'school' | 'friends' | 'private'
 export type ThemeId = 'nobles' | 'sleek' | 'fantasy' | 'urban' | 'fleur' | 'hyperpop' | 'emo'
+  | 'vintage' | 'ocean' | 'garden' | 'country' | 'poppunk' | 'typewriter' | 'darkfantasy' | 'medieval' | 'wizard' | 'glass' | 'cartoon'
 export type ItemType = 'track' | 'album'
 
 export interface Artist { id: ID; name: string; genre: string }
@@ -19,7 +20,6 @@ export interface User {
   sharingPaused: boolean
   leaderboardOptIn: boolean
   spotify: boolean
-  apple: boolean
   favoriteAlbums: ID[]
   badges: string[]
   nowPlaying?: ID

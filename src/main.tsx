@@ -8,7 +8,7 @@ import './styles/base.css'
 
 // Complete a real Spotify OAuth redirect if one is in progress (no-op in mock mode).
 handleSpotifyCallback()
-  .then((ok) => { if (ok) useStore.getState().connect('spotify') })
+  .then((ok) => { if (ok) useStore.getState().connect() })
   .catch(() => {})
 
 createRoot(document.getElementById('root')!).render(

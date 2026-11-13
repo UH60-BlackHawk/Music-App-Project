@@ -56,7 +56,7 @@ const U = (id: ID, name: string, classYear: number, color: string, bio: string, 
   const handle = (first[0] + last).toLowerCase() + String(classYear).slice(2)
   return {
     id, name, handle, email: `${handle}@nobles.edu`, classYear, color, bio, privacy, sharingPaused: false, leaderboardOptIn: true,
-    spotify: true, apple: false, favoriteAlbums: favs.map(alid), badges: [], ...extra,
+    spotify: true, favoriteAlbums: favs.map(alid), badges: [], ...extra,
   }
 }
 
@@ -66,7 +66,7 @@ const PEOPLE: [User, Tastes][] = [
   [U('u3', 'Sofia Reyes', 2028, '#c2315f', 'pop is a serious genre', 'school', ["Short n' Sweet", 'GUTS', 'folklore'], { nowPlaying: tid('Espresso'), badges: ['Called It'] }), { pop: 1, hyperpop: 0.4 }],
   [U('u4', 'Ethan Park', 2028, '#17705a', 'guitar music isn’t dead', 'friends', ['AM', 'Currents', 'Rumours']), { rock: 1, indie: 0.6, classic: 0.4 }],
   [U('u5', 'Chloe Whitman', 2027, '#a66f0c', 'stick season is a lifestyle', 'school', ['Stick Season', 'folklore', 'For Emma, Forever Ago'], { badges: ['Called It'] }), { folk: 1, pop: 0.5, indie: 0.3 }],
-  [U('u6', 'Noah Feldman', 2029, '#2b6fe2', 'game day playlist curator', 'school', ['CHROMAKOPIA', 'GNX', 'SOS'], { apple: true, spotify: false }), { 'hip-hop': 0.9, 'r&b': 0.7 }],
+  [U('u6', 'Noah Feldman', 2029, '#2b6fe2', 'game day playlist curator', 'school', ['CHROMAKOPIA', 'GNX', 'SOS']), { 'hip-hop': 0.9, 'r&b': 0.7 }],
   [U('u7', 'Ava Lindqvist', 2028, '#6f8f14', 'brat summer never ended', 'school', ['BRAT', 'HIT ME HARD AND SOFT']), { hyperpop: 1, pop: 0.7 }],
   [U('u8', 'Jackson Tran', 2027, '#8a6a4f', 'my dad’s record collection', 'friends', ['Rumours', 'Speakerboxxx/The Love Below']), { classic: 1, rock: 0.7 }],
   [U('u9', 'Priya Desai', 2029, '#b136a8', 'r&b for studying, r&b for everything', 'school', ['SOS', 'Freudian', 'Blonde']), { 'r&b': 1, pop: 0.5 }],
@@ -121,7 +121,7 @@ export function buildSeed(now = Date.now()): Data {
   const users: Record<ID, User> = {
     me: {
       id: 'me', name: 'You', handle: 'you', email: '', classYear: 2027, color: '#0b3b8c', bio: 'passing the aux', privacy: 'school',
-      sharingPaused: false, leaderboardOptIn: true, spotify: false, apple: false, favoriteAlbums: ['Punisher', 'Blonde', 'Charm'].map(alid), badges: [],
+      sharingPaused: false, leaderboardOptIn: true, spotify: false, favoriteAlbums: ['Punisher', 'Blonde', 'Charm'].map(alid), badges: [],
     },
   }
   let listens: Listen[] = []

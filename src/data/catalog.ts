@@ -71,4 +71,3 @@ export const itemArtist = (type: 'track' | 'album', id: ID) =>
 export const fmt = (sec: number) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`
 
 export const spotifyLink = (t: Track) => `https://open.spotify.com/search/${encodeURIComponent(`${t.title} ${artistOf(t).name}`)}`
-export const appleLink = (t: Track) => `https://music.apple.com/us/search?term=${encodeURIComponent(`${t.title} ${artistOf(t).name}`)}`

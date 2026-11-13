@@ -12,10 +12,10 @@ export default function Settings() {
   const [live, setLive] = useState<LiveTrack[]>([])
   useEffect(() => { if (spotifyLive()) recentlyPlayed().then(setLive).catch(() => {}) }, [me.spotify])
 
-  const toggleProvider = (p: 'spotify' | 'apple') => {
-    if (me[p]) { s.disconnect(p); if (p === 'spotify') spotifyLogout() }
-    else if (p === 'spotify' && spotifyConfigured) void beginSpotifyAuth()
-    else s.connect(p)
+  const toggleSpotify = () => {
+    if (me.spotify) { s.disconnect(); spotifyLogout() }
+    else if (spotifyConfigured) void beginSpotifyAuth()
+    else s.connect()
   }
 
   return (
@@ -48,14 +48,12 @@ export default function Settings() {
         </div>
       </Section>
 
-      <Section title="Connected accounts">
+      <Section title="Connected account">
         <div className="card stack">
-          {(['spotify', 'apple'] as const).map((p) => (
-            <div className="toggle-row" key={p}>
-              <span><b>{p === 'spotify' ? 'Spotify' : 'Apple Music'}</b><small>{me[p] ? 'Connected · recently played, top artists, now playing' : 'Not connected'}</small></span>
-              <button className={`btn sm ${me[p] ? '' : 'primary'}`} onClick={() => toggleProvider(p)}>{me[p] ? 'Disconnect' : 'Connect'}</button>
-            </div>
-          ))}
+          <div className="toggle-row">
+            <span><b>Spotify</b><small>{me.spotify ? 'Connected · recently played, top artists, now playing' : 'Not connected'}</small></span>
+            <button className={`btn sm ${me.spotify ? '' : 'primary'}`} onClick={toggleSpotify}>{me.spotify ? 'Disconnect' : 'Connect'}</button>
+          </div>
           {live.length > 0 && (
             <div>
               <div className="kicker">Live from your Spotify</div>

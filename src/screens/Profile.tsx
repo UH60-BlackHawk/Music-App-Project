@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useStore } from '../store'
 import { albums, artists, tracks } from '../data/catalog'
-import { canSee, followers, following, timeAgo, topArtists, trophiesForUser, userListens } from '../lib/select'
+import { canSee, followers, following, isFollowing, timeAgo, topArtists, trophiesForUser, userListens } from '../lib/select'
+import type { ID } from '../types'
 import { Trophy } from '../components/Brand'
 import { Avatar, Cover, Empty, Icon, ReportButton, Section, Sheet, Stars, TopBar, TrackRow } from '../components/ui'
 import { FollowButton } from './Discover'
@@ -13,6 +14,7 @@ export default function Profile() {
   const { id = 'me' } = useParams()
   const s = useStore()
   const [menu, setMenu] = useState(false)
+  const [people, setPeople] = useState<'followers' | 'following' | null>(null)
   const u = s.users[id]
   if (!u) return <><TopBar title="Profile" /><Empty>No student found.</Empty></>
   const isMe = id === 'me'
@@ -22,6 +24,8 @@ export default function Profile() {
   const top = visible ? topArtists(s, id, 6) : []
   const ratings = visible ? s.ratings.filter((r) => r.userId === id && !r.hidden).sort((a, b) => b.at - a.at).slice(0, 6) : []
   const trophies = trophiesForUser(s, id)
+  const visiblePeople = (ids: ID[]) => ids.filter((x) => s.users[x] && !s.blocks.includes(x))
+  const peopleList = people ? visiblePeople(people === 'followers' ? followers(s, id) : following(s, id)) : []
   const recent = [...new Map(listens.map((l) => [l.trackId, l])).values()].slice(0, 6)
 
   return (
@@ -38,8 +42,8 @@ export default function Profile() {
         <p className="muted">@{u.handle} · Class of {u.classYear}</p>
         {u.bio && <p className="bio">{u.bio}</p>}
         <div className="stats">
-          <span><b>{followers(s, id).length}</b> followers</span>
-          <span><b>{following(s, id).length}</b> following</span>
+          <button onClick={() => setPeople('followers')}><b>{visiblePeople(followers(s, id)).length}</b> followers</button>
+          <button onClick={() => setPeople('following')}><b>{visiblePeople(following(s, id)).length}</b> following</button>
           <span><b>{trophies.length}</b> {trophies.length === 1 ? 'trophy' : 'trophies'}</span>
         </div>
         {!isMe && !blocked && <div className="detail-actions"><FollowButton id={id} /></div>}
@@ -81,7 +85,7 @@ export default function Profile() {
                   <div className="tile small" key={aid}><Cover id={aid} size={84} className="round" /><b>{artists[aid].name}</b><span>{n} plays</span></div>
                 ))}
               </div>
-            ) : <Empty>{isMe ? 'Connect Spotify or Apple Music in Settings to see your top artists.' : 'Nothing yet.'}</Empty>}
+            ) : <Empty>{isMe ? 'Connect Spotify in Settings to see your top artists.' : 'Nothing yet.'}</Empty>}
           </Section>
 
           <Section title="Favorite albums">
@@ -116,6 +120,23 @@ export default function Profile() {
           </Section>
         </>
       )}
+
+      <Sheet open={!!people} onClose={() => setPeople(null)} title={people === 'followers' ? `${isMe ? 'Your' : u.name.split(' ')[0] + '’s'} followers` : `${isMe ? 'You follow' : u.name.split(' ')[0] + ' follows'}`}>
+        <div className="list">
+          {peopleList.length ? peopleList.map((pid) => (
+            <div className="row" key={pid}>
+              <Link className="row-main" to={`/profile/${pid}`} onClick={() => setPeople(null)}>
+                <Avatar user={s.users[pid]} size={42} />
+                <span className="row-text">
+                  <span className="row-title">{pid === 'me' ? `${s.users[pid].name} (you)` : s.users[pid].name}</span>
+                  <span className="row-sub">@{s.users[pid].handle} · ’{String(s.users[pid].classYear).slice(2)}{pid !== 'me' && isFollowing(s, pid, 'me') ? ' · follows you' : ''}</span>
+                </span>
+              </Link>
+              <span className="row-right"><FollowButton id={pid} /></span>
+            </div>
+          )) : <Empty>{people === 'followers' ? 'No followers yet.' : 'Not following anyone yet.'}</Empty>}
+        </div>
+      </Sheet>
 
       <Sheet open={menu} onClose={() => setMenu(false)} title={u.name}>
         <div className="stack">

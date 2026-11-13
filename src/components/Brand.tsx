@@ -10,6 +10,17 @@ export const THEMES: { id: ThemeId; name: string; blurb: string }[] = [
   { id: 'fleur', name: 'Fleur', blurb: 'Pressed flowers, pastel' },
   { id: 'hyperpop', name: 'Hyperpop', blurb: 'Neon, chrome, Y2K' },
   { id: 'emo', name: 'Alternative Emo', blurb: 'Black, red, safety pins' },
+  { id: 'vintage', name: 'Vintage Jukebox', blurb: '1940s–60s diner and vinyl' },
+  { id: 'ocean', name: 'Ocean', blurb: 'Deep water, aqua, coral' },
+  { id: 'garden', name: 'Garden', blurb: 'Leafy greens and blooms' },
+  { id: 'country', name: 'Country', blurb: 'Dirt road, rust, denim' },
+  { id: 'poppunk', name: 'Pop Punk', blurb: 'Neon, checkerboard, spray paint' },
+  { id: 'typewriter', name: 'Typewriter', blurb: 'Black ink on paper' },
+  { id: 'darkfantasy', name: 'Dark Fantasy', blurb: 'Soot, blood, iron, bone' },
+  { id: 'medieval', name: 'Medieval', blurb: 'Parchment and gold leaf' },
+  { id: 'wizard', name: 'Wizarding School', blurb: 'Candlelit castle at midnight' },
+  { id: 'glass', name: 'Liquid Glass', blurb: 'Sky, clouds, translucency' },
+  { id: 'cartoon', name: 'Ink & Paint', blurb: 'Hand-drawn 1930s cartoon' },
 ]
 
 /** The "Aux" wordmark. Styling comes entirely from theme tokens (see themes.css `.wordmark`). */
@@ -64,14 +75,14 @@ export function Trophy({ size = 64, theme: forced }: { size?: number; theme?: Th
       <text x="60" y="141" textAnchor="middle" className="trophy-label">NMA</text>
 
       {theme === 'nobles' && <path d="M52 119h16v7l-8 4-8-4z" fill="var(--accent)" stroke="var(--trophy-line)" strokeWidth="1.5" />}
-      {theme === 'fantasy' && (
+      {(theme === 'fantasy' || theme === 'wizard') && (
         <g fill="var(--accent-2)" stroke="none">
           <path d="M60 4a9 9 0 1 0 6 16 7 7 0 1 1-6-16z" />
           <path d="M20 22l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5zM100 14l1 3 3 1-3 1-1 3-1-3-3-1 3-1zM104 78l1 3 3 1-3 1-1 3-1-3-3-1 3-1z" />
           <path d="M26 130c-6-8-4-18 2-22M94 130c6-8 4-18-2-22" fill="none" stroke="var(--accent)" strokeWidth="2" />
         </g>
       )}
-      {theme === 'fleur' && (
+      {(theme === 'fleur' || theme === 'garden') && (
         <g>
           {[[36, 26], [48, 19], [60, 16], [72, 19], [84, 26]].map(([x, y], i) => (
             <g key={i} transform={`translate(${x} ${y})`}>
@@ -81,13 +92,13 @@ export function Trophy({ size = 64, theme: forced }: { size?: number; theme?: Th
           ))}
         </g>
       )}
-      {theme === 'hyperpop' && (
+      {(theme === 'hyperpop' || theme === 'cartoon' || theme === 'glass') && (
         <g fill="var(--accent-2)" stroke="var(--trophy-line)" strokeWidth="1.2">
           <path d="M14 14l3 8 8 3-8 3-3 8-3-8-8-3 8-3zM104 86l2.5 6 6 2.5-6 2.5-2.5 6-2.5-6-6-2.5 6-2.5z" />
           <path d="M100 10l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="var(--accent-3)" />
         </g>
       )}
-      {theme === 'emo' && (
+      {(theme === 'emo' || theme === 'poppunk') && (
         <g fill="none" stroke="var(--muted)" strokeWidth="2" strokeLinecap="round">
           <path d="M96 34l14 14a3 3 0 0 1-4 4L92 38" />
           <circle cx="111" cy="52" r="2.5" />
@@ -100,6 +111,13 @@ export function Trophy({ size = 64, theme: forced }: { size?: number; theme?: Th
           <text x="24" y="111" textAnchor="middle" className="trophy-sticker">WINNER</text>
         </g>
       )}
+      {(theme === 'medieval' || theme === 'darkfantasy') && (
+        <path d="M40 22l6-14 7 9 7-13 7 13 7-9 6 14z" fill="var(--accent-3)" stroke="var(--trophy-line)" strokeWidth="2" strokeLinejoin="round" />
+      )}
+      {(theme === 'vintage' || theme === 'country') && (
+        <path d="M60 110l2.6 5.4 6 .8-4.4 4.1 1.1 5.9-5.3-2.9-5.3 2.9 1.1-5.9-4.4-4.1 6-.8z" fill="var(--accent-2)" stroke="var(--trophy-line)" strokeWidth="1.2" transform="translate(0 6)" />
+      )}
+      {theme === 'ocean' && <path d="M22 148q9.500-7 19 0t19 0 19 0 19 0" fill="none" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" />}
       {theme === 'sleek' && <path d="M26 148h68" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" />}
     </svg>
   )
@@ -110,6 +128,8 @@ export function ThemeDecor() {
   const theme = useStore((s) => s.theme)
   const common = { className: 'decor', width: 76, height: 40, viewBox: '0 0 76 40', 'aria-hidden': true } as const
   switch (theme) {
+    case 'wizard':
+    case 'darkfantasy':
     case 'fantasy':
       return (
         <svg {...common}>
@@ -118,6 +138,7 @@ export function ThemeDecor() {
           <path d="M40 36c6-8 14-8 20-2" stroke="var(--accent)" strokeWidth="1.4" fill="none" />
         </svg>
       )
+    case 'garden':
     case 'fleur':
       return (
         <svg {...common}>
@@ -140,6 +161,7 @@ export function ThemeDecor() {
           </g>
         </svg>
       )
+    case 'cartoon':
     case 'hyperpop':
       return (
         <svg {...common}>
@@ -148,6 +170,7 @@ export function ThemeDecor() {
           <circle cx="68" cy="10" r="5" fill="var(--accent)" />
         </svg>
       )
+    case 'poppunk':
     case 'emo':
       return (
         <svg {...common}>
@@ -155,6 +178,43 @@ export function ThemeDecor() {
             <path d="M10 28L52 10a4 4 0 0 1 4 7L22 32" /><circle cx="14" cy="30" r="4" /><path d="M56 17c4 2 8 0 9-3" />
           </g>
           <path d="M62 24l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6-4.5-4 6-1z" fill="var(--accent)" />
+        </svg>
+      )
+    case 'ocean':
+      return (
+        <svg {...common}>
+          <g fill="none" stroke="var(--accent)" strokeWidth="2.2" strokeLinecap="round">
+            <path d="M6 14q8-8 16 0t16 0 16 0 16 0" /><path d="M6 24q8-8 16 0t16 0 16 0 16 0" opacity=".6" /><path d="M6 34q8-8 16 0t16 0 16 0 16 0" opacity=".3" />
+          </g>
+        </svg>
+      )
+    case 'glass':
+      return (
+        <svg {...common}>
+          <path d="M22 30a9 9 0 0 1 1-18 13 13 0 0 1 25 2 8 8 0 0 1 1 16z" fill="#fff" opacity=".9" />
+          <path d="M50 34a6 6 0 0 1 1-12 9 9 0 0 1 17 2 5 5 0 0 1 0 10z" fill="#fff" opacity=".7" />
+        </svg>
+      )
+    case 'vintage':
+      return (
+        <svg {...common}>
+          <circle cx="22" cy="20" r="17" fill="var(--text)" /><circle cx="22" cy="20" r="12" fill="none" stroke="var(--surface-2)" strokeWidth=".8" opacity=".5" />
+          <circle cx="22" cy="20" r="6.5" fill="var(--accent-2)" /><circle cx="22" cy="20" r="1.6" fill="var(--bg)" />
+          <path d="M56 8l3.2 7 7.600 1-5.600 5.200 1.500 7.500L56 25l-6.700 3.700 1.500-7.500-5.600-5.200 7.600-1z" fill="var(--accent-3)" stroke="var(--text)" strokeWidth="1.5" strokeLinejoin="round" />
+        </svg>
+      )
+    case 'country':
+      return (
+        <svg {...common}>
+          <path d="M40 4l4.500 10.500 11.500 1.200-8.600 7.700 2.400 11.300L40 29l-9.800 5.700 2.400-11.300-8.600-7.700 11.500-1.200z" fill="var(--accent-3)" stroke="var(--text)" strokeWidth="2" strokeLinejoin="round" />
+          <circle cx="40" cy="20" r="3" fill="var(--text)" />
+        </svg>
+      )
+    case 'typewriter':
+      return (
+        <svg {...common}>
+          <g fill="none" stroke="var(--text)" strokeWidth="1.4">{[10, 28, 46].map((x) => <circle key={x} cx={x + 8} cy="14" r="7" />)}{[19, 37].map((x) => <circle key={x} cx={x + 8} cy="28" r="7" />)}</g>
+          <g fontFamily="var(--font-head)" fontSize="9" fill="var(--text)" textAnchor="middle"><text x="18" y="17">A</text><text x="36" y="17">U</text><text x="54" y="17">X</text></g>
         </svg>
       )
     case 'sleek':

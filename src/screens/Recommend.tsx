@@ -61,7 +61,7 @@ export default function Recommend() {
           <button className="btn primary block big" onClick={send} disabled={sent}>
             {sent ? <><Icon name="check" size={18} /> Sent</> : <><Icon name="send" size={18} /> {to ? `Send to ${s.users[to].name.split(' ')[0]}` : 'Post to feed'}</>}
           </button>
-          <p className="fine center">Aux saves the song and a start time only. The clip plays through Spotify or Apple Music.</p>
+          <p className="fine center">Aux saves the song and a start time only. The clip plays through Spotify.</p>
         </div>
       )}
     </>

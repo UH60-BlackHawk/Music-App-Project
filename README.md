@@ -23,17 +23,17 @@ Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 di
 | Area | Status |
 | --- | --- |
 | School-email sign-in, onboarding, privacy choice | Working (no real email is sent) |
-| Spotify / Apple Music connection | Sample data by default. A real Spotify PKCE adapter is included and switches on with `VITE_SPOTIFY_CLIENT_ID`; it has not been tested against a live Spotify app. Apple Music is a documented stub (MusicKit needs a server-signed developer token). |
-| Profiles, follows, home feed, privacy (school / friends / private, pause sharing) | Working |
+| Spotify connection | Sample data by default. A real Spotify PKCE adapter is included and switches on with `VITE_SPOTIFY_CLIENT_ID`; it has not been tested against a live Spotify app. Apple Music is not included for now and could be added later. |
+| Profiles, follows (with follower / following lists), home feed, privacy (school / friends / private, pause sharing) | Working |
 | For You + Your Friends Are Into, each with a reason | Working, computed from in-app data only (`src/lib/recs.ts`) |
-| Recommend a song with a 30s best-part scrubber | Working. Stores track id + start second only. Playback is simulated in sample mode, with deep links to Spotify and Apple Music. |
+| Recommend a song with a 30s best-part scrubber | Working. Stores track id + start second only. Playback is simulated in sample mode, with an "Open in Spotify" link. |
 | Ratings and reviews (half stars), Nobles averages | Working |
 | Song / Album of the Day (manual or automatic), reactions, comments | Working |
 | Nobles Leaderboard (week / month / all time, Trending) | Working, opted-in users only, aggregate counts only |
 | NMAs: nominations, voting, animated reveal, Castle Hall of Fame, badges | Working. Classmates' nominations and votes are simulated. |
 | Award predictions with free points | Working, with sample nominees entered through Admin |
 | Report, block, basic language filter, admin dashboard | Working |
-| Seven themes with instant switching | Working |
+| Eighteen themes with instant switching | Working |
 
 ## Stack
 
@@ -54,7 +54,7 @@ src/
   data/seed.ts        sample students and generated listening history
   lib/select.ts       privacy rule (canSee), feed, leaderboard, daily pick, moderation
   lib/recs.ts         recommendation scoring and reasons
-  services/           Spotify adapter (PKCE + Web Playback SDK), Apple Music stub
+  services/           Spotify adapter (PKCE + Web Playback SDK)
   components/         shared UI, wordmark, Golden Bulldog trophy
   screens/            one file per screen
   styles/themes.css   theme tokens
@@ -75,7 +75,7 @@ src/
 
 ## Themes
 
-Each theme is one block of CSS variables in `src/styles/themes.css` covering colour, type, radius, texture, icon stroke, motion, the wordmark and the trophy. To add one, copy a block, change the values, and add an entry to `THEMES` in `src/components/Brand.tsx`.
+Each theme is one block of CSS variables in `src/styles/themes.css` covering colour, type, radius, texture, icon stroke, motion, the wordmark and the trophy. The first block holds the defaults; every other theme only overrides what differs. To add one, add a block, add its id to `ThemeId` in `src/types.ts`, and add an entry to `THEMES` in `src/components/Brand.tsx`.
 
 ## Embedding
 

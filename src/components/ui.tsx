@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import type { ID, ItemType, Rec, Track, User } from '../types'
-import { albumList, albums, appleLink, artistOf, artists, fmt, spotifyLink, trackList, tracks } from '../data/catalog'
+import { albumList, albums, artistOf, artists, fmt, spotifyLink, trackList, tracks } from '../data/catalog'
 import { useStore } from '../store'
 import { moderate, timeAgo } from '../lib/select'
 import { playClip, spotifyLive, stopClip } from '../services/spotify'
@@ -225,8 +225,7 @@ export function useClip(track: Track, start: number) {
 export function OpenIn({ track }: { track: Track }) {
   return (
     <span className="openin">
-      <a href={spotifyLink(track)} target="_blank" rel="noreferrer">Spotify <Icon name="external" size={13} /></a>
-      <a href={appleLink(track)} target="_blank" rel="noreferrer">Apple Music <Icon name="external" size={13} /></a>
+      <a href={spotifyLink(track)} target="_blank" rel="noreferrer">Open in Spotify <Icon name="external" size={13} /></a>
     </span>
   )
 }
