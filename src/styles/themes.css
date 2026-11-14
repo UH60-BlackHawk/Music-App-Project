@@ -27,6 +27,13 @@
   --trophy-a: #f8dc82; --trophy-b: #d9a520; --trophy-c: #f3c94f; --trophy-line: #6b4b05; --trophy-stroke: 2.5;
   --wm-font: 'Newsreader', Georgia, serif; --wm-weight: 700; --wm-style: italic; --wm-transform: none; --wm-spacing: -0.03em; --wm-color: #0b3b8c;
   --wm-grad: none; --wm-clip: border-box; --wm-shadow: none; --wm-filter: none; --wm-rotate: 0deg; --wm-pad: 0; --wm-border: 0 solid transparent;
+  /* Shape and ornament: these are what make a theme more than a recolour. */
+  --trophy-eye: var(--trophy-line);
+  --card-shape: var(--radius); --card-art: none;
+  --cover-shape: var(--radius-sm); --cover-clip: none; --cover-border: 0 solid transparent;
+  --head-rule: none; --head-rule-size: auto 6px; --head-rule-pad: 0px;
+  --nav-inset: 0px; --nav-radius: 0px; --nav-bg: color-mix(in srgb, var(--bg) 88%, transparent); --nav-ink: var(--muted); --nav-on: var(--accent-text);
+  --nav-border: var(--border-w) 0 0 0; --nav-shadow: none; --nav-blur: blur(16px);
 }
 
 /* Sleek Modern — monochrome, one accent, glass cards, geometric sans */
@@ -135,6 +142,8 @@
   --trophy-a: #f6dcc0; --trophy-b: #d99a8a; --trophy-c: #f1c9b5; --trophy-line: #7a4a4a; --trophy-stroke: 2;
   --wm-font: 'Parisienne', 'Snell Roundhand', cursive; --wm-weight: 400; --wm-style: normal; --wm-transform: none; --wm-spacing: 0; --wm-color: #9c4460;
   --wm-grad: none; --wm-clip: border-box; --wm-shadow: none; --wm-filter: none; --wm-rotate: -2deg; --wm-pad: 0; --wm-border: 0 solid transparent;
+  --card-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 70 70'%3E%3Cg opacity='.6' transform='translate(0 70) scale(1 -1)'%3E%3Cpath d='M68 2C46 10 34 26 28 52' fill='none' stroke='%238fa586' stroke-width='1.6'/%3E%3Cpath d='M50 14c-8-2-13 2-14 8 7 1 12-2 14-8zM38 30c-8 0-12 5-11 11 7-1 11-5 11-11z' fill='%238fa586'/%3E%3Ccircle cx='58.0' cy='7.0' r='4.0' fill='%23e9a9b8'/%3E%3Ccircle cx='62.8' cy='10.5' r='4.0' fill='%23e9a9b8'/%3E%3Ccircle cx='60.9' cy='16.0' r='4.0' fill='%23e9a9b8'/%3E%3Ccircle cx='55.1' cy='16.0' r='4.0' fill='%23e9a9b8'/%3E%3Ccircle cx='53.2' cy='10.5' r='4.0' fill='%23e9a9b8'/%3E%3Ccircle cx='58' cy='12' r='2.8' fill='%23e6c35c'/%3E%3Ccircle cx='40.0' cy='22.0' r='3.2' fill='%23f3c9d2'/%3E%3Ccircle cx='43.8' cy='24.8' r='3.2' fill='%23f3c9d2'/%3E%3Ccircle cx='42.4' cy='29.2' r='3.2' fill='%23f3c9d2'/%3E%3Ccircle cx='37.6' cy='29.2' r='3.2' fill='%23f3c9d2'/%3E%3Ccircle cx='36.2' cy='24.8' r='3.2' fill='%23f3c9d2'/%3E%3Ccircle cx='40' cy='26' r='2.2' fill='%23e6c35c'/%3E%3Ccircle cx='28.0' cy='45.5' r='3.6' fill='%23e9a9b8'/%3E%3Ccircle cx='32.3' cy='48.6' r='3.6' fill='%23e9a9b8'/%3E%3Ccircle cx='30.6' cy='53.6' r='3.6' fill='%23e9a9b8'/%3E%3Ccircle cx='25.4' cy='53.6' r='3.6' fill='%23e9a9b8'/%3E%3Ccircle cx='23.7' cy='48.6' r='3.6' fill='%23e9a9b8'/%3E%3Ccircle cx='28' cy='50' r='2.5' fill='%23e6c35c'/%3E%3C/g%3E%3C/svg%3E") bottom right / 54px no-repeat; --cover-shape: 50% 50% 14px 14px / 34% 34% 14px 14px;
+  --head-rule: radial-gradient(circle at 4px 3px, #e9b9c3 1.6px, transparent 2px); --head-rule-size: 8px 6px; --head-rule-pad: 9px;
 }
 
 /* Hyperpop — maximalist neon, chrome gradients, Y2K bubble type, bouncy motion */
@@ -213,46 +222,55 @@
   --hero-bg: repeating-conic-gradient(from 0deg at 50% 125%, #b13a24 0 10deg, #a03220 10deg 20deg); --hero-ink: #fff6e0; --hero-muted: #f6dcc0; --hero-accent: #f3e7cf; --hero-accent-ink: #33241a;
   --trophy-line: #33241a;
   --wm-font: 'Lobster', 'Brush Script MT', cursive; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0; --wm-color: #c8442c; --wm-shadow: 2px 2px 0 #d9a441; --wm-rotate: -4deg;
+  --cover-shape: 50%; --cover-border: 3px solid #33241a;
+  --head-rule: repeating-linear-gradient(90deg, #c8442c 0 8px, #fbf3e1 8px 16px); --head-rule-size: auto 5px; --head-rule-pad: 11px;
 }
 
-/* Ocean — deep water, aqua light, coral and sand accents, slow tidal motion */
+/* Ocean — you sink as you scroll: sunlit shallows at the top, the deep at the bottom, a sandy seabed for the nav */
 [data-theme='ocean'] {
   color-scheme: dark;
-  --bg: #06283b; --bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='26'%3E%3Cpath d='M0 13q15-10 30 0t30 0 30 0 30 0' fill='none' stroke='%234dd6d0' stroke-opacity='.13' stroke-width='1.5'/%3E%3C/svg%3E"), radial-gradient(60% 30% at 80% 0%, rgba(77, 214, 208, 0.28), transparent 70%), radial-gradient(70% 40% at 0% 100%, rgba(20, 90, 140, 0.6), transparent 70%); --page-bg: #031826;
-  --surface: #0c3a52; --surface-2: #124a66; --field-bg: #062233;
-  --text: #e8f8fb; --muted: #a5cdd8;
-  --accent: #4dd6d0; --accent-ink: #04222e; --accent-text: #7fe6e0; --accent-2: #ff8f78; --accent-3: #f2d79a;
-  --good: #8fe6b0; --danger: #ff9a8a; --star: #f2d79a;
-  --border: #1f5a75;
-  --radius: 22px; --radius-sm: 14px;
+  --bg: #04202f; --bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='240'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.16' stroke-width='1.2'%3E%3Ccircle cx='24' cy='40' r='7'/%3E%3Ccircle cx='36' cy='22' r='3'/%3E%3Ccircle cx='118' cy='96' r='10'/%3E%3Ccircle cx='132' cy='74' r='4'/%3E%3Ccircle cx='70' cy='170' r='5'/%3E%3Ccircle cx='60' cy='190' r='2.5'/%3E%3Ccircle cx='140' cy='214' r='6'/%3E%3C/g%3E%3C/svg%3E"), repeating-linear-gradient(105deg, rgba(190, 245, 255, 0.06) 0 26px, transparent 26px 120px), linear-gradient(180deg, #0b6480 0, #08506b 380px, #06374f 1100px, #04202f 2200px); --page-bg: #021520;
+  --surface: rgba(120, 215, 230, 0.11); --surface-2: rgba(120, 215, 230, 0.18); --field-bg: rgba(2, 25, 38, 0.55);
+  --text: #eafaff; --muted: #c2e4ec;
+  --accent: #5ee0d6; --accent-ink: #03202b; --accent-text: #8cf0e8; --accent-2: #ff9478; --accent-3: #f2d79a;
+  --good: #8fe6b0; --danger: #ffa596; --star: #f2d79a;
+  --border: rgba(150, 235, 240, 0.32);
+  --radius: 26px; --radius-sm: 16px;
+  --card-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 16' preserveAspectRatio='none'%3E%3Cpath d='M0 8q25-10 50 0t50 0 50 0 50 0v8H0z' fill='%238cf0e8' fill-opacity='.13'/%3E%3Cpath d='M0 11q25-8 50 0t50 0 50 0 50 0v5H0z' fill='%238cf0e8' fill-opacity='.1'/%3E%3C/svg%3E") bottom / 100% 16px no-repeat;
+  --cover-shape: 50%; --cover-border: 3px solid #e2c27a;
+  --head-rule: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='8'%3E%3Cpath d='M0 4q5-4 10 0t10 0 10 0 10 0' fill='none' stroke='%235ee0d6' stroke-width='1.6'/%3E%3C/svg%3E"); --head-rule-size: auto 8px; --head-rule-pad: 12px;
   --font-head: 'Marcellus', 'Optima', serif; --font-body: 'Mulish', system-ui, sans-serif; --font-accent: 'Mulish', sans-serif;
   --head-weight: 400; --head-spacing: 0.01em; --head-scale: 1.06;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  --shadow: 0 10px 30px rgba(0, 20, 30, 0.35), inset 0 1px 0 rgba(200, 250, 255, 0.18); --card-blur: blur(10px);
   --ease: cubic-bezier(0.45, 0, 0.2, 1); --dur: 0.45s; --screen-anim: tide; --screen-dur: 0.7s;
   --icon-stroke: 1.6;
-  --hero-bg: linear-gradient(180deg, #1c8fa8, #0b4f73 60%, #083652); --hero-ink: #ffffff; --hero-muted: #cfeef4; --hero-accent: #ffffff; --hero-accent-ink: #0b4f73;
+  --nav-bg: linear-gradient(180deg, #ecdcb0, #dcc48c); --nav-ink: #6a5630; --nav-on: #0a5f7a; --nav-border: 0; --nav-shadow: 0 -8px 22px rgba(0, 0, 0, 0.3);
+  --hero-bg: repeating-linear-gradient(105deg, rgba(255, 255, 255, 0.08) 0 18px, transparent 18px 70px), linear-gradient(180deg, #0f7d95, #0a5f7a 60%, #084a63); --hero-ink: #ffffff; --hero-muted: #d2eef4; --hero-accent: #ffffff; --hero-accent-ink: #084a63;
   --trophy-a: #fbe7b5; --trophy-b: #e0b25a; --trophy-c: #f2d79a; --trophy-line: #04222e;
-  --wm-font: 'Marcellus', 'Optima', serif; --wm-weight: 400; --wm-style: normal; --wm-transform: uppercase; --wm-spacing: 0.14em; --wm-color: #7fe6e0; --wm-shadow: 0 0 16px rgba(77, 214, 208, 0.6);
+  --wm-font: 'Marcellus', 'Optima', serif; --wm-weight: 400; --wm-style: normal; --wm-transform: uppercase; --wm-spacing: 0.14em; --wm-color: #8cf0e8; --wm-shadow: 0 0 16px rgba(94, 224, 214, 0.6);
 }
 
-/* Garden — leafy greens with flower-petal pinks and yellows */
+/* Garden — inside a greenhouse: deep leaf green, sunflower and bloom accents, leaf-shaped cards, covers and buttons */
 [data-theme='garden'] {
-  --bg: #f0f5e4; --bg-image: radial-gradient(45% 26% at 100% 0%, rgba(140, 190, 110, 0.45), transparent 70%), radial-gradient(35% 20% at 0% 30%, rgba(243, 169, 189, 0.35), transparent 70%), radial-gradient(40% 24% at 90% 75%, rgba(240, 197, 61, 0.22), transparent 70%); --page-bg: #d9e4c6;
-  --surface: #fbfdf5; --surface-2: #dfeccb; --field-bg: #ffffff;
-  --text: #22331d; --muted: #51634a;
-  --accent: #3b7530; --accent-ink: #ffffff; --accent-text: #2f6426; --accent-2: #e58fa8; --accent-3: #f0c53d;
-  --good: #2f6426; --danger: #a8323d; --star: #b87a12;
-  --border: #c5d6ad;
-  --radius: 20px; --radius-sm: 12px;
+  color-scheme: dark;
+  --bg: #12301f; --bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='110' height='110'%3E%3Cg fill='%232a5c3a' fill-opacity='.55'%3E%3Cpath d='M12 14c16 2 25 13 23 29-16-2-25-13-23-29z'/%3E%3Cpath d='M96 60c-16 2-25 13-23 29 16-2 25-13 23-29z'/%3E%3Cpath d='M60 8c8 3 11 10 8 18-8-3-11-10-8-18z'/%3E%3C/g%3E%3C/svg%3E"), radial-gradient(60% 24% at 100% 0%, rgba(242, 201, 76, 0.16), transparent 70%); --page-bg: #0a1f13;
+  --surface: #1b4029; --surface-2: #25553a; --field-bg: #0f2819;
+  --text: #f3f1df; --muted: #b9c9ae;
+  --accent: #f2c94c; --accent-ink: #1a2a12; --accent-text: #f5d76a; --accent-2: #f08fb0; --accent-3: #ff8a4c;
+  --good: #9fe08a; --danger: #ff9a8a; --star: #f2c94c;
+  --border: #3b6b48;
+  --radius: 22px; --radius-sm: 12px; --btn-radius: 16px 4px 16px 4px;
+  --card-shape: 28px 6px 28px 6px; --cover-shape: 42% 6% 42% 6%;
+  --head-rule: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='10'%3E%3Cpath d='M0 6q12-6 24 0t24 0' fill='none' stroke='%237fbf7a' stroke-width='1.4'/%3E%3Cpath d='M10 3c3-3 7-3 9 0-3 2-6 2-9 0zM34 8c3-3 7-3 9 0-3 2-6 2-9 0z' fill='%237fbf7a'/%3E%3C/svg%3E"); --head-rule-size: auto 10px; --head-rule-pad: 13px;
   --font-head: 'Fraunces', Georgia, serif; --font-body: 'Nunito', system-ui, sans-serif; --font-accent: 'Nunito', sans-serif;
   --head-scale: 1.04;
-  --shadow: 0 6px 22px rgba(47, 100, 38, 0.12);
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   --ease: cubic-bezier(0.33, 1, 0.68, 1); --dur: 0.35s; --screen-anim: bloom; --screen-dur: 0.55s;
   --icon-stroke: 1.7;
-  --hero-bg: radial-gradient(11px 11px at 92% 58%, #f3a9bd 50%, transparent 52%), radial-gradient(7px 7px at 84% 70%, #f6d35c 50%, transparent 52%), radial-gradient(8px 8px at 95% 78%, #ffffff 50%, transparent 52%), linear-gradient(160deg, #26551f, #3b7530 60%, #4a8238);
-  --hero-ink: #ffffff; --hero-muted: #dcebd0; --hero-accent: #ffffff; --hero-accent-ink: #26551f;
-  --trophy-line: #3a2c08;
-  --wm-font: 'Fraunces', Georgia, serif; --wm-color: #2f6426;
+  --hero-bg: radial-gradient(90% 70% at 100% 0%, rgba(242, 201, 76, 0.28), transparent 60%), linear-gradient(160deg, #2f7040, #1f5230);
+  --hero-ink: #ffffff; --hero-muted: #d5e6cb; --hero-accent: #f2c94c; --hero-accent-ink: #1a2a12;
+  --trophy-line: #1a2a12;
+  --wm-font: 'Fraunces', Georgia, serif; --wm-color: #f5d76a;
 }
 
 /* Country — dirt road browns, rust, denim, western slab type */
@@ -274,6 +292,8 @@
   --hero-bg: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.045) 0 2px, transparent 2px 5px), linear-gradient(180deg, #2f4f6f, #243c55); --hero-ink: #f6ead4; --hero-muted: #c9d3df; --hero-accent: #e0a23a; --hero-accent-ink: #38210f;
   --trophy-a: #f0cf7a; --trophy-b: #b9842a; --trophy-c: #e0b55a; --trophy-line: #38210f;
   --wm-font: 'Rye', 'Alfa Slab One', serif; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0.02em; --wm-color: #96390f; --wm-shadow: 2px 2px 0 #f6ead4, 3px 3px 0 #38210f;
+  --cover-border: 3px solid #f6ead4;
+  --head-rule: repeating-linear-gradient(90deg, #7a5a3a 0 10px, transparent 10px 16px); --head-rule-size: auto 2px; --head-rule-pad: 8px;
 }
 
 /* Pop Punk — skate-punk zine: black, neon green, hot pink, checkerboard, spray paint */
@@ -297,6 +317,8 @@
   --hero-bg: repeating-conic-gradient(#222222 0 25%, #121212 0 50%) 0 0 / 28px 28px; --hero-ink: #ffffff; --hero-muted: #d2d2d2; --hero-accent: #c6ff1a; --hero-accent-ink: #101010;
   --trophy-a: #ffffff; --trophy-b: #c6ff1a; --trophy-c: #ffe600; --trophy-line: #000000; --trophy-stroke: 3.5;
   --wm-font: 'Rubik Spray Paint', 'Permanent Marker', Impact, sans-serif; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0; --wm-color: #c6ff1a; --wm-shadow: 3px 3px 0 #ff2e88; --wm-rotate: -5deg;
+  --card-art: linear-gradient(#ffe600, #ffe600) 50% 0 / 70px 9px no-repeat;
+  --head-rule: repeating-conic-gradient(#f5f5f5 0 25%, transparent 0 50%); --head-rule-size: 12px 12px; --head-rule-pad: 17px;
 }
 
 /* Typewriter — black ink on paper, monospaced, no colour at all */
@@ -319,29 +341,35 @@
   --hero-bg: #161616; --hero-ink: #f4f1e8; --hero-muted: #c2beb3; --hero-accent: #f4f1e8; --hero-accent-ink: #161616;
   --trophy-a: #ffffff; --trophy-b: #cfcabd; --trophy-c: #9a968c; --trophy-line: #161616; --trophy-stroke: 2;
   --wm-font: 'Special Elite', 'Courier New', monospace; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0.12em; --wm-color: #161616; --wm-border: 0 solid transparent;
+  --card-art: repeating-linear-gradient(transparent 0 25px, rgba(22, 22, 22, 0.09) 25px 26px);
+  --head-rule: repeating-linear-gradient(90deg, #161616 0 6px, transparent 6px 10px); --head-rule-size: auto 1px; --head-rule-pad: 6px;
 }
 
-/* Dark Fantasy — grim medieval: soot black, blood crimson, iron and bone, blackletter */
+/* Dark Fantasy — a moonlit keep: midnight indigo, moon-silver, amethyst and wyrm-green glow, blackletter */
 [data-theme='darkfantasy'] {
   color-scheme: dark;
-  --bg: #0e0b0d; --bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"), radial-gradient(70% 30% at 50% 100%, rgba(143, 29, 33, 0.3), transparent 70%), radial-gradient(60% 25% at 50% 0%, rgba(140, 143, 150, 0.14), transparent 70%); --page-bg: #000000;
-  --surface: #1b1518; --surface-2: #2b1a1e; --field-bg: #0e0b0d;
-  --text: #e4dcd3; --muted: #a89c94;
-  --accent: #8f1d21; --accent-ink: #ffffff; --accent-text: #e2666b; --accent-2: #8c8f96; --accent-3: #c9b37a;
-  --good: #9fc79a; --danger: #ff8a80; --star: #c9b37a;
-  --border: #4a3b3e;
+  --bg: #0b0d17; --bg-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"), radial-gradient(60% 24% at 85% 0%, rgba(185, 162, 255, 0.22), transparent 70%), radial-gradient(60% 30% at 0% 55%, rgba(63, 208, 168, 0.1), transparent 70%), radial-gradient(70% 30% at 50% 100%, rgba(111, 71, 214, 0.25), transparent 70%); --page-bg: #05060c;
+  --surface: #151a2b; --surface-2: #1f2540; --field-bg: #0b0d17;
+  --text: #e3e6f2; --muted: #a3a9c2;
+  --accent: #6f47d6; --accent-ink: #ffffff; --accent-text: #b9a2ff; --accent-2: #3fd0a8; --accent-3: #c9ccd9;
+  --good: #7fe0b8; --danger: #ff9aa8; --star: #d7dcf0;
+  --border: #353c5c;
   --radius: 2px; --radius-sm: 2px; --btn-radius: 2px;
+  --card-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M1 14V1h13M1 6h5V1' fill='none' stroke='%23c9ccd9' stroke-opacity='.6' stroke-width='1.2'/%3E%3C/svg%3E") top left / 20px no-repeat, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M19 6v13H6M19 14h-5v5' fill='none' stroke='%23c9ccd9' stroke-opacity='.6' stroke-width='1.2'/%3E%3C/svg%3E") bottom right / 20px no-repeat;
+  --cover-clip: polygon(0 0, 100% 0, 100% 68%, 50% 100%, 0 68%);
+  --head-rule: linear-gradient(90deg, #c9ccd9, rgba(201, 204, 217, 0)); --head-rule-size: auto 1px; --head-rule-pad: 8px;
   --font-head: 'Pirata One', 'UnifrakturCook', 'Old English Text MT', serif; --font-body: 'EB Garamond', Garamond, Georgia, serif; --font-accent: 'Pirata One', serif;
   --head-weight: 400; --head-spacing: 0.02em; --head-scale: 1.18;
   --kicker-size: 13px; --kicker-spacing: 0.08em; --kicker-transform: none; --kicker-weight: 400;
-  --btn-transform: uppercase; --btn-spacing: 0.14em; --btn-shadow: inset 0 0 14px rgba(0, 0, 0, 0.5);
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.7), inset 0 0 0 1px rgba(201, 179, 122, 0.12);
+  --btn-transform: uppercase; --btn-spacing: 0.14em; --btn-shadow: 0 0 16px rgba(111, 71, 214, 0.5);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(201, 204, 217, 0.08);
   --ease: cubic-bezier(0.4, 0, 0.2, 1); --dur: 0.4s; --screen-anim: ink-in; --screen-dur: 0.8s;
   --icon-stroke: 1.5; --icon-cap: butt; --icon-join: miter;
-  --cover-filter: grayscale(0.5) contrast(1.15) brightness(0.85);
-  --hero-bg: radial-gradient(80% 60% at 50% 110%, #5a1114, transparent 70%), linear-gradient(180deg, #1a1215, #0e0b0d); --hero-ink: #efe6dc; --hero-muted: #b9aba2; --hero-accent: #8f1d21; --hero-accent-ink: #ffffff;
-  --trophy-a: #d8d2c8; --trophy-b: #7c7a78; --trophy-c: #3d3a3a; --trophy-line: #0a0808; --trophy-eye: #b3272c;
-  --wm-font: 'Pirata One', 'Old English Text MT', serif; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0.02em; --wm-color: #e4dcd3; --wm-shadow: 0 0 12px rgba(143, 29, 33, 0.9), 1px 2px 0 #8f1d21;
+  --cover-filter: saturate(0.75) contrast(1.1) brightness(0.92);
+  --hero-bg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 60' preserveAspectRatio='none'%3E%3Cpath d='M0 60V40l36-20 30 16 28-28 34 30 22-10V14h7V6h7v8h9V2h7v12h9V6h7v8h7v22l28-16 40 22 46-30 32 20 24-8v28z' fill='%23080a16'/%3E%3C/svg%3E") bottom / 100% 54px no-repeat, radial-gradient(130px 130px at 88% 8%, rgba(215, 220, 240, 0.3), transparent 70%), linear-gradient(180deg, #23285a, #12152e);
+  --hero-ink: #eef0fa; --hero-muted: #b9bfdb; --hero-accent: #6f47d6; --hero-accent-ink: #ffffff;
+  --trophy-a: #eef0fa; --trophy-b: #9aa0b8; --trophy-c: #5c6280; --trophy-line: #0a0c18; --trophy-eye: #8f6cf0;
+  --wm-font: 'Pirata One', 'Old English Text MT', serif; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0.02em; --wm-color: #e3e6f2; --wm-shadow: 0 0 14px rgba(143, 108, 240, 0.9), 1px 2px 0 #3b2a7a;
 }
 
 /* Medieval — illuminated manuscript: parchment, royal blue, vermilion, gold leaf */
@@ -364,6 +392,8 @@
   --hero-ink: #f7eed6; --hero-muted: #cfd6ea; --hero-accent: #d9a93a; --hero-accent-ink: #2c2014;
   --trophy-line: #2c2014;
   --wm-font: 'MedievalSharp', 'Luminari', serif; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0.02em; --wm-color: #a3231d; --wm-shadow: 1px 1px 0 #c9962b;
+  --cover-shape: 50% 50% 3px 3px / 32% 32% 3px 3px;
+  --head-rule: linear-gradient(180deg, #b8962e 0 1px, transparent 1px 3px, #a3231d 3px 4px); --head-rule-size: auto 4px; --head-rule-pad: 9px;
 }
 
 /* Wizarding School — candlelit castle at midnight: scarlet, gold, starry ceiling */
@@ -388,26 +418,33 @@
   --hero-ink: #f6e7b8; --hero-muted: #dcc9a0; --hero-accent: #d4a93a; --hero-accent-ink: #1a1408;
   --trophy-line: #1a1408;
   --wm-font: 'Cinzel Decorative', 'Cinzel', serif; --wm-style: normal; --wm-spacing: 0.04em; --wm-color: #e3bd57; --wm-shadow: 0 0 14px rgba(212, 169, 58, 0.6);
+  --cover-border: 3px solid #d4a93a;
+  --card-art: radial-gradient(2.5px 2.5px at calc(100% - 18px) calc(100% - 16px), #e3bd57 50%, transparent 52%), radial-gradient(1.5px 1.5px at calc(100% - 36px) calc(100% - 28px), #e3bd57 50%, transparent 52%), radial-gradient(1.5px 1.5px at calc(100% - 12px) calc(100% - 38px), #e3bd57 50%, transparent 52%);
+  --head-rule: linear-gradient(90deg, #d4a93a, rgba(212, 169, 58, 0)); --head-rule-size: auto 1px; --head-rule-pad: 8px;
 }
 
-/* Liquid Glass — sky, clouds and frosted translucent panels */
+/* Liquid Glass — a luminous wallpaper behind frosted, floating, light-catching panels */
 [data-theme='glass'] {
-  --bg: #cfe6fb; --bg-image: radial-gradient(40% 9% at 18% 5%, rgba(255, 255, 255, 0.95), transparent 70%), radial-gradient(50% 10% at 88% 13%, rgba(255, 255, 255, 0.85), transparent 70%), radial-gradient(60% 12% at 40% 45%, rgba(255, 255, 255, 0.6), transparent 70%), radial-gradient(50% 10% at 80% 80%, rgba(255, 255, 255, 0.6), transparent 70%), linear-gradient(180deg, #8fc4f5, #d7ecfb 55%, #f3f9ff); --page-bg: #a9cdee;
-  --surface: rgba(255, 255, 255, 0.42); --surface-2: rgba(255, 255, 255, 0.5); --field-bg: rgba(255, 255, 255, 0.7);
-  --text: #0c2740; --muted: #3a546d;
-  --accent: #0a63c2; --accent-ink: #ffffff; --accent-text: #084f9c; --accent-2: #7fd3ff; --accent-3: #ffffff;
-  --good: #136b45; --danger: #a5262a; --star: #0a63c2;
-  --border: rgba(255, 255, 255, 0.8);
-  --radius: 30px; --radius-sm: 18px;
-  --font-head: 'Plus Jakarta Sans', system-ui, sans-serif; --font-body: 'Plus Jakarta Sans', system-ui, sans-serif; --font-accent: 'Plus Jakarta Sans', sans-serif;
+  --bg: #eef1f8; --bg-image: radial-gradient(55% 22% at 8% 4%, rgba(120, 170, 255, 0.75), transparent 70%), radial-gradient(50% 20% at 96% 12%, rgba(255, 150, 200, 0.6), transparent 70%), radial-gradient(60% 22% at 70% 38%, rgba(160, 130, 255, 0.5), transparent 70%), radial-gradient(55% 20% at 10% 58%, rgba(110, 220, 220, 0.5), transparent 70%), radial-gradient(55% 22% at 92% 80%, rgba(255, 190, 120, 0.55), transparent 70%), radial-gradient(50% 18% at 20% 96%, rgba(140, 160, 255, 0.55), transparent 70%); --page-bg: #d9deea;
+  --surface: rgba(255, 255, 255, 0.34); --surface-2: rgba(255, 255, 255, 0.42); --field-bg: rgba(255, 255, 255, 0.6);
+  --text: #0b1220; --muted: #3b4558;
+  --accent: #0062e0; --accent-ink: #ffffff; --accent-text: #0052bd; --accent-2: #a78bfa; --accent-3: #ffffff;
+  --good: #136b45; --danger: #b3261e; --star: #0062e0;
+  --border: rgba(255, 255, 255, 0.78);
+  --radius: 28px; --radius-sm: 18px;
+  --card-art: linear-gradient(135deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0) 36%), linear-gradient(315deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0) 30%);
+  --cover-shape: 26%;
+  --font-head: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif; --font-body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, sans-serif; --font-accent: -apple-system, BlinkMacSystemFont, 'Inter', system-ui, sans-serif;
   --head-spacing: -0.02em;
-  --kicker-spacing: 0.14em;
-  --shadow: 0 10px 36px rgba(20, 70, 130, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.9); --card-blur: blur(22px) saturate(1.6);
+  --kicker-spacing: 0.1em;
+  --btn-shadow: 0 6px 18px rgba(0, 98, 224, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  --shadow: 0 12px 40px rgba(30, 50, 110, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(255, 255, 255, 0.35); --card-blur: blur(26px) saturate(1.9);
   --ease: cubic-bezier(0.16, 1, 0.3, 1); --dur: 0.4s; --screen-anim: glass-in; --screen-dur: 0.5s;
-  --icon-stroke: 1.6;
-  --hero-bg: linear-gradient(160deg, rgba(255, 255, 255, 0.78), rgba(255, 255, 255, 0.38)); --hero-ink: #0c2740; --hero-muted: #3a546d; --hero-accent: #0a63c2; --hero-accent-ink: #ffffff;
-  --trophy-a: #ffffff; --trophy-b: #cfe9ff; --trophy-c: #9fd0f7; --trophy-line: #0c2740; --trophy-stroke: 2;
-  --wm-font: 'Plus Jakarta Sans', system-ui, sans-serif; --wm-weight: 800; --wm-style: normal; --wm-spacing: -0.04em; --wm-color: transparent; --wm-grad: linear-gradient(120deg, #0a63c2, #4fb4ee); --wm-clip: text;
+  --icon-stroke: 1.7;
+  --nav-inset: 12px; --nav-radius: 999px; --nav-bg: rgba(255, 255, 255, 0.42); --nav-border: 1px; --nav-shadow: 0 12px 36px rgba(30, 50, 110, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.95); --nav-blur: blur(28px) saturate(2);
+  --hero-bg: radial-gradient(120% 80% at 0% 0%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 55%), linear-gradient(160deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.18)); --hero-ink: #0b1220; --hero-muted: #3b4558; --hero-accent: #0062e0; --hero-accent-ink: #ffffff;
+  --trophy-a: #ffffff; --trophy-b: #dfe8ff; --trophy-c: #c9b8ff; --trophy-line: #0b1220; --trophy-stroke: 2;
+  --wm-font: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Inter', system-ui, sans-serif; --wm-weight: 700; --wm-style: normal; --wm-spacing: -0.04em; --wm-color: transparent; --wm-grad: linear-gradient(120deg, #0062e0, #a855f7 55%, #ff6aa8); --wm-clip: text;
 }
 
 /* Ink & Paint — 1930s hand-drawn cartoon: thick black outlines, primary colours, bouncy */
@@ -430,35 +467,40 @@
   --hero-bg: repeating-conic-gradient(from 0deg at 50% 100%, #ffc93c 0 12deg, #ffb81f 12deg 24deg); --hero-ink: #1a1a1a; --hero-muted: #4a3a10; --hero-accent: #c92a22; --hero-accent-ink: #ffffff;
   --trophy-a: #ffe680; --trophy-b: #ffc93c; --trophy-c: #ffd95e; --trophy-line: #1a1a1a; --trophy-stroke: 4;
   --wm-font: 'Luckiest Guy', 'Chewy', 'Comic Sans MS', cursive; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0.02em; --wm-color: #c92a22; --wm-shadow: 3px 3px 0 #1a1a1a; --wm-rotate: -4deg;
+  --cover-border: 3px solid #1a1a1a;
+  --head-rule: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='8'%3E%3Cpath d='M0 4q3.500-5 7 0t7 0 7 0 7 0' fill='none' stroke='%231a1a1a' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E"); --head-rule-size: auto 8px; --head-rule-pad: 13px;
 }
 
-/* Jazz Club — smoky midnight room, brass, burgundy, Blue Note blue, marquee lettering */
+/* Jazz Club — a warm spotlight in a midnight-blue room: brass and gold throughout, burgundy velvet, marquee lettering */
 [data-theme='jazz'] {
   color-scheme: dark;
-  --bg: #0f1420; --bg-image: radial-gradient(50% 22% at 15% 0%, rgba(214, 168, 74, 0.2), transparent 70%), radial-gradient(60% 30% at 100% 35%, rgba(63, 110, 165, 0.22), transparent 70%), radial-gradient(60% 30% at 0% 100%, rgba(125, 31, 46, 0.3), transparent 70%); --page-bg: #070a11;
-  --surface: #19202f; --surface-2: #2b2130; --field-bg: #0f1420;
-  --text: #f1e6cf; --muted: #b8ab92;
-  --accent: #d6a84a; --accent-ink: #171208; --accent-text: #e6bd62; --accent-2: #7d1f2e; --accent-3: #3f6ea5;
-  --good: #9fd6a8; --danger: #ff8f8a; --star: #e6bd62;
-  --border: #3a4152;
+  --bg: #172036; --bg-image: radial-gradient(70% 26% at 20% 0%, rgba(243, 212, 136, 0.36), transparent 70%), radial-gradient(60% 26% at 100% 30%, rgba(214, 168, 74, 0.2), transparent 70%), radial-gradient(60% 30% at 0% 65%, rgba(125, 31, 46, 0.32), transparent 70%), radial-gradient(60% 26% at 90% 95%, rgba(243, 212, 136, 0.2), transparent 70%); --page-bg: #0c1220;
+  --surface: #222d49; --surface-2: #33304a; --field-bg: #141c30;
+  --text: #f6ecd6; --muted: #c9bfa6;
+  --accent: #e0b354; --accent-ink: #1a1408; --accent-text: #f0c96e; --accent-2: #8a2434; --accent-3: #5d8cc4;
+  --good: #9fd6a8; --danger: #ff9a94; --star: #f0c96e;
+  --border: #8a7238;
   --radius: 4px; --radius-sm: 3px; --btn-radius: 3px;
+  --card-art: linear-gradient(90deg, transparent, #d6a84a 18%, #f6dc9a 50%, #d6a84a 82%, transparent) top / 100% 2px no-repeat;
+  --cover-shape: 50%; --cover-border: 2px solid #e0b354;
+  --head-rule: linear-gradient(180deg, #e0b354 0 1px, transparent 1px 3px, #e0b354 3px 4px); --head-rule-size: auto 4px; --head-rule-pad: 9px;
   --font-head: 'Limelight', 'Playfair Display', Georgia, serif; --font-body: 'Josefin Sans', 'Century Gothic', sans-serif; --font-accent: 'Playfair Display', Georgia, serif;
   --head-weight: 400; --head-spacing: 0.02em; --head-scale: 1.04;
   --kicker-size: 13px; --kicker-spacing: 0.02em; --kicker-transform: none; --kicker-weight: 400;
-  --btn-transform: uppercase; --btn-spacing: 0.12em;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(214, 168, 74, 0.12);
+  --btn-transform: uppercase; --btn-spacing: 0.12em; --btn-shadow: 0 0 18px rgba(224, 179, 84, 0.35);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(224, 179, 84, 0.18);
   --ease: cubic-bezier(0.3, 0, 0.2, 1); --dur: 0.35s; --screen-anim: tide; --screen-dur: 0.6s;
   --icon-stroke: 1.5;
   --cover-filter: sepia(0.25) contrast(1.1) saturate(0.85);
-  --hero-bg: radial-gradient(70% 90% at 15% 0%, rgba(230, 189, 98, 0.38), transparent 70%), linear-gradient(160deg, #1d3557, #0f1a2c); --hero-ink: #f6ecd6; --hero-muted: #c9c1ad; --hero-accent: #d6a84a; --hero-accent-ink: #171208;
-  --trophy-a: #f3d488; --trophy-b: #c0902f; --trophy-c: #e6bd62; --trophy-line: #171208;
-  --wm-font: 'Limelight', 'Playfair Display', serif; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0.04em; --wm-color: #e6bd62; --wm-shadow: 0 0 14px rgba(214, 168, 74, 0.55);
+  --hero-bg: radial-gradient(90% 110% at 60% -10%, rgba(246, 220, 154, 0.38), transparent 65%), linear-gradient(160deg, #2c4a78, #18263f); --hero-ink: #fff8e6; --hero-muted: #d8cfb8; --hero-accent: #e0b354; --hero-accent-ink: #1a1408;
+  --trophy-a: #fbe6a6; --trophy-b: #d6a84a; --trophy-c: #f0c96e; --trophy-line: #171208;
+  --wm-font: 'Limelight', 'Playfair Display', serif; --wm-weight: 400; --wm-style: normal; --wm-spacing: 0.04em; --wm-color: #f0c96e; --wm-shadow: 0 0 16px rgba(224, 179, 84, 0.7);
 }
 [data-theme='jazz'] .kicker { font-style: italic; }
 
 /* Autumn — burnt orange, maroon, mustard, warm paper */
 [data-theme='fall'] {
-  --bg: #f6ead8; --bg-image: radial-gradient(45% 26% at 100% 0%, rgba(217, 154, 31, 0.3), transparent 70%), radial-gradient(40% 24% at 0% 35%, rgba(179, 71, 15, 0.16), transparent 70%), radial-gradient(45% 26% at 90% 85%, rgba(122, 31, 31, 0.12), transparent 70%); --page-bg: #e2cba6;
+  --bg: #f6ead8; --bg-image: repeating-linear-gradient(0deg, rgba(179, 71, 15, 0.07) 0 3px, transparent 3px 34px), repeating-linear-gradient(90deg, rgba(122, 31, 31, 0.07) 0 3px, transparent 3px 34px), radial-gradient(45% 26% at 100% 0%, rgba(217, 154, 31, 0.3), transparent 70%), radial-gradient(40% 24% at 0% 35%, rgba(179, 71, 15, 0.16), transparent 70%), radial-gradient(45% 26% at 90% 85%, rgba(122, 31, 31, 0.12), transparent 70%); --page-bg: #e2cba6;
   --surface: #fdf5e8; --surface-2: #f0d9b8; --field-bg: #fffaf2;
   --text: #3a2214; --muted: #6e5140;
   --accent: #b3470f; --accent-ink: #ffffff; --accent-text: #963a0a; --accent-2: #7a1f1f; --accent-3: #d99a1f;
@@ -473,6 +515,7 @@
   --hero-ink: #fff5e6; --hero-muted: #f3d9bd; --hero-accent: #fff5e6; --hero-accent-ink: #6f1d14;
   --trophy-line: #3a2214;
   --wm-font: 'Fraunces', Georgia, serif; --wm-color: #963a0a;
+  --card-art: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E%3Cg opacity='.5'%3E%3Cpath d='M52 54c-22 2-36-10-38-32 20 0 36 10 38 32z' fill='%23c9611a'/%3E%3Cpath d='M52 54L22 28' stroke='%23fdf5e8' stroke-width='1.5'/%3E%3Cpath d='M30 56c-10 0-16-6-17-16 10 0 16 6 17 16z' fill='%23d99a1f'/%3E%3C/g%3E%3C/svg%3E") bottom right / 48px no-repeat;
 }
 
 /* Winter — snow, icy blue, pine and cranberry */
@@ -495,20 +538,24 @@
   --hero-ink: #ffffff; --hero-muted: #d3e2f0; --hero-accent: #ffffff; --hero-accent-ink: #16324f;
   --trophy-a: #ffffff; --trophy-b: #c9d9e8; --trophy-c: #e6eef6; --trophy-line: #14263a; --trophy-stroke: 2;
   --wm-font: 'Marcellus', 'Optima', serif; --wm-weight: 400; --wm-style: normal; --wm-transform: uppercase; --wm-spacing: 0.16em; --wm-color: #1f5a8a;
+  --card-art: radial-gradient(130px 70px at 100% 0%, rgba(205, 224, 242, 0.9), transparent 70%);
+  --head-rule: radial-gradient(circle, #9fbcd8 1.5px, transparent 2px); --head-rule-size: 10px 5px; --head-rule-pad: 9px;
 }
 
-/* Spring — lilac, mint, blossom pink, butter yellow */
+/* Spring — a picnic blanket: gingham, lilac, tulip pink, butter yellow, scalloped edges */
 [data-theme='spring'] {
-  --bg: #f7fbf1; --bg-image: radial-gradient(45% 26% at 100% 0%, rgba(205, 180, 240, 0.5), transparent 70%), radial-gradient(40% 24% at 0% 30%, rgba(170, 225, 180, 0.45), transparent 70%), radial-gradient(45% 26% at 85% 80%, rgba(247, 220, 111, 0.3), transparent 70%), radial-gradient(35% 20% at 10% 90%, rgba(242, 167, 195, 0.3), transparent 70%); --page-bg: #dcebd2;
-  --surface: #ffffff; --surface-2: #e3f2d9; --field-bg: #ffffff;
-  --text: #253322; --muted: #566a52;
+  --bg: #fbfdf7; --bg-image: repeating-linear-gradient(0deg, rgba(150, 205, 150, 0.17) 0 14px, transparent 14px 28px), repeating-linear-gradient(90deg, rgba(150, 205, 150, 0.17) 0 14px, transparent 14px 28px); --page-bg: #dcebd2;
+  --surface: #ffffff; --surface-2: #efe6fb; --field-bg: #ffffff;
+  --text: #253322; --muted: #536650;
   --accent: #7a4fb5; --accent-ink: #ffffff; --accent-text: #6a41a3; --accent-2: #f2a7c3; --accent-3: #f7dc6f;
   --good: #2f7a3a; --danger: #a8323d; --star: #b57c0a;
-  --border: #d4e8c8;
-  --radius: 24px; --radius-sm: 15px;
+  --border: #dccdf2; --border-w: 2px;
+  --radius: 26px; --radius-sm: 16px;
+  --cover-shape: 30%;
+  --head-rule: radial-gradient(circle at 6px 0, #f2a7c3 5px, transparent 5.5px); --head-rule-size: 12px 6px; --head-rule-pad: 11px;
   --font-head: 'Fredoka', 'Arial Rounded MT Bold', sans-serif; --font-body: 'Nunito', system-ui, sans-serif; --font-accent: 'Nunito', sans-serif;
   --head-weight: 600; --head-spacing: 0;
-  --shadow: 0 6px 22px rgba(122, 79, 181, 0.12);
+  --shadow: 0 6px 0 #e6d6f7;
   --ease: cubic-bezier(0.34, 1.3, 0.5, 1); --dur: 0.32s; --screen-anim: bloom; --screen-dur: 0.5s;
   --icon-stroke: 1.9;
   --hero-bg: linear-gradient(160deg, #e6d6f7, #d6efd9 60%, #fdf0c2); --hero-ink: #2b2140; --hero-muted: #55496b; --hero-accent: #7a4fb5; --hero-accent-ink: #ffffff;
@@ -537,6 +584,8 @@
   --hero-ink: #ffffff; --hero-muted: #d2eef2; --hero-accent: #ffc233; --hero-accent-ink: #0f2f3d;
   --trophy-line: #4a2f05;
   --wm-font: 'Baloo 2', 'Arial Rounded MT Bold', sans-serif; --wm-weight: 800; --wm-style: normal; --wm-spacing: -0.01em; --wm-color: #cc3a26; --wm-shadow: 2px 2px 0 #ffc233;
+  --card-art: repeating-linear-gradient(90deg, #cc3a26 0 14px, #ffffff 14px 28px) top / 100% 6px no-repeat;
+  --head-rule: repeating-linear-gradient(90deg, #18a5b8 0 10px, #ffc233 10px 20px, #cc3a26 20px 30px); --head-rule-size: auto 4px; --head-rule-pad: 9px;
 }
 
 /* ---------- Theme motion ---------- */

@@ -38,6 +38,11 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 - The first block (`:root, [data-theme]`) is the Nobles default and the fallback for every token. Other themes override what differs.
 - To add a theme: add a block in `themes.css`, add the id to `ThemeId` in `src/types.ts`, add an entry to `THEMES` in `src/components/Brand.tsx` with one of the `THEME_CATEGORIES` (Classic, Music scenes, Fantasy & storybook, Nature, Seasonal), and load any new fonts in `index.html`. Optionally add a trophy accessory and a header motif in `Brand.tsx`.
 - Settings previews nest a different `data-theme` on each swatch, so theme styling must come from tokens. A selector like `[data-theme='x'] .thing` also matches inside a swatch nested under theme x, so only use one for classes that never appear in a swatch.
+- A theme should differ in shape and ornament, not just colour and font. The levers, all tokens: `--card-shape` and `--card-art` (card outline and corner art), `--cover-shape` / `--cover-clip` / `--cover-border` (round records, portholes, shields, arches, leaves), `--head-rule` (the decorative line under section headings), and the `--nav-*` set (floating pill, coloured bar). The owner called earlier recolour-only themes "lazy", so use these when adding or revising a theme, and keep neighbours distinct (Fleur is pink stationery with arched covers, Garden is a dark greenhouse with leaf shapes, Spring is a gingham picnic).
+- **Dark Fantasy** is a moonlit keep (indigo, silver, amethyst). No blood, bone or other gruesome imagery, in the styling or the copy.
+- **Liquid Glass** is frosted floating panels over a colourful wallpaper, with a floating pill nav. It is not a sky-and-clouds theme, and it uses no Apple assets or names.
+- **Jazz Club** should stay gold-forward and not too dark.
+- Keep decoration out from under text: hero-card ornaments belong in corners that hold no controls (the Song/Album toggle is top-right, the rating row is at the bottom).
 - Every theme must keep readable contrast: check body text, muted text, text on `--accent`, and text and stars inside hero cards (`--hero-*`).
 - Themes inspired by existing properties (the wizarding-school and hand-drawn-cartoon ones) borrow a mood only. Do not use their names, logos, characters or lookalike fonts.
 

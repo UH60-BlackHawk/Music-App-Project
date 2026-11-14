@@ -75,7 +75,7 @@ src/
 
 ## Themes
 
-Each theme is one block of CSS variables in `src/styles/themes.css` covering colour, type, radius, texture, icon stroke, motion, the wordmark and the trophy. The first block holds the defaults; every other theme only overrides what differs. To add one, add a block, add its id to `ThemeId` in `src/types.ts`, and add an entry (with its category) to `THEMES` in `src/components/Brand.tsx`.
+Each theme is one block of CSS variables in `src/styles/themes.css` covering colour, type, texture, icon stroke, motion, the wordmark and the trophy, plus shape and ornament: card outline and corner art, cover shape (records, portholes, shields, arches, leaves), the rule under section headings, and the nav bar style. The first block holds the defaults; every other theme only overrides what differs. To add one, add a block, add its id to `ThemeId` in `src/types.ts`, and add an entry (with its category) to `THEMES` in `src/components/Brand.tsx`.
 
 ## Embedding
 

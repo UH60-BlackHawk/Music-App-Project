@@ -14,18 +14,18 @@ export const THEMES: { id: ThemeId; category: ThemeCategory; name: string; blurb
   { id: 'hyperpop', category: 'Music scenes', name: 'Hyperpop', blurb: 'Neon, chrome, Y2K' },
   { id: 'emo', category: 'Music scenes', name: 'Alternative Emo', blurb: 'Black, red, safety pins' },
   { id: 'vintage', category: 'Music scenes', name: 'Vintage Jukebox', blurb: '1940s–60s diner and vinyl' },
-  { id: 'ocean', category: 'Nature', name: 'Ocean', blurb: 'Deep water, aqua, coral' },
-  { id: 'garden', category: 'Nature', name: 'Garden', blurb: 'Leafy greens and blooms' },
+  { id: 'ocean', category: 'Nature', name: 'Ocean', blurb: 'Sunlit shallows to the deep' },
+  { id: 'garden', category: 'Nature', name: 'Garden', blurb: 'Greenhouse leaves and blooms' },
   { id: 'country', category: 'Music scenes', name: 'Country', blurb: 'Dirt road, rust, denim' },
   { id: 'poppunk', category: 'Music scenes', name: 'Pop Punk', blurb: 'Neon, checkerboard, spray paint' },
   { id: 'typewriter', category: 'Classic', name: 'Typewriter', blurb: 'Black ink on paper' },
-  { id: 'darkfantasy', category: 'Fantasy & storybook', name: 'Dark Fantasy', blurb: 'Soot, blood, iron, bone' },
+  { id: 'darkfantasy', category: 'Fantasy & storybook', name: 'Dark Fantasy', blurb: 'Moonlit keep, amethyst, silver' },
   { id: 'medieval', category: 'Fantasy & storybook', name: 'Medieval', blurb: 'Parchment and gold leaf' },
   { id: 'wizard', category: 'Fantasy & storybook', name: 'Wizarding School', blurb: 'Candlelit castle at midnight' },
-  { id: 'glass', category: 'Classic', name: 'Liquid Glass', blurb: 'Sky, clouds, translucency' },
+  { id: 'glass', category: 'Classic', name: 'Liquid Glass', blurb: 'Frosted, floating, luminous' },
   { id: 'cartoon', category: 'Fantasy & storybook', name: 'Ink & Paint', blurb: 'Hand-drawn 1930s cartoon' },
-  { id: 'jazz', category: 'Music scenes', name: 'Jazz Club', blurb: 'Smoke, brass, midnight blue' },
-  { id: 'spring', category: 'Seasonal', name: 'Spring', blurb: 'Lilac, mint, blossom' },
+  { id: 'jazz', category: 'Music scenes', name: 'Jazz Club', blurb: 'Gold, spotlight, midnight blue' },
+  { id: 'spring', category: 'Seasonal', name: 'Spring', blurb: 'Gingham, lilac, tulips' },
   { id: 'summer', category: 'Seasonal', name: 'Summer', blurb: 'Sun, turquoise, coral' },
   { id: 'fall', category: 'Seasonal', name: 'Autumn', blurb: 'Burnt orange and maroon' },
   { id: 'winter', category: 'Seasonal', name: 'Winter', blurb: 'Snow, ice blue, pine' },
@@ -90,7 +90,17 @@ export function Trophy({ size = 64, theme: forced }: { size?: number; theme?: Th
           <path d="M26 130c-6-8-4-18 2-22M94 130c6-8 4-18-2-22" fill="none" stroke="var(--accent)" strokeWidth="2" />
         </g>
       )}
-      {(theme === 'fleur' || theme === 'garden' || theme === 'spring') && (
+      {theme === 'garden' && (
+        <g fill="var(--good)" stroke="var(--trophy-line)" strokeWidth="1.5" strokeLinejoin="round">
+          <path d="M60 23c-2-11-11-16-20-13 2 10 10 15 20 13z" /><path d="M60 23c2-11 11-16 20-13-2 10-10 15-20 13z" />
+        </g>
+      )}
+      {theme === 'spring' && (
+        <g transform="translate(100 28)" stroke="var(--trophy-line)" strokeWidth="1.2">
+          <ellipse cx="-6" cy="-3" rx="6" ry="8" transform="rotate(-20)" fill="var(--accent-2)" /><ellipse cx="6" cy="-3" rx="6" ry="8" transform="rotate(20)" fill="var(--accent-3)" /><path d="M0-9v15" strokeWidth="2" strokeLinecap="round" />
+        </g>
+      )}
+      {theme === 'fleur' && (
         <g>
           {[[36, 26], [48, 19], [60, 16], [72, 19], [84, 26]].map(([x, y], i) => (
             <g key={i} transform={`translate(${x} ${y})`}>
@@ -159,8 +169,6 @@ export function ThemeDecor() {
           <path d="M40 36c6-8 14-8 20-2" stroke="var(--accent)" strokeWidth="1.4" fill="none" />
         </svg>
       )
-    case 'spring':
-    case 'garden':
     case 'fleur':
       return (
         <svg {...common}>
@@ -213,8 +221,30 @@ export function ThemeDecor() {
     case 'glass':
       return (
         <svg {...common}>
-          <path d="M22 30a9 9 0 0 1 1-18 13 13 0 0 1 25 2 8 8 0 0 1 1 16z" fill="#fff" opacity=".9" />
-          <path d="M50 34a6 6 0 0 1 1-12 9 9 0 0 1 17 2 5 5 0 0 1 0 10z" fill="#fff" opacity=".7" />
+          <circle cx="24" cy="20" r="15" fill="rgba(255,255,255,.45)" stroke="#fff" strokeWidth="1.5" />
+          <circle cx="47" cy="20" r="11" fill="rgba(255,255,255,.3)" stroke="#fff" strokeWidth="1.2" />
+          <path d="M14 15a12 12 0 0 1 9-8" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" />
+        </svg>
+      )
+    case 'garden':
+      return (
+        <svg {...common}>
+          <g transform="translate(22 20)">
+            {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((r) => <ellipse key={r} cx="0" cy="-11" rx="3.2" ry="7" transform={`rotate(${r})`} fill="var(--accent)" />)}
+            <circle r="6" fill="#5a3a1a" />
+          </g>
+          <path d="M44 31c2-13 12-19 27-17-2 13-12 19-27 17z" fill="var(--good)" /><path d="M46 30l21-14" stroke="var(--bg)" strokeWidth="1.2" />
+        </svg>
+      )
+    case 'spring':
+      return (
+        <svg {...common}>
+          {[[10, 'var(--accent)'], [30, 'var(--accent-2)'], [50, 'var(--accent-3)']].map(([x, c]) => (
+            <g key={x} transform={`translate(${x} 3)`}>
+              <path d="M8 20v15" stroke="var(--good)" strokeWidth="2" /><path d="M8 30c-5 0-7-3-7-6 4 0 7 2 7 6z" fill="var(--good)" />
+              <path d="M1 6l3.500 3L8 4l3.500 5L15 6v8a7 7 0 0 1-14 0z" fill={c as string} />
+            </g>
+          ))}
         </svg>
       )
     case 'vintage':
