@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Data, ID, ItemType, NmaPhase, Privacy, Report, ThemeId, User } from './types'
+import type { CatalogExtra, Data, ID, ItemType, NmaPhase, Privacy, Report, ThemeId, User } from './types'
 import { buildSeed, DAY, emptyLiveData, genListens, ME_TASTES, mulberry32, seedNominations, uid } from './data/seed'
 import { LIVE, liveHooks } from './services/mode'
 import { registerCatalog, tid, tracks } from './data/catalog'
@@ -16,6 +16,8 @@ interface Actions {
   updateMe(patch: Partial<User>): void
   connect(): number
   applySpotifyImport(d: SpotifyImport): void
+  /** Add songs (e.g. picked from Spotify search) to the catalog; in live mode they're saved to the shared catalog. */
+  addCatalog(extra: CatalogExtra): void
   disconnect(): void
   toggleFollow(id: ID): void
   block(id: ID): void
@@ -96,6 +98,14 @@ export const useStore = create<Store>()(
           }
           me({ spotify: true, nowPlaying: tid('Pink + White') })
           return added
+        },
+        addCatalog: (extra) => {
+          registerCatalog(extra)
+          set((s) => {
+            const prev = s.catalogExtra ?? { artists: [], albums: [], tracks: [] }
+            const add = <T extends { id: ID }>(a: T[], b: T[]) => [...a, ...b.filter((x) => !a.some((y) => y.id === x.id))]
+            return { catalogExtra: { artists: add(prev.artists, extra.artists), albums: add(prev.albums, extra.albums), tracks: add(prev.tracks, extra.tracks) } }
+          })
         },
         applySpotifyImport: (d) => {
           registerCatalog(d.catalog)

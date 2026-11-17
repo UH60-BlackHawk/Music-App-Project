@@ -7,6 +7,8 @@ import { beginSpotifyAuth, spotifyConfigured } from '../services/spotify'
 import { LIVE } from '../services/mode'
 import { remote } from '../services/remote'
 import { onSignedIn } from '../services/live'
+import { LastfmConnect } from '../components/Lastfm'
+import { lastfmConfigured } from '../services/lastfm'
 
 export const SCHOOL_DOMAIN = 'nobles.edu'
 export const PRIVACY_OPTIONS: [Privacy, string, string][] = [
@@ -91,7 +93,7 @@ export default function Welcome() {
           {LIVE
             ? <p className="muted">We emailed <b>{email}</b>. Tap the link in that email <b>on this device</b>, or type the code from it below.</p>
             : <p className="muted">We sent a 6-digit code to <b>{email}</b>.</p>}
-          <input className="input code" inputMode="numeric" maxLength={LIVE ? 8 : 6} placeholder={LIVE ? 'Code' : '••••••'} value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} aria-label="Verification code" autoFocus />
+          <input className="input code" inputMode="numeric" maxLength={LIVE ? 8 : 6} placeholder="••••••" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} aria-label="Verification code" autoFocus />
           {err && <p className="error">{err}</p>}
           <button className="btn primary block" disabled={busy}>{busy ? 'Checking…' : 'Verify'}</button>
           {LIVE
@@ -120,11 +122,12 @@ export default function Welcome() {
               <Icon name={me.spotify ? 'check' : 'headphones'} size={18} /> {me.spotify ? 'Spotify connected' : 'Connect Spotify'}
             </button>
           )}
+          {LIVE && <LastfmConnect compact />}
           {LIVE && spotifyConfigured && <p className="fine">Spotify sign-in is limited to a few testers for now. Everyone can still share, rate and message songs.</p>}
-          {LIVE && !spotifyConfigured && <p className="fine">You can connect a music account later in Settings. Everything else works without one.</p>}
+          {LIVE && !spotifyConfigured && !lastfmConfigured && <p className="fine">You can connect a music account later in Settings. Everything else works without one.</p>}
           {imported !== null && imported > 0 && <p className="ok">Imported {imported} recent plays.</p>}
           {!LIVE && !spotifyConfigured && <p className="fine">Prototype: connecting uses sample listening data until a Spotify client ID is configured.</p>}
-          <button className="btn primary block" onClick={() => setStep(5)}>{me.spotify ? 'Continue' : 'Skip for now'}</button>
+          <button className="btn primary block" onClick={() => setStep(5)}>{me.spotify || me.lastfm ? 'Continue' : 'Skip for now'}</button>
         </div>
       )}
 

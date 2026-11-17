@@ -1,6 +1,8 @@
 // End-to-end test of live mode: two students (Maya and Liam) use the real app against a local Postgres
 // with the real security rules, through the test bridge. See "Verifying changes" in CLAUDE.md for how to run it.
 //   DATABASE_URL=… APP_URL=http://127.0.0.1:4175/ node supabase/tests/live-app.e2e.cjs
+// The app must be built with VITE_TEST_BRIDGE and VITE_LASTFM_API_KEY=test-lastfm-key, and the bridge started with
+// --reset --functions (see CLAUDE.md, Verifying changes).
 // Needs Playwright (preinstalled in the cloud container). Prints one line per check.
 const { chromium } = require('playwright');
 const pg = require('pg');
@@ -103,6 +105,31 @@ const log = (...a) => console.log(...a);
   await liam.goto(APP + '#/settings'); await liam.click('button:has-text("Sign out")'); await liam.waitForSelector('input[type=email]');
   await liam.fill('input[type=email]', 'lbrennan27@nobles.edu'); await liam.click('button:has-text("Email me a sign-in link")'); await liam.fill('input.code', '654321'); await liam.click('button:has-text("Verify")');
   await liam.waitForSelector('.homebar', { timeout: 8000 }); log('returning student goes straight to Home:', await liam.locator('.homebar').count() === 1);
+  // ---------- Spotify search, pasted links, Last.fm (needs the bridge started with --functions) ----------
+  await maya.goto(APP + '#/track/t-luther'); await maya.click('.detail-actions button:has-text("Share")'); await maya.click('.share-person >> nth=0');
+  await maya.keyboard.press('Escape');
+  await maya.goto(APP + '#/recommend'); await maya.waitForSelector('.sheet input');
+  await maya.fill('.sheet input', 'from the start'); await maya.waitForSelector('.sheet .kicker:has-text("On Spotify")');
+  await maya.waitForSelector('.sheet .row-title:has-text("From The Start")', { timeout: 8000 });
+  log('Spotify search result:', await maya.textContent('.sheet .row:has-text("From The Start") .row-sub'));
+  await maya.click('.sheet .row:has-text("From The Start") .row-main'); await maya.waitForTimeout(400);
+  log('picked song shown in Recommend:', await maya.textContent('.card .row-title'));
+  await maya.click('button.big'); await maya.waitForTimeout(1500);
+  log('new song saved to shared catalog + feed post:', JSON.stringify((await db.query(`select t.title, a.name, a.genre from tracks t join artists a on a.id = t.artist_id where t.id like 't-sp-%'`)).rows), (await db.query(`select count(*)::int n from songs_sent where track_id like 't-sp-%'`)).rows[0].n);
+  await maya.goto(APP + '#/recommend'); await maya.waitForSelector('.sheet input');
+  await maya.fill('.sheet input', 'https://open.spotify.com/track/1BxfuPKGuaTgP7aM0Bbdwr?si=abc');
+  await maya.waitForSelector('.sheet .kicker:has-text("From your link")'); await maya.waitForSelector('.sheet .row-title:has-text("Cruel Summer")', { timeout: 8000 });
+  log('pasted link found:', await maya.textContent('.sheet .row-title'));
+  await maya.keyboard.press('Escape');
+  // Last.fm: privacy note, sign in on (stand-in) Last.fm, come back connected with plays imported
+  await maya.route('https://www.last.fm/api/auth/**', (r) => { const cb = new URL(r.request().url()).searchParams.get('cb'); r.fulfill({ status: 302, headers: { location: cb + '&token=' + 'a'.repeat(32) } }) });
+  await maya.goto(APP + '#/settings'); await maya.click('.toggle-row:has-text("Last.fm") button:has-text("Connect")');
+  log('privacy note shown:', (await maya.textContent('.lastfm-note')).includes('public by default'));
+  await maya.click('button:has-text("Continue to Last.fm")');
+  await maya.waitForSelector('text=Connected as maya_fm', { timeout: 12000 });
+  log('Last.fm connected, plays imported:', (await db.query(`select count(*)::int n from listens l join profiles p on p.id = l.user_id where p.handle = 'mokafor27' and l.track_id <> 't-juna'`)).rows[0].n, '| address bar cleaned:', !maya.url().includes('token='));
+  await maya.goto(APP + '#/profile/me'); await maya.waitForTimeout(500);
+  log('profile now playing (from Last.fm):', (await maya.textContent('.nowplaying')).replace(/\s+/g, ' ').trim());
   log(errs.length ? 'logged errors:\n  ' + errs.join('\n  ') : 'no console errors');
   await b.close(); await db.end();
 })().catch(async (e) => { console.error('FAIL', e.message); process.exit(1); });

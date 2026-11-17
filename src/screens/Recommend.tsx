@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useStore } from '../store'
 import { tracks } from '../data/catalog'
@@ -11,6 +11,7 @@ export default function Recommend() {
   const s = useStore()
   const [trackId, setTrackId] = useState(id && tracks[id] ? id : '')
   const [picking, setPicking] = useState(!trackId)
+  const picked = useRef(trackId)
   const [start, setStart] = useState(() => (trackId ? Math.round(tracks[trackId].dur * 0.3) : 0))
   const [to, setTo] = useState<string | null>(null)
   const [note, setNote] = useState('')
@@ -30,7 +31,8 @@ export default function Recommend() {
   return (
     <>
       <TopBar title="Recommend a song" />
-      <Picker open={picking} onClose={() => (trackId ? setPicking(false) : nav(-1))} onPick={(tid) => { setTrackId(tid); setStart(Math.round(tracks[tid].dur * 0.3)) }} />
+      {/* Picker calls onPick then onClose in the same tick, so onClose reads the choice from a ref, not state. */}
+      <Picker open={picking} onClose={() => (picked.current ? setPicking(false) : nav(-1))} onPick={(tid) => { picked.current = tid; setTrackId(tid); setStart(Math.round(tracks[tid].dur * 0.3)) }} />
       {t && (
         <div className="stack">
           <div className="card">

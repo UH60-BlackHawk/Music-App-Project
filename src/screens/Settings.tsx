@@ -6,6 +6,8 @@ import { Avatar, GenrePicker, Icon, Section, Toggle, TopBar } from '../component
 import { beginSpotifyAuth, spotifyConfigured, spotifyLive, spotifyLogout } from '../services/spotify'
 import { syncSpotify } from '../services/spotifySync'
 import { LIVE } from '../services/mode'
+import { LastfmConnect } from '../components/Lastfm'
+import { lastfmConfigured } from '../services/lastfm'
 import { timeAgo } from '../lib/select'
 import { PRIVACY_OPTIONS } from './Welcome'
 import { ProfilePhoto } from '../components/Photo'
@@ -75,15 +77,18 @@ export default function Settings() {
         </div>
       </Section>
 
-      <Section title="Connected account">
+      <Section title="Connected accounts">
         <div className="card stack">
-          <div className="toggle-row">
+          <LastfmConnect />
+          {(!LIVE || spotifyConfigured) && <div className="toggle-row">
             <span><b>Spotify</b><small>{!me.spotify ? 'Not connected' : me.spotifySync ? `Synced ${timeAgo(me.spotifySync.at) === 'now' ? 'just now' : `${timeAgo(me.spotifySync.at)} ago`} · ${me.spotifySync.plays} real plays imported` : 'Connected · sample listening data'}</small></span>
             <button className={`btn sm ${me.spotify ? '' : 'primary'}`} onClick={toggleSpotify}>{me.spotify ? 'Disconnect' : 'Connect'}</button>
-          </div>
+          </div>}
+          {LIVE && spotifyConfigured && !me.spotify && <p className="fine">Spotify sign-in is limited to a few testers for now.</p>}
+          {LIVE && !spotifyConfigured && !lastfmConfigured && <p className="fine">No music services are set up yet. Everything else works without one.</p>}
           {me.spotify && spotifyLive() && <button className="btn block" onClick={syncNow} disabled={syncing}>{syncing ? 'Syncing…' : 'Sync now'}</button>}
           {syncErr && <p className="error">{syncErr}</p>}
-          {!spotifyConfigured && <p className="fine">Prototype mode: connections use sample listening data.</p>}
+          {!LIVE && !spotifyConfigured && <p className="fine">Prototype mode: connections use sample listening data.</p>}
         </div>
       </Section>
 

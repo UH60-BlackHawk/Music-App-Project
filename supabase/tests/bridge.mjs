@@ -122,7 +122,21 @@ export const server = http.createServer(async (req, res) => {
 })
 
 // Run directly: start listening (optionally rebuilding the database first).
+// --functions also serves the Spotify and Last.fm server functions against stand-in services (needs
+// `node --experimental-strip-types`, since the functions are TypeScript).
 if (import.meta.url === `file://${process.argv[1]}`) {
   if (args.includes('--reset')) await resetDatabase()
+  if (args.includes('--functions')) {
+    const { spotifyAction, lastfmAction } = await import('../functions/_shared/handlers.ts')
+    const { createSpotify } = await import('../functions/_shared/spotify.ts')
+    const { createLastfm } = await import('../functions/_shared/lastfm.ts')
+    const { pgDb } = await import('./pgdb.mjs')
+    const { FAKE, fakeFetch } = await import('./fakes.mjs')
+    const spotify = createSpotify({ clientId: FAKE.spotifyId, clientSecret: FAKE.spotifySecret, fetch: fakeFetch() })
+    const lastfm = createLastfm({ apiKey: FAKE.lastfmKey, sharedSecret: FAKE.lastfmSecret, fetch: fakeFetch() })
+    const signedIn = (uid) => { if (!uid) throw new Error('Sign in first.'); return uid }
+    functions.spotify = ({ uid, body, asUser }) => { signedIn(uid); return spotifyAction(body, { db: pgDb(asUser), spotify }) }
+    functions.lastfm = ({ uid, body, asUser }) => lastfmAction(body, { uid: signedIn(uid), db: pgDb(asUser), lastfm, spotify })
+  }
   server.listen(port, '127.0.0.1', () => console.log(`bridge on http://127.0.0.1:${port}`))
 }

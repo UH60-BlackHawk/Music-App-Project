@@ -7,6 +7,8 @@ import { useStore } from '../store'
 import { moderate, timeAgo } from '../lib/select'
 import { playClip, spotifyLive, stopClip } from '../services/spotify'
 import { ShareButton } from './Share'
+import { spotifyIdFromLink, useSpotifySearch } from '../services/songSearch'
+import { LIVE } from '../services/mode'
 
 const ICONS: Record<string, string> = {
   home: 'M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
@@ -190,14 +192,36 @@ export function Sheet({ open, onClose, title, children }: { open: boolean; onClo
 export function Picker({ open, onClose, onPick, type = 'track', title }: { open: boolean; onClose: () => void; onPick: (id: ID) => void; type?: ItemType; title?: string }) {
   const [q, setQ] = useState('')
   const ql = q.toLowerCase()
+  const addCatalog = useStore((s) => s.addCatalog)
+  const link = spotifyIdFromLink(q)
+  const remoteSearch = useSpotifySearch(type === 'track' && open ? q : '')
+  const local = link ? [] : trackList.filter((t) => `${t.title} ${artistOf(t).name}`.toLowerCase().includes(ql)).slice(0, 30)
+  // Spotify results not already listed above (songs already in Aux keep their Aux id).
+  const fromSpotify = (remoteSearch.data?.results ?? []).filter((r) => !local.some((t) => t.id === r.id))
+  const pickSpotify = (id: string) => {
+    const c = remoteSearch.data!.catalog
+    addCatalog({ artists: c.artists, albums: c.albums.filter((a) => c.tracks.some((t) => t.id === id && t.albumId === a.id)), tracks: c.tracks.filter((t) => t.id === id) })
+    onPick(id); onClose()
+  }
   return (
     <Sheet open={open} onClose={onClose} title={title ?? (type === 'track' ? 'Pick a song' : 'Pick an album')}>
-      <label className="search"><Icon name="search" size={18} /><input autoFocus placeholder="Search" value={q} onChange={(e) => setQ(e.target.value)} /></label>
+      <label className="search"><Icon name="search" size={18} /><input autoFocus placeholder={type === 'track' && LIVE ? 'Search songs, or paste a Spotify link' : 'Search'} value={q} onChange={(e) => setQ(e.target.value)} /></label>
       <div className="list">
         {type === 'track'
-          ? trackList.filter((t) => `${t.title} ${artistOf(t).name}`.toLowerCase().includes(ql)).slice(0, 30).map((t) => (
-              <TrackRow key={t.id} track={t} onClick={() => { onPick(t.id); onClose() }} />
-            ))
+          ? <>
+              {local.map((t) => <TrackRow key={t.id} track={t} onClick={() => { onPick(t.id); onClose() }} />)}
+              {LIVE && q.trim().length >= 2 && <div className="kicker picker-kicker">{link ? 'From your link' : 'On Spotify'}{remoteSearch.loading && ' · searching…'}</div>}
+              {fromSpotify.map((r) => (
+                <div className="row" key={r.id}>
+                  <button className="row-main" onClick={() => pickSpotify(r.id)}>
+                    <Cover id={r.id} size={46} />
+                    <span className="row-text"><span className="row-title">{r.title}</span><span className="row-sub">{r.artist} · {r.album}</span></span>
+                  </button>
+                </div>
+              ))}
+              {LIVE && remoteSearch.error && <p className="fine">{remoteSearch.error}</p>}
+              {!LIVE && link && <p className="fine">Pasting Spotify links works once Aux is connected to its backend.</p>}
+            </>
           : albumList.filter((a) => `${a.title} ${artists[a.artistId].name}`.toLowerCase().includes(ql)).map((a) => (
               <div className="row" key={a.id}>
                 <button className="row-main" onClick={() => { onPick(a.id); onClose() }}>

@@ -1,11 +1,12 @@
 # Setting up Spotify and the backend
 
-Two free accounts power the real version of Aux:
+Three free accounts power the real version of Aux:
 
-- **Spotify for Developers** lets people sign in with Spotify so Aux can read what they listen to.
-- **Supabase** is the backend: a database and sign-in service, so classmates share one app instead of each having their own copy in their browser.
+- **Supabase** is the backend: a database and sign-in service, so classmates share one app instead of each having their own copy in their browser. Start here.
+- **Spotify for Developers** powers searching all of Spotify for everyone, and Spotify sign-in for you and up to four testers.
+- **Last.fm** gives everyone else automatic listening history: each student links their Spotify to Last.fm once.
 
-Each part takes about 10 minutes. You can do them in either order.
+Each part takes about 10 minutes. Parts A and B can be done in either order; Part D needs A, B and C done.
 
 ---
 
@@ -20,7 +21,7 @@ Each part takes about 10 minutes. You can do them in either order.
    - **Redirect URI:** `http://127.0.0.1:5173/` (type it exactly, then click **Add**)
    - **Which API/SDKs are you planning to use?** tick **Web API** and **Web Playback SDK**
 3. Tick the terms box and click **Save**.
-4. On your app's page, click **Settings**. Copy the **Client ID** (a long string of letters and numbers). Don't click "View client secret"; Aux doesn't need it.
+4. On your app's page, click **Settings**. Copy the **Client ID** (a long string of letters and numbers). Then click **View client secret** and copy that too, but keep it private: it only ever goes into Supabase in Part D, never into the app or our chat.
 5. Click **User Management** and add yourself, plus up to four friends who want to test (their name and the email on their Spotify account).
 6. Put the Client ID into the app:
    1. In VS Code's file list, right-click `.env.example`, choose **Copy**, then right-click the empty space and choose **Paste**. Rename the copy to exactly `.env`.
@@ -28,7 +29,7 @@ Each part takes about 10 minutes. You can do them in either order.
    3. Restart the app: press **Shift+F5**, then **F5**.
 7. The app now opens at `http://127.0.0.1:5173/`. Your old demo was saved under `localhost`, so you'll sign in once more with the demo student. Then go to **Settings → Connected account → Connect** and log in to Spotify.
 
-You can paste the Client ID into our chat too. It isn't a secret, since it's built into the app anyway. Never share the client secret.
+You can paste the Client ID into our chat too. It isn't a secret, since it's built into the app anyway. Never share the client secret: it goes only into Supabase (Part D).
 
 ---
 
@@ -69,6 +70,60 @@ You can paste the Client ID into our chat too. It isn't a secret, since it's bui
 10. You can also send me the Project URL and the publishable key in our chat. Both are safe to share: they're designed to be public and ship inside the app, and the database's security rules protect the data. **Never share the `service_role` / secret key or the database password.**
 
 Free Supabase projects pause after a week with no activity. If that happens, open the project in the dashboard and click **Restore**.
+
+---
+
+## Part C: Last.fm
+
+1. Make a free Last.fm account at <https://www.last.fm/join> if you don't have one. (To test it yourself, also open Last.fm's **Settings → Applications** and connect your Spotify, so your plays appear there.)
+2. Go to <https://www.last.fm/api/account/create> and fill in:
+   - **Contact email:** your email
+   - **Application name:** Aux
+   - **Application description:** A music-sharing app for Nobles students
+   - **Callback URL:** `http://127.0.0.1:5173/`
+   - Leave the homepage blank. Click **Submit**.
+3. Last.fm shows an **API key** and a **Shared secret**. Copy both.
+   - The **API key** goes into `.env` after `VITE_LASTFM_API_KEY=` (it's public, and fine to paste in our chat).
+   - The **Shared secret** is private: it goes only into Supabase in Part D.
+4. Save `.env` and restart the app (**Shift+F5**, then **F5**).
+
+---
+
+## Part D: Turn on search and Last.fm (the server functions)
+
+Searching all of Spotify and importing Last.fm plays run on Supabase, where the secret keys stay safe. This part uses VS Code's terminal once.
+
+1. In VS Code, open the terminal: **Terminal → New Terminal**.
+2. Run each of these lines, pressing Enter after each:
+
+   ```bash
+   npx supabase login
+   ```
+
+   (A browser window opens: approve it, then come back.)
+
+   ```bash
+   npx supabase link --project-ref YOUR_PROJECT_REF
+   ```
+
+   Your project ref is the part of your Project URL before `.supabase.co`: for `https://abcdefgh.supabase.co`, it's `abcdefgh`. If it asks for the database password, paste it from your password manager.
+
+   ```bash
+   npx supabase functions deploy spotify
+   ```
+
+   ```bash
+   npx supabase functions deploy lastfm
+   ```
+
+3. Add the secret keys in the Supabase dashboard: **Edge Functions → Secrets** (in some layouts, **Project Settings → Edge Functions**). Add these four, one at a time, with **Name** exactly as written:
+   - `SPOTIFY_CLIENT_ID`: your Spotify Client ID
+   - `SPOTIFY_CLIENT_SECRET`: your Spotify client secret
+   - `LASTFM_API_KEY`: your Last.fm API key
+   - `LASTFM_SHARED_SECRET`: your Last.fm shared secret
+4. In the app, any song picker now shows **On Spotify** results under the usual list, and you can paste a Spotify song link into it. **Settings → Connected accounts → Last.fm → Connect** links Last.fm.
+
+If you ever change code in `supabase/functions/`, run the two `deploy` lines again.
 
 ---
 

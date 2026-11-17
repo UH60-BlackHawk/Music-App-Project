@@ -73,6 +73,8 @@ h3 { font-size: calc(16px * var(--head-scale)); }
 .genre-bar::-webkit-scrollbar { display: none; }
 .genre-bar .chip { flex: none; white-space: nowrap; }
 .genre-picker .chip { padding: 7px 13px; }
+.lastfm-note p { margin: 0; }
+.picker-kicker { display: block; padding: 14px 0 4px; border-top: 0 !important; }
 .profile-genres { justify-content: center; margin: 4px 0 0; }
 .filters { margin-bottom: 8px; }
 .chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 11px; border-radius: var(--btn-radius); border: var(--border-w) solid var(--border); background: var(--surface); color: var(--text); font-weight: 600; font-size: 13px; transition: transform var(--dur) var(--ease); }
