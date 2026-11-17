@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useStore } from '../store'
-import { albums, artists, tracks } from '../data/catalog'
+import { albums, artists, genreLabel, tracks } from '../data/catalog'
 import { canSee, followers, following, isFollowing, timeAgo, topArtists, trophiesForUser, userListens } from '../lib/select'
 import type { ID } from '../types'
 import { Trophy } from '../components/Brand'
@@ -42,6 +42,7 @@ export default function Profile() {
         <h1>{u.name}</h1>
         <p className="muted">@{u.handle} · Class of {u.classYear}</p>
         {u.bio && <p className="bio">{u.bio}</p>}
+        {!!u.genres?.length && <div className="chips profile-genres">{u.genres.map((g) => <span key={g} className="chip static">{genreLabel(g)}</span>)}</div>}
         <div className="stats">
           <button onClick={() => setPeople('followers')}><b>{visiblePeople(followers(s, id)).length}</b> followers</button>
           <button onClick={() => setPeople('following')}><b>{visiblePeople(following(s, id)).length}</b> following</button>

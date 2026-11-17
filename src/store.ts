@@ -226,7 +226,20 @@ export const useStore = create<Store>()(
         toggleLock: (eventId) => set((s) => ({ events: s.events.map((e) => (e.id === eventId ? { ...e, locked: !e.locked } : e)) })),
       }
     },
-    { name: 'aux-v3' },
+    {
+      name: 'aux-v3',
+      // Bump `version` and add a step here to upgrade saved data in place, instead of renaming the key (which wipes it).
+      version: 1,
+      migrate: (saved, from) => {
+        const st = saved as Data
+        if (from < 1) {
+          // v1: classmates gained favourite genres.
+          const fresh = buildSeed().users
+          for (const id of Object.keys(st.users ?? {})) if (id !== 'me' && !st.users[id].genres) st.users[id] = { ...st.users[id], genres: fresh[id]?.genres ?? [] }
+        }
+        return st as Store
+      },
+    },
   ),
 )
 

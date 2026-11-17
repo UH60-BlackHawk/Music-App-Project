@@ -34,7 +34,7 @@ export function MessagesList() {
               </span>
               <span className="thread-meta">
                 <small>{timeAgo(t.last.at)}</small>
-                {t.unread > 0 && <span className="badge" aria-label={`${t.unread} unread`}>{t.unread}</span>}
+                {t.unread > 0 && <span className="count-badge" aria-label={`${t.unread} unread`}>{t.unread}</span>}
               </span>
             </Link>
           )

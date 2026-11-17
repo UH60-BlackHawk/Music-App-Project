@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { Link, useNavigate } from 'react-router-dom'
 import type { ID, ItemType, Rec, Track, User } from '../types'
-import { albumList, albums, artistOf, artists, fmt, spotifyLink, trackList, tracks } from '../data/catalog'
+import { GENRES, albumList, albums, artistOf, artists, fmt, spotifyLink, trackList, tracks, type GenreFilter } from '../data/catalog'
 import { useStore } from '../store'
 import { moderate, timeAgo } from '../lib/select'
 import { playClip, spotifyLive, stopClip } from '../services/spotify'
@@ -394,6 +394,38 @@ export function Toggle({ checked, onChange, label, hint }: { checked: boolean; o
       <span><b>{label}</b>{hint && <small>{hint}</small>}</span>
       <input type="checkbox" role="switch" checked={checked} onChange={(e) => onChange(e.target.checked)} />
     </label>
+  )
+}
+
+/** Single-choice genre chips for filtering a list. "My genres" appears once the viewer has picked some. */
+export function GenreFilterBar({ value, onChange }: { value: GenreFilter; onChange: (v: GenreFilter) => void }) {
+  const mine = useStore((s) => s.users.me.genres ?? [])
+  const ordered = [...GENRES.filter(([g]) => mine.includes(g)), ...GENRES.filter(([g]) => !mine.includes(g))]
+  const opts: [GenreFilter, string][] = [['all', 'All genres'], ...(mine.length ? [['mine', 'My genres'] as [GenreFilter, string]] : []), ...ordered]
+  return (
+    <div className="genre-bar" role="radiogroup" aria-label="Filter by genre">
+      {opts.map(([v, label]) => (
+        <button key={v} role="radio" aria-checked={value === v} className={`chip ${value === v ? 'on' : ''}`} onClick={() => onChange(v)}>
+          {v === 'mine' && <Icon name="star" size={13} />}{label}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+/** Multi-choice genre chips for picking favourite genres. */
+export function GenrePicker({ value, onChange }: { value: string[]; onChange: (v: string[]) => void }) {
+  return (
+    <div className="chips genre-picker" role="group" aria-label="Favourite genres">
+      {GENRES.map(([g, label]) => {
+        const on = value.includes(g)
+        return (
+          <button key={g} className={`chip ${on ? 'on' : ''}`} aria-pressed={on} onClick={() => onChange(on ? value.filter((x) => x !== g) : [...value, g])}>
+            {on && <Icon name="check" size={13} />}{label}
+          </button>
+        )
+      })}
+    </div>
   )
 }
 

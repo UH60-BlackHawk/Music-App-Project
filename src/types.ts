@@ -24,6 +24,8 @@ export interface User {
   leaderboardOptIn: boolean
   spotify: boolean
   favoriteAlbums: ID[]
+  /** Genres the student picked as favourites (ids from GENRES). Boosts For You and powers the "My genres" filter. */
+  genres?: string[]
   badges: string[]
   nowPlaying?: ID
 }

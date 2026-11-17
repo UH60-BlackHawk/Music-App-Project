@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore } from '../store'
-import { albums, artists, tracks } from '../data/catalog'
+import { albums, artists, genreLabel, tracks, type GenreFilter } from '../data/catalog'
 import { leaderboard, trending, type Range } from '../lib/select'
-import { Cover, Icon, Seg, TrackRow } from '../components/ui'
+import { Cover, Empty, GenreFilterBar, Icon, Seg, TrackRow } from '../components/ui'
 
 type Kind = 'songs' | 'artists' | 'albums' | 'trending'
 
@@ -11,8 +11,10 @@ export default function Leaderboard() {
   const s = useStore()
   const [kind, setKind] = useState<Kind>('songs')
   const [range, setRange] = useState<Range>('week')
-  const rows = useMemo(() => (kind === 'trending' ? [] : leaderboard(s, kind, range)), [s.listens, s.users, kind, range])
-  const trend = useMemo(() => trending(s), [s.listens, s.users])
+  const [genre, setGenre] = useState<GenreFilter>('all')
+  const rows = useMemo(() => (kind === 'trending' ? [] : leaderboard(s, kind, range, genre)), [s.listens, s.users, kind, range, genre])
+  const trend = useMemo(() => trending(s, genre), [s.listens, s.users, genre])
+  const empty = kind === 'trending' ? !trend.length : !rows.length
   const optedIn = Object.values(s.users).filter((u) => u.leaderboardOptIn).length
   const max = rows[0]?.plays ?? 1
 
@@ -30,7 +32,9 @@ export default function Leaderboard() {
           ))}
         </div>
       )}
+      <GenreFilterBar value={genre} onChange={setGenre} />
 
+      {empty && <Empty>{kind === 'trending' ? 'Nothing is climbing' : 'No plays'} in {genre === 'all' ? 'any genre' : genre === 'mine' ? 'your genres' : genreLabel(genre)} {kind === 'trending' ? 'this week' : range === 'all' ? 'yet' : `this ${range}`}.</Empty>}
       <div className="list chart">
         {kind === 'trending'
           ? trend.map((r, i) => (

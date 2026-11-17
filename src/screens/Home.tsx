@@ -95,7 +95,7 @@ export default function Home() {
         <ThemeDecor />
         <div className="topbar-right">
           <Link className="iconbtn has-badge" to="/messages" aria-label={unread ? `Messages, ${unread} unread` : 'Messages'}>
-            <Icon name="send" />{unread > 0 && <span className="badge">{unread}</span>}
+            <Icon name="send" />{unread > 0 && <span className="count-badge">{unread}</span>}
           </Link>
           <Link className="iconbtn" to="/settings" aria-label="Settings"><Icon name="settings" /></Link>
         </div>

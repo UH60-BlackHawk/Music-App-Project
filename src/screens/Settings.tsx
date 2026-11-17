@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore } from '../store'
 import { THEME_CATEGORIES, THEMES, Trophy, Wordmark } from '../components/Brand'
-import { Avatar, Icon, Section, Toggle, TopBar } from '../components/ui'
+import { Avatar, GenrePicker, Icon, Section, Toggle, TopBar } from '../components/ui'
 import { beginSpotifyAuth, recentlyPlayed, spotifyConfigured, spotifyLive, spotifyLogout, type LiveTrack } from '../services/spotify'
 import { PRIVACY_OPTIONS } from './Welcome'
 import { ProfilePhoto } from '../components/Photo'
@@ -30,6 +30,13 @@ export default function Settings() {
             <span className="row-title">{me.name}</span>
             <span className="row-sub">{me.photo ? 'Tap your photo to change or remove it' : 'Tap to add a profile photo'}</span>
           </span>
+        </div>
+      </Section>
+
+      <Section title="Your genres" kicker="Shapes For You and the “My genres” filter">
+        <div className="card">
+          <GenrePicker value={me.genres ?? []} onChange={(genres) => s.updateMe({ genres })} />
+          <p className="fine">{me.genres?.length ? 'Shown on your profile. Tap again to remove.' : 'Pick as many as you like.'}</p>
         </div>
       </Section>
 

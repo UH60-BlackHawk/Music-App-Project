@@ -127,7 +127,7 @@ export function buildSeed(now = Date.now()): Data {
   let listens: Listen[] = []
   const ratings: Rating[] = []
   for (const [u, tastes] of PEOPLE) {
-    users[u.id] = u
+    users[u.id] = { ...u, genres: Object.keys(tastes).filter((g) => tastes[g] >= 0.6) }
     const ls = genListens(u.id, tastes, 90 + Math.floor(rng() * 50), rng, now)
     listens = listens.concat(ls)
     const counts: Record<ID, number> = {}

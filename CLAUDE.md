@@ -25,12 +25,13 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 - **No emoji reactions.** They were removed on request. Song of the Day, recommendation cards and incoming chat messages carry an inline star rating (`QuickRate`) instead; the full rating and review form stays on the song / album page.
 - **No emoji characters anywhere in the UI.** Use the `Icon` component (`ICONS` in `src/components/ui.tsx`) so icons follow the theme's stroke style. Award categories and badges store an icon name, not an emoji. The ★ rating glyphs are the one exception.
 - **Profile photos** are optional (`photo` on `User`, edited with `ProfilePhoto` in `src/components/Photo.tsx` on your profile and in Settings). The crop step saves a 320 px square JPEG data URL (about 10 KB) so it fits in browser storage; never store the original file. `Avatar` shows the photo or falls back to initials. In admin moderation, "Remove photo" on a reported profile takes the photo down.
+- **Genres.** The genre list and labels live in `GENRES` in `src/data/catalog.ts`; every artist has one genre and songs and albums inherit it. Students pick favourites (`genres` on `User`) during onboarding and in Settings; they show on profiles, add a "Because you like …" boost in `forYou`, and power the "My genres" option of `GenreFilterBar`. Charts (`leaderboard`, `trending`) and Discover (`forYou`, `friendsInto`) take a `GenreFilter` ('all' | 'mine' | a genre id). To add a genre, add it to `GENRES` and give artists that genre.
 - **Cover art is generated** (`Cover` in `src/components/ui.tsx`). Do not add real album artwork.
 - **No school API is assumed.** `?embed=1` drops the phone frame for future embedding in the Nobles app.
 
 ## What is simulated
 
-- Everything runs in the browser; state is a Zustand store persisted to `localStorage` under `aux-v3` (`src/store.ts`). There is no backend, so nothing is shared between devices. Suggested next step is Supabase.
+- Everything runs in the browser; state is a Zustand store persisted to `localStorage` under `aux-v3`, saved-data version 1 (`src/store.ts`). There is no backend, so nothing is shared between devices. Suggested next step is Supabase.
 - The other students, their listens, nominations, votes and prediction picks are seeded (`src/data/seed.ts`).
 - Connecting Spotify imports sample listens unless `VITE_SPOTIFY_CLIENT_ID` is set. The real adapter (`src/services/spotify.ts`) has not been tested against a live Spotify app, and its data only appears under "Live from your Spotify" in Settings; it does not yet feed profiles, charts or recommendations.
 - Replies in Messages are simulated: after you send someone a song, there is a 70% chance they send one back 3–7 seconds later (`simulateReply` in `store.ts`). Remove this when a real backend exists.
@@ -54,7 +55,8 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 
 - `.screen` has an entry animation, which makes it the containing block for `position: fixed` children. Full-screen overlays and sheets must be portalled to `document.body` (see `Sheet` and `Ceremony`).
 - `.hero` and `.ceremony` remap tokens (`--text`, `--accent`, `--surface`…) to the `--hero-*` set, so components inside them restyle automatically.
-- Do not change the shape of persisted state casually: existing browsers keep old data. Removing fields is safe; for renamed or required new fields, bump the storage key or tell the owner to use "Reset demo data".
+- Do not change the shape of persisted state casually: existing browsers keep old data. Removing fields and adding optional ones is safe. To fill in or reshape saved data, bump `version` in the persist options in `src/store.ts` and add a step to `migrate` (v1 added classmates' genres this way). Renaming the storage key wipes everyone's demo, including their photo, so only do that for changes a migration can't handle.
+- Class names are global: check `base.css` before naming a new one. A new `.badge` class once collided with the award-badge chips and hid their labels; the unread counter is `.count-badge`.
 
 ## Verifying changes
 

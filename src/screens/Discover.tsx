@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore } from '../store'
-import { albumList, artistOf, artists, trackList } from '../data/catalog'
+import { albumList, artistOf, artists, genreLabel, trackList, type GenreFilter } from '../data/catalog'
 import { forYou, friendsInto } from '../lib/recs'
 import { isFollowing } from '../lib/select'
-import { Avatar, Cover, Empty, Icon, Section, TrackRow } from '../components/ui'
+import { Avatar, Cover, Empty, GenreFilterBar, Icon, Section, TrackRow } from '../components/ui'
 import { ShareButton } from '../components/Share'
 
 export function FollowButton({ id }: { id: string }) {
@@ -18,8 +18,10 @@ export default function Discover() {
   const s = useStore()
   const [q, setQ] = useState('')
   const deps = [s.listens, s.ratings, s.recs, s.follows, s.blocks, s.users]
-  const fy = useMemo(() => forYou(s, 10), deps)
-  const into = useMemo(() => friendsInto(s), deps)
+  const [genre, setGenre] = useState<GenreFilter>('all')
+  const fy = useMemo(() => forYou(s, 10, genre), [...deps, genre])
+  const into = useMemo(() => friendsInto(s, 8, genre), [...deps, genre])
+  const where = genre === 'all' ? '' : genre === 'mine' ? ' in your genres' : ` in ${genreLabel(genre)}`
   const ql = q.trim().toLowerCase()
   const people = Object.values(s.users).filter((u) => u.id !== 'me' && !s.blocks.includes(u.id))
 
@@ -55,11 +57,12 @@ export default function Discover() {
         </div>
       ) : (
         <>
+          <GenreFilterBar value={genre} onChange={setGenre} />
           <Section title="For You" kicker="From your listening + your friends">
             <div className="list">
               {fy.length ? fy.map(({ track, reason }) => (
                 <TrackRow key={track.id} track={track} sub={<>{artistOf(track).name} · <em className="reason">{reason}</em></>} />
-              )) : <Empty>Connect a music account and follow friends to get picks.</Empty>}
+              )) : <Empty>{genre === 'all' ? 'Connect Spotify and follow friends to get picks.' : `No new picks${where} right now.`}</Empty>}
             </div>
           </Section>
 
@@ -67,6 +70,7 @@ export default function Discover() {
             <div className="chips">
               {into.artists.map(({ artist, friends }) => <span className="chip static" key={artist.id}>{artist.name}<b>{friends}</b></span>)}
             </div>
+            {!into.songs.length && <Empty>Your friends haven’t played anything{where} this week.</Empty>}
             <div className="carousel">
               {into.songs.map(({ track, reason }) => (
                 <Link key={track.id} to={`/track/${track.id}`} className="tile">

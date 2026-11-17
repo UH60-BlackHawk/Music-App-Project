@@ -1,5 +1,5 @@
 import type { Data, ID, ItemType, Listen, Rating, Rec, Track, User } from '../types'
-import { albums, artists, trackList, tracks } from '../data/catalog'
+import { albums, artists, genreMatches, trackList, tracks, type GenreFilter } from '../data/catalog'
 import { DAY, HOUR } from '../data/seed'
 
 export const following = (s: Data, id: ID) => s.follows.filter((f) => f[0] === id).map((f) => f[1])
@@ -110,15 +110,17 @@ export type Range = 'week' | 'month' | 'all'
 const rangeMs: Record<Range, number> = { week: 7 * DAY, month: 30 * DAY, all: Infinity }
 export const optedInListens = (s: Data): Listen[] => s.listens.filter((l) => s.users[l.userId]?.leaderboardOptIn)
 
-export function leaderboard(s: Data, kind: 'songs' | 'artists' | 'albums', range: Range) {
+const inGenre = (s: Data, genre: GenreFilter) => (l: Listen) => genreMatches(genre, artists[tracks[l.trackId].artistId].genre, s.users.me.genres)
+
+export function leaderboard(s: Data, kind: 'songs' | 'artists' | 'albums', range: Range, genre: GenreFilter = 'all') {
   const now = Date.now()
-  const ls = optedInListens(s).filter((l) => now - l.at < rangeMs[range])
+  const ls = optedInListens(s).filter((l) => now - l.at < rangeMs[range]).filter(inGenre(s, genre))
   const key = kind === 'songs' ? (l: Listen) => l.trackId : kind === 'artists' ? (l: Listen) => tracks[l.trackId].artistId : (l: Listen) => tracks[l.trackId].albumId
   return ranked(countBy(ls, key)).slice(0, 20).map(([id, plays]) => ({ id, plays }))
 }
-export function trending(s: Data) {
+export function trending(s: Data, genre: GenreFilter = 'all') {
   const now = Date.now()
-  const ls = optedInListens(s)
+  const ls = optedInListens(s).filter(inGenre(s, genre))
   const cur = countBy(ls.filter((l) => now - l.at < 7 * DAY), (l) => l.trackId)
   const prev = countBy(ls.filter((l) => now - l.at >= 7 * DAY && now - l.at < 14 * DAY), (l) => l.trackId)
   return trackList

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useStore } from '../store'
 import type { Privacy } from '../types'
 import { Trophy, Wordmark } from '../components/Brand'
-import { Icon } from '../components/ui'
+import { GenrePicker, Icon } from '../components/ui'
 import { beginSpotifyAuth, spotifyConfigured } from '../services/spotify'
 
 export const SCHOOL_DOMAIN = 'nobles.edu'
@@ -86,7 +86,16 @@ export default function Welcome() {
           </button>
           {imported !== null && imported > 0 && <p className="ok">Imported {imported} recent plays.</p>}
           {!spotifyConfigured && <p className="fine">Prototype: connecting uses sample listening data until a Spotify client ID is configured.</p>}
-          <button className="btn primary block" onClick={() => setStep(4)}>{me.spotify ? 'Continue' : 'Skip for now'}</button>
+          <button className="btn primary block" onClick={() => setStep(5)}>{me.spotify ? 'Continue' : 'Skip for now'}</button>
+        </div>
+      )}
+
+      {step === 5 && (
+        <div className="card stack">
+          <h2>What do you listen to?</h2>
+          <p className="muted">Pick your genres. Aux uses them for your picks, and they show on your profile.</p>
+          <GenrePicker value={me.genres ?? []} onChange={(genres) => s.updateMe({ genres })} />
+          <button className="btn primary block" onClick={() => setStep(4)}>{me.genres?.length ? 'Continue' : 'Skip for now'}</button>
         </div>
       )}
 

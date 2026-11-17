@@ -54,6 +54,20 @@ for (const [artist, genre, album, year, ts] of RAW) {
   }
 }
 
+/** Genres in display order. Every artist has exactly one; songs and albums take their artist's genre. */
+export const GENRES: [id: string, label: string][] = [
+  ['pop', 'Pop'], ['hip-hop', 'Hip-Hop'], ['r&b', 'R&B'], ['indie', 'Indie'], ['rock', 'Rock'],
+  ['folk', 'Folk'], ['classic', 'Classics'], ['hyperpop', 'Hyperpop'], ['emo', 'Emo & Pop Punk'],
+]
+export const genreLabel = (g: string) => GENRES.find(([id]) => id === g)?.[1] ?? g
+export const trackGenre = (id: ID) => artists[tracks[id]?.artistId]?.genre ?? ''
+export const albumGenre = (id: ID) => artists[albums[id]?.artistId]?.genre ?? ''
+
+/** A genre filter value: everything, the viewer's own picked genres, or one genre. */
+export type GenreFilter = 'all' | 'mine' | string
+export const genreMatches = (filter: GenreFilter, genre: string, mine: string[] = []) =>
+  filter === 'all' || (filter === 'mine' ? mine.includes(genre) : filter === genre)
+
 export const trackList = Object.values(tracks)
 export const albumList = Object.values(albums)
 export const artistList = Object.values(artists)
