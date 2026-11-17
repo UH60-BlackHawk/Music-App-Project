@@ -7,6 +7,7 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 - Work in this repo, on the `aux-prototype` branch. `main` only has the initial commit. Commit and push when a piece of work is done; do not open a pull request unless asked.
 - The owner is not an experienced developer. Explain things in plain language, and give exact click-by-click or copy-paste steps. They are on a Mac and run the app from VS Code with F5 (`.vscode/launch.json`).
 - Keep `README.md` in step with the code whenever a feature is added or removed.
+- **Keep this file current, continuously.** The owner asked for this explicitly. Every commit that adds, removes or changes a feature, records a product decision or owner preference, renames something, changes what is simulated, bumps the storage key, or uncovers a technical gotcha must update `CLAUDE.md` in that same commit. Before committing, reread the sections you touched and fix anything that has gone stale. When you tell the owner what you did, say what changed in this file.
 
 ## Product decisions so far
 
@@ -21,7 +22,7 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 - **NMAs**: results stay hidden until the reveal; one vote per student per category; winners get a Golden Bulldog shown on the item page and the nominator's profile.
 - **Sharing and Messages.** The Share sheet (`src/components/Share.tsx`) is modelled on Instagram's Send (multi-select people, optional message, one send) with an Apple-style action row. Messages (`src/screens/Messages.tsx`) are songs only: every message must carry a song, the note is optional, and there are no text-only messages. A direct message is just a `Rec` with a `toId`, so the "Sent to you" section, the best-part Recommend flow and the chats all share one record. Who you can send to is `shareContacts` in `select.ts` (recent chats, then people you follow; blocked people never). Notes go through `moderate`, and incoming messages have a report button.
 - **Predictions** award free points only. No money or purchasable currency, ever.
-- **No emoji reactions.** They were removed on request. Song of the Day and recommendation cards carry an inline star rating (`QuickRate`) instead; the full rating and review form stays on the song / album page.
+- **No emoji reactions.** They were removed on request. Song of the Day, recommendation cards and incoming chat messages carry an inline star rating (`QuickRate`) instead; the full rating and review form stays on the song / album page.
 - **No emoji characters anywhere in the UI.** Use the `Icon` component (`ICONS` in `src/components/ui.tsx`) so icons follow the theme's stroke style. Award categories and badges store an icon name, not an emoji. The ★ rating glyphs are the one exception.
 - **Profile photos** are optional (`photo` on `User`, edited with `ProfilePhoto` in `src/components/Photo.tsx` on your profile and in Settings). The crop step saves a 320 px square JPEG data URL (about 10 KB) so it fits in browser storage; never store the original file. `Avatar` shows the photo or falls back to initials. In admin moderation, "Remove photo" on a reported profile takes the photo down.
 - **Cover art is generated** (`Cover` in `src/components/ui.tsx`). Do not add real album artwork.
