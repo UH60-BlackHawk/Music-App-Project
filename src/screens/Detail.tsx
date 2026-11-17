@@ -5,6 +5,7 @@ import type { ID, ItemType } from '../types'
 import { albumOf, albumTracks, albums, artistOf, artists, fmt, tracks } from '../data/catalog'
 import { avgRating, canSee, moderate, myRating, optedInListens, reviewsFor, timeAgo, trophiesForItem } from '../lib/select'
 import { Trophy } from '../components/Brand'
+import { ShareButton } from '../components/Share'
 import { Avatar, ClipPlayer, Cover, Empty, Icon, OpenIn, ReportButton, Section, StarInput, Stars, TopBar, TrackRow, UserLink } from '../components/ui'
 
 function Trophies({ id }: { id: ID }) {
@@ -82,7 +83,7 @@ export function TrackPage() {
   if (!t) return <><TopBar title="Song" /><Empty>That song isn’t in the catalog.</Empty></>
   const album = albumOf(t)
   const plays = optedInListens(s).filter((l) => l.trackId === id).length
-  const clips = s.recs.filter((r) => r.trackId === id && !r.hidden && canSee(s, 'me', r.fromId) && (r.toId === null || r.toId === 'me' || r.fromId === 'me'))
+  const clips = s.recs.filter((r) => r.trackId === id && r.clipStart !== null && !r.hidden && canSee(s, 'me', r.fromId) && (r.toId === null || r.toId === 'me' || r.fromId === 'me'))
   return (
     <>
       <TopBar title="Song" />
@@ -92,7 +93,8 @@ export function TrackPage() {
         <p className="detail-sub">{artistOf(t).name} · <Link to={`/album/${album.id}`}>{album.title}</Link> · {fmt(t.dur)}</p>
         <p className="fine">{plays} plays at Nobles</p>
         <div className="detail-actions">
-          <Link className="btn primary" to={`/recommend/${id}`}><Icon name="send" size={16} /> Recommend</Link>
+          <ShareButton trackId={id} className="btn primary" label="Share" />
+          <Link className="btn" to={`/recommend/${id}`}><Icon name="star" size={16} /> Send best part</Link>
           <OpenIn track={t} />
         </div>
       </div>
@@ -103,7 +105,7 @@ export function TrackPage() {
             {clips.slice(0, 3).map((r) => (
               <div className="card" key={r.id}>
                 <p className="muted"><UserLink user={s.users[r.fromId]} />{r.note ? ` — “${r.note}”` : ''}</p>
-                <ClipPlayer track={t} start={r.clipStart} />
+                <ClipPlayer track={t} start={r.clipStart!} />
               </div>
             ))}
           </div>

@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore } from '../store'
 import { albums, artists, tracks } from '../data/catalog'
-import { avgRating, dailyPick, feed, inbox, timeAgo, type FeedItem } from '../lib/select'
+import { avgRating, dailyPick, feed, inbox, timeAgo, unreadCount, type FeedItem } from '../lib/select'
+import { ShareButton } from '../components/Share'
 import { forYou } from '../lib/recs'
 import { ThemeDecor, Wordmark } from '../components/Brand'
 import { Avatar, Comments, Cover, Empty, Icon, QuickRate, RecCard, Section, Seg, Stars, TrackRow, UserLink } from '../components/ui'
@@ -35,7 +36,10 @@ function Daily() {
       </Link>
       <div className="daily-actions">
         <QuickRate type={tab} id={id} />
+        <span className="daily-tools">
+        {tab === 'track' && <ShareButton trackId={id} className="chip" label="Share" />}
         <button className="chip" onClick={() => setOpen(!open)} aria-label={`${nComments} comments`}><Icon name="comment" size={15} /> <b>{nComments}</b></button>
+        </span>
       </div>
       {open && <Comments targetId={target} />}
     </section>
@@ -82,6 +86,7 @@ export default function Home() {
   const items = useMemo(() => feed(s), [s.listens, s.ratings, s.recs, s.follows, s.blocks, s.users])
   const mine = useMemo(() => inbox(s), [s.recs, s.blocks])
   const fy = useMemo(() => forYou(s, 8), [s.listens, s.ratings, s.recs, s.follows, s.blocks, s.users])
+  const unread = useMemo(() => unreadCount(s), [s.recs, s.blocks])
   const me = s.users.me
   return (
     <>
@@ -89,6 +94,9 @@ export default function Home() {
         <Wordmark />
         <ThemeDecor />
         <div className="topbar-right">
+          <Link className="iconbtn has-badge" to="/messages" aria-label={unread ? `Messages, ${unread} unread` : 'Messages'}>
+            <Icon name="send" />{unread > 0 && <span className="badge">{unread}</span>}
+          </Link>
           <Link className="iconbtn" to="/settings" aria-label="Settings"><Icon name="settings" /></Link>
         </div>
       </header>
@@ -99,8 +107,8 @@ export default function Home() {
       <Daily />
 
       {mine.length > 0 && (
-        <Section title="Sent to you" kicker={`${mine.length} from friends`}>
-          <div className="carousel wide">{mine.map((r) => <RecCard key={r.id} rec={r} />)}</div>
+        <Section title="Sent to you" kicker={unread ? `${unread} new` : 'From friends'} action={<Link className="more" to="/messages">Messages</Link>}>
+          <div className="carousel wide">{mine.slice(0, 6).map((r) => <RecCard key={r.id} rec={r} />)}</div>
         </Section>
       )}
 

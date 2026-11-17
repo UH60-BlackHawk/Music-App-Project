@@ -76,6 +76,35 @@ export function feed(s: Data): FeedItem[] {
 }
 export const inbox = (s: Data) => s.recs.filter((r) => r.toId === 'me' && !r.hidden && !s.blocks.includes(r.fromId)).sort((a, b) => b.at - a.at)
 
+// ---------- Direct song messages ----------
+const isDm = (s: Data, r: Rec) => r.toId !== null && !r.hidden && (r.fromId === 'me' || r.toId === 'me')
+const otherOf = (r: Rec) => (r.fromId === 'me' ? r.toId! : r.fromId)
+
+export interface Thread { userId: ID; last: Rec; unread: number }
+export function threads(s: Data): Thread[] {
+  const map = new Map<ID, Thread>()
+  for (const r of s.recs) {
+    if (!isDm(s, r)) continue
+    const userId = otherOf(r)
+    if (s.blocks.includes(userId) || !s.users[userId]) continue
+    const t = map.get(userId) ?? { userId, last: r, unread: 0 }
+    if (r.at > t.last.at) t.last = r
+    if (r.toId === 'me' && !r.read) t.unread++
+    map.set(userId, t)
+  }
+  return [...map.values()].sort((a, b) => b.last.at - a.last.at)
+}
+export const thread = (s: Data, userId: ID) =>
+  s.recs.filter((r) => isDm(s, r) && otherOf(r) === userId).sort((a, b) => a.at - b.at)
+export const unreadCount = (s: Data) => threads(s).reduce((n, t) => n + t.unread, 0)
+
+/** Who you can send songs to: recent conversations first, then everyone you follow. Blocked people never appear. */
+export function shareContacts(s: Data): ID[] {
+  const recent = threads(s).map((t) => t.userId)
+  const rest = following(s, 'me').filter((id) => !recent.includes(id))
+  return [...recent, ...rest].filter((id) => id !== 'me' && s.users[id] && !s.blocks.includes(id))
+}
+
 // ---------- Leaderboard (aggregate counts from opted-in users only; never who listened) ----------
 export type Range = 'week' | 'month' | 'all'
 const rangeMs: Record<Range, number> = { week: 7 * DAY, month: 30 * DAY, all: Infinity }

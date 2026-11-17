@@ -166,11 +166,20 @@ export function buildSeed(now = Date.now()): Data {
     seededAt: now, signedIn: false, onboarded: false, theme: 'nobles', admin: true,
     users, follows, blocks: [], listens, ratings,
     recs: [
-      { id: 'rec1', fromId: 'u1', toId: 'me', trackId: tid('Kyoto'), clipStart: 62, note: 'the horns at 1:02. trust.', at: now - 2 * HOUR },
-      { id: 'rec2', fromId: 'u2', toId: 'me', trackId: tid('tv off'), clipStart: 118, note: 'you know which part', at: now - 9 * HOUR },
+      { id: 'rec1', fromId: 'u1', toId: 'me', trackId: tid('Kyoto'), clipStart: 62, note: 'the horns at 1:02. trust.', at: now - 2 * HOUR, read: false },
+      { id: 'rec2', fromId: 'u2', toId: 'me', trackId: tid('tv off'), clipStart: 118, note: 'you know which part', at: now - 9 * HOUR, read: true },
       { id: 'rec3', fromId: 'u3', toId: null, trackId: tid('Espresso'), clipStart: 44, note: 'still not over this chorus', at: now - 5 * HOUR },
       { id: 'rec4', fromId: 'u5', toId: null, trackId: tid('Northern Attitude'), clipStart: 150, note: 'bus ride home in november energy', at: now - 20 * HOUR },
-      { id: 'rec5', fromId: 'u4', toId: 'me', trackId: tid('Do I Wanna Know?'), clipStart: 0, note: 'that riff.', at: now - 30 * HOUR },
+      { id: 'rec5', fromId: 'u4', toId: 'me', trackId: tid('Do I Wanna Know?'), clipStart: 0, note: 'that riff.', at: now - 30 * HOUR, read: true },
+      // Earlier direct-message history so the Messages screen has real threads.
+      { id: 'dm1', fromId: 'me', toId: 'u1', trackId: tid('Pink + White'), clipStart: null, note: 'study hall essential', at: now - 3 * DAY, read: true },
+      { id: 'dm2', fromId: 'u1', toId: 'me', trackId: tid('Juna'), clipStart: null, note: 'ok then you NEED this', at: now - 3 * DAY + 40 * 60e3, read: true },
+      { id: 'dm3', fromId: 'me', toId: 'u1', trackId: tid('Sexy to Someone'), clipStart: 41, note: 'same album, better song (fight me)', at: now - 2 * DAY, read: true },
+      { id: 'dm4', fromId: 'me', toId: 'u3', trackId: tid('Pink Pony Club'), clipStart: 96, note: 'for the bus home', at: now - 26 * HOUR, read: true },
+      { id: 'dm5', fromId: 'u3', toId: 'me', trackId: tid('Taste'), clipStart: null, note: 'returning the favor', at: now - 50 * 60e3, read: false },
+      { id: 'dm6', fromId: 'u7', toId: 'me', trackId: tid('360'), clipStart: 18, note: 'trust the intro', at: now - 4 * HOUR, read: false },
+      { id: 'dm7', fromId: 'me', toId: 'u5', trackId: tid('Something in the Orange'), clipStart: null, note: '', at: now - 4 * DAY, read: true },
+      { id: 'dm8', fromId: 'u5', toId: 'me', trackId: tid('Stick Season'), clipStart: 52, note: 'obligatory', at: now - 4 * DAY + 2 * HOUR, read: true },
       { id: 'rec6', fromId: 'u6', toId: null, trackId: tid('Sticky'), clipStart: 92, note: 'game day warmups', at: now - 40 * HOUR },
     ],
     comments: [

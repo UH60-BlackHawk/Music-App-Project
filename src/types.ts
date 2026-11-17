@@ -28,8 +28,11 @@ export interface User {
 
 export interface Listen { id: ID; userId: ID; trackId: ID; at: number }
 export interface Rating { id: ID; userId: ID; itemType: ItemType; itemId: ID; stars: number; review: string; at: number; hidden?: boolean }
-/** A recommendation stores only the track id and clip start (seconds) — never audio. */
-export interface Rec { id: ID; fromId: ID; toId: ID | null; trackId: ID; clipStart: number; note: string; at: number; hidden?: boolean }
+/**
+ * A song sent by one student. toId null = posted to the feed; otherwise it is a direct message.
+ * clipStart is the chosen 30s "best part" in seconds, or null for a plain share. Never stores audio.
+ */
+export interface Rec { id: ID; fromId: ID; toId: ID | null; trackId: ID; clipStart: number | null; note: string; at: number; read?: boolean; hidden?: boolean }
 export interface Comment { id: ID; userId: ID; targetId: ID; text: string; at: number; hidden?: boolean }
 export interface Report { id: ID; reporterId: ID; kind: 'comment' | 'review' | 'user' | 'rec'; targetId: ID; reason: string; at: number; status: 'open' | 'removed' | 'dismissed' }
 export interface DailyConfig { mode: 'manual' | 'auto'; metric: 'shared' | 'rated'; trackId: ID; albumId: ID }

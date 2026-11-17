@@ -24,7 +24,7 @@ export default function Recommend() {
     if (!m.ok) return setErr(m.error!)
     s.recommend(trackId, to, start, m.text)
     setSent(true)
-    setTimeout(() => nav('/'), 1100)
+    setTimeout(() => nav(to ? `/messages/${to}` : '/'), 1100)
   }
 
   return (

@@ -46,7 +46,7 @@ export default function Profile() {
           <button onClick={() => setPeople('following')}><b>{visiblePeople(following(s, id)).length}</b> following</button>
           <span><b>{trophies.length}</b> {trophies.length === 1 ? 'trophy' : 'trophies'}</span>
         </div>
-        {!isMe && !blocked && <div className="detail-actions"><FollowButton id={id} /></div>}
+        {!isMe && !blocked && <div className="detail-actions"><FollowButton id={id} /><Link className="btn sm" to={`/messages/${id}`}><Icon name="send" size={15} /> Message</Link></div>}
         {blocked && <button className="btn" onClick={() => s.unblock(id)}>Unblock</button>}
       </div>
 

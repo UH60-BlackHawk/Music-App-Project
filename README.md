@@ -28,6 +28,8 @@ Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 di
 | For You + Your Friends Are Into, each with a reason | Working, computed from in-app data only (`src/lib/recs.ts`) |
 | Recommend a song with a 30s best-part scrubber | Working. Stores track id + start second only. Playback is simulated in sample mode, with an "Open in Spotify" link. |
 | Ratings and reviews (half stars), Nobles averages | Working |
+| Share a song (pick several classmates, add a message; plus best part, post to feed, copy link, Spotify, system share) | Working |
+| Messages: direct messages that are songs only, with an optional note, unread badges and per-person chats | Working. Classmates sometimes send a song back a few seconds later (simulated). |
 | Song / Album of the Day (manual or automatic), inline rating, comments | Working |
 | Nobles Leaderboard (week / month / all time, Trending) | Working, opted-in users only, aggregate counts only |
 | NMAs: nominations, voting, animated reveal, Castle Hall of Fame, badges | Working. Classmates' nominations and votes are simulated. |
@@ -67,7 +69,7 @@ src/
 - **Follow**: `[from, to]`; "friends" means a mutual follow
 - **Listen**: user, track, timestamp
 - **Rating**: user, song or album, stars (0.5 to 5), optional review
-- **Rec**: from, to (a friend, or `null` for the feed), track, `clipStart` seconds, note. No audio is ever stored.
+- **Rec**: a song sent by a student. `to` is a classmate (a direct message) or `null` (a feed post); `clipStart` is the best-part start in seconds, or `null` for a plain share; `read` marks incoming messages as seen. No audio is ever stored.
 - **Comment / Reaction / Report / blocks**
 - **DailyConfig**: manual or automatic, metric (most shared / highest rated in 24h)
 - **Nma**: season, phase, categories, nominations, votes, proposals, ballot, winners, hall of fame, integrity flags

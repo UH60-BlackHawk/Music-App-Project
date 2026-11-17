@@ -5,6 +5,7 @@ import { albumList, artistOf, artists, trackList } from '../data/catalog'
 import { forYou, friendsInto } from '../lib/recs'
 import { isFollowing } from '../lib/select'
 import { Avatar, Cover, Empty, Icon, Section, TrackRow } from '../components/ui'
+import { ShareButton } from '../components/Share'
 
 export function FollowButton({ id }: { id: string }) {
   const s = useStore()
@@ -31,7 +32,7 @@ export default function Discover() {
         <div className="stack">
           <div className="list">
             {trackList.filter((t) => `${t.title} ${artistOf(t).name}`.toLowerCase().includes(ql)).slice(0, 8).map((t) => (
-              <TrackRow key={t.id} track={t} right={<Link className="iconbtn" to={`/recommend/${t.id}`} aria-label="Recommend"><Icon name="send" size={18} /></Link>} />
+              <TrackRow key={t.id} track={t} right={<ShareButton trackId={t.id} />} />
             ))}
             {albumList.filter((a) => `${a.title} ${artists[a.artistId].name}`.toLowerCase().includes(ql)).slice(0, 5).map((a) => (
               <div className="row" key={a.id}>

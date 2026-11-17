@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Data, ID, ItemType, NmaPhase, Privacy, Report, ThemeId, User } from './types'
 import { buildSeed, DAY, genListens, ME_TASTES, mulberry32, seedNominations, uid } from './data/seed'
-import { tid } from './data/catalog'
+import { tid, tracks } from './data/catalog'
 
 interface Actions {
   signIn(email: string, name: string, classYear: number): void
@@ -18,7 +18,9 @@ interface Actions {
   block(id: ID): void
   unblock(id: ID): void
   rate(itemType: ItemType, itemId: ID, stars: number, review: string): void
-  recommend(trackId: ID, toId: ID | null, clipStart: number, note: string): void
+  recommend(trackId: ID, toId: ID | null, clipStart: number | null, note: string): void
+  share(trackId: ID, toIds: ID[], note: string): void
+  markThreadRead(otherId: ID): void
   comment(targetId: ID, text: string): void
   report(kind: Report['kind'], targetId: ID, reason: string): void
   resolveReport(id: ID, remove: boolean): void
@@ -42,6 +44,22 @@ export const useStore = create<Store>()(
   persist(
     (set, get) => {
       const me = (patch: Partial<User>) => set((s) => ({ users: { ...s.users, me: { ...s.users.me, ...patch } } }))
+      // Prototype only: a classmate sometimes sends a song back a few seconds after you message them.
+      const simulateReply = (toId: ID, sentTrack: ID) => {
+        if (Math.random() > 0.7) return
+        setTimeout(() => {
+          const st = get()
+          if (st.blocks.includes(toId) || !st.users[toId]) return
+          const counts: Record<ID, number> = {}
+          st.listens.forEach((l) => { if (l.userId === toId && l.trackId !== sentTrack) counts[l.trackId] = (counts[l.trackId] ?? 0) + 1 })
+          const top = Object.keys(counts).sort((a, b) => counts[b] - counts[a]).slice(0, 8)
+          const trackId = top[Math.floor(Math.random() * top.length)]
+          if (!trackId) return
+          const notes = ['ok this is so good', 'adding to my playlist rn', 'in return:', 'you might like this one too', 'been on repeat all week', '']
+          const clipStart = Math.random() < 0.5 ? Math.floor(Math.random() * Math.max(1, tracks[trackId].dur - 30)) : null
+          set((s) => ({ recs: [{ id: uid(), fromId: toId, toId: 'me', trackId, clipStart, note: notes[Math.floor(Math.random() * notes.length)], at: Date.now(), read: false }, ...s.recs] }))
+        }, 3500 + Math.random() * 3500)
+      }
       const badge = (b: string) => { const u = get().users.me; if (!u.badges.includes(b)) me({ badges: [...u.badges, b] }) }
       return {
         ...buildSeed(),
@@ -84,7 +102,18 @@ export const useStore = create<Store>()(
             ...s.ratings.filter((r) => !(r.userId === 'me' && r.itemType === itemType && r.itemId === itemId)),
           ],
         })),
-        recommend: (trackId, toId, clipStart, note) => set((s) => ({ recs: [{ id: uid(), fromId: 'me', toId, trackId, clipStart, note, at: Date.now() }, ...s.recs] })),
+        recommend: (trackId, toId, clipStart, note) => {
+          set((s) => ({ recs: [{ id: uid(), fromId: 'me', toId, trackId, clipStart, note, at: Date.now(), read: true }, ...s.recs] }))
+          if (toId) simulateReply(toId, trackId)
+        },
+        share: (trackId, toIds, note) => {
+          const now = Date.now()
+          set((s) => ({ recs: [...toIds.map((toId, i) => ({ id: uid(), fromId: 'me', toId, trackId, clipStart: null, note, at: now + i, read: true })), ...s.recs] }))
+          toIds.forEach((toId) => simulateReply(toId, trackId))
+        },
+        markThreadRead: (otherId) => set((s) => (s.recs.some((r) => r.fromId === otherId && r.toId === 'me' && !r.read)
+          ? { recs: s.recs.map((r) => (r.fromId === otherId && r.toId === 'me' && !r.read ? { ...r, read: true } : r)) }
+          : {})),
         comment: (targetId, text) => set((s) => ({ comments: [...s.comments, { id: uid(), userId: 'me', targetId, text, at: Date.now() }] })),
         report: (kind, targetId, reason) => set((s) => ({ reports: [{ id: uid(), reporterId: 'me', kind, targetId, reason, at: Date.now(), status: 'open' }, ...s.reports] })),
         resolveReport: (id, remove) => set((s) => {
@@ -195,7 +224,7 @@ export const useStore = create<Store>()(
         toggleLock: (eventId) => set((s) => ({ events: s.events.map((e) => (e.id === eventId ? { ...e, locked: !e.locked } : e)) })),
       }
     },
-    { name: 'aux-v2' },
+    { name: 'aux-v3' },
   ),
 )
 

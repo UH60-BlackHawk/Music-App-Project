@@ -13,6 +13,7 @@ import { AlbumPage, TrackPage } from './screens/Detail'
 import Recommend from './screens/Recommend'
 import Settings from './screens/Settings'
 import Admin from './screens/Admin'
+import { MessageThread, MessagesList } from './screens/Messages'
 
 const TABS = [
   ['/', 'home', 'Home'],
@@ -28,7 +29,8 @@ const embed = new URLSearchParams(location.search).has('embed')
 function Shell() {
   const { pathname } = useLocation()
   useEffect(() => { window.scrollTo(0, 0) }, [pathname])
-  const immersive = pathname.startsWith('/ceremony')
+  // The ceremony and chat threads are full-screen: no tab bar (a thread has its own composer there).
+  const immersive = pathname.startsWith('/ceremony') || /^\/messages\/.+/.test(pathname)
   return (
     <div className={`app ${embed ? 'embed' : ''}`}>
       <main className="screen" key={pathname}>
@@ -43,6 +45,8 @@ function Shell() {
           <Route path="/track/:id" element={<TrackPage />} />
           <Route path="/album/:id" element={<AlbumPage />} />
           <Route path="/recommend/:id?" element={<Recommend />} />
+          <Route path="/messages" element={<MessagesList />} />
+          <Route path="/messages/:id" element={<MessageThread />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<Home />} />
