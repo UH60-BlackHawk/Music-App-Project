@@ -2,7 +2,8 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Data, ID, ItemType, NmaPhase, Privacy, Report, ThemeId, User } from './types'
 import { buildSeed, DAY, genListens, ME_TASTES, mulberry32, seedNominations, uid } from './data/seed'
-import { tid, tracks } from './data/catalog'
+import { registerCatalog, tid, tracks } from './data/catalog'
+import type { SpotifyImport } from './services/spotify'
 
 interface Actions {
   signIn(email: string, name: string, classYear: number): void
@@ -13,6 +14,7 @@ interface Actions {
   setAdmin(on: boolean): void
   updateMe(patch: Partial<User>): void
   connect(): number
+  applySpotifyImport(d: SpotifyImport): void
   disconnect(): void
   toggleFollow(id: ID): void
   block(id: ID): void
@@ -85,6 +87,22 @@ export const useStore = create<Store>()(
           }
           me({ spotify: true, nowPlaying: tid('Pink + White') })
           return added
+        },
+        applySpotifyImport: (d) => {
+          registerCatalog(d.catalog)
+          set((s) => {
+            const prev = s.catalogExtra ?? { artists: [], albums: [], tracks: [] }
+            const add = <T extends { id: ID }>(a: T[], b: T[]) => [...a, ...b.filter((x) => !a.some((y) => y.id === x.id))]
+            const catalogExtra = { artists: add(prev.artists, d.catalog.artists), albums: add(prev.albums, d.catalog.albums), tracks: add(prev.tracks, d.catalog.tracks) }
+            // Real plays replace the sample ones the first time; after that new plays are merged in (Spotify only returns the latest 50).
+            const firstReal = !s.users.me.spotifySync
+            const mine = firstReal ? [] : s.listens.filter((l) => l.userId === 'me')
+            const known = new Set(mine.map((l) => `${l.trackId}@${l.at}`))
+            const fresh = d.plays.filter((p) => !known.has(`${p.trackId}@${p.at}`)).map((p) => ({ id: `me-sp-${p.trackId}-${p.at}`, userId: 'me', trackId: p.trackId, at: p.at }))
+            const listens = [...s.listens.filter((l) => l.userId !== 'me'), ...mine, ...fresh].sort((a, b) => b.at - a.at)
+            const sync = { at: Date.now(), plays: (firstReal ? 0 : s.users.me.spotifySync!.plays) + fresh.length, topArtists: d.topArtists, topTracks: d.topTracks }
+            return { catalogExtra, listens, users: { ...s.users, me: { ...s.users.me, spotify: true, nowPlaying: d.nowPlaying, spotifySync: sync } } }
+          })
         },
         disconnect: () => me({ spotify: false, nowPlaying: undefined }),
         toggleFollow: (id) => set((s) => {
@@ -238,6 +256,13 @@ export const useStore = create<Store>()(
           for (const id of Object.keys(st.users ?? {})) if (id !== 'me' && !st.users[id].genres) st.users[id] = { ...st.users[id], genres: fresh[id]?.genres ?? [] }
         }
         return st as Store
+      },
+      // Imported Spotify songs live in saved state; put them back into the catalog before anything renders,
+      // and drop any saved references to songs that are no longer known (so a lost import can't crash a screen).
+      onRehydrateStorage: () => (st) => {
+        if (!st) return
+        registerCatalog(st.catalogExtra)
+        if (st.listens.some((l) => !tracks[l.trackId])) useStore.setState({ listens: st.listens.filter((l) => tracks[l.trackId]) })
       },
     },
   ),

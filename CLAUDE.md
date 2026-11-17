@@ -12,6 +12,8 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 ## Product decisions so far
 
 - **Sign-in** is limited to `@nobles.edu` (`SCHOOL_DOMAIN` in `src/screens/Welcome.tsx`). No email is really sent; any 6 digits pass.
+- **Spotify's limits (as of a July 2026 Spotify developer post; confirm on the dashboard):** an app in Development Mode allows only 5 allowlisted users and the app owner needs Premium; Extended Quota (more users) is reserved for established businesses with large user bases, which a school project won't meet. So Spotify sign-in is an optional extra for the owner and a few testers. Aux must stay fully usable without Spotify.
+- **The app runs on `http://127.0.0.1:5173/`, not `localhost`.** Spotify rejects `localhost` redirect URIs. Browser storage is per address, so data saved under `localhost` doesn't carry over.
 - **Spotify only.** Apple Music was removed on request. It may come back later, so keep provider logic easy to extend, but do not add Apple Music UI, links or copy until asked.
 - **Listening Party was removed** on request. Do not re-add it.
 - **Recommendations** are computed from in-app data only (`src/lib/recs.ts`), never Spotify's recommendations endpoint, and every suggestion shows a reason.
@@ -33,7 +35,7 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 
 - Everything runs in the browser; state is a Zustand store persisted to `localStorage` under `aux-v3`, saved-data version 1 (`src/store.ts`). There is no backend, so nothing is shared between devices. Suggested next step is Supabase.
 - The other students, their listens, nominations, votes and prediction picks are seeded (`src/data/seed.ts`).
-- Connecting Spotify imports sample listens unless `VITE_SPOTIFY_CLIENT_ID` is set. The real adapter (`src/services/spotify.ts`) has not been tested against a live Spotify app, and its data only appears under "Live from your Spotify" in Settings; it does not yet feed profiles, charts or recommendations.
+- Connecting Spotify imports sample listens unless `VITE_SPOTIFY_CLIENT_ID` is set. With it set, sign-in is real (PKCE, `src/services/spotify.ts`) and `importSpotify` pulls recent plays (Spotify only returns the last 50), top tracks and artists, and now playing. `applySpotifyImport` in `store.ts` adds unknown songs to the catalog (`catalogExtra`, ids `t-sp-…`/`al-sp-…`/`ar-sp-…`, re-registered on load), reuses catalog ids for songs already there (`findTrack` ignores case, "(feat. …)" and "- Remaster"), replaces the sample plays with real ones the first time, and merges later syncs without duplicates. Spotify's free-text genres map to Aux genres via `mapGenre` in `catalog.ts`. Sync runs on startup if older than 10 minutes and from "Sync now" in Settings (`src/services/spotifySync.ts`). This has been tested against simulated Spotify responses only, not a live Spotify app.
 - Replies in Messages are simulated: after you send someone a song, there is a 70% chance they send one back 3–7 seconds later (`simulateReply` in `store.ts`). Remove this when a real backend exists.
 - Admin mode is a Settings toggle, on by default, so the awards phases can be advanced in the demo.
 

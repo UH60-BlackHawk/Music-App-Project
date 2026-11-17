@@ -1,4 +1,4 @@
-import type { Album, Artist, ID, Track } from '../types'
+import type { Album, Artist, CatalogExtra, ID, Track } from '../types'
 
 // Mock catalog. Titles/artists are real so the prototype feels alive; durations are approximate.
 // Cover art is generated (see Cover component) — no copyrighted artwork or audio is bundled.
@@ -84,4 +84,41 @@ export const itemArtist = (type: 'track' | 'album', id: ID) =>
 
 export const fmt = (sec: number) => `${Math.floor(sec / 60)}:${String(Math.floor(sec % 60)).padStart(2, '0')}`
 
-export const spotifyLink = (t: Track) => `https://open.spotify.com/search/${encodeURIComponent(`${t.title} ${artistOf(t).name}`)}`
+export const spotifyLink = (t: Track) =>
+  t.spotifyId ? `https://open.spotify.com/track/${t.spotifyId}` : `https://open.spotify.com/search/${encodeURIComponent(`${t.title} ${artistOf(t).name}`)}`
+
+/** Add runtime songs (e.g. imported from Spotify) to the catalog. Existing ids are left alone. */
+export function registerCatalog(extra?: CatalogExtra) {
+  if (!extra) return
+  for (const a of extra.artists) if (!artists[a.id]) { artists[a.id] = a; artistList.push(a) }
+  for (const a of extra.albums) if (!albums[a.id]) { albums[a.id] = a; albumList.push(a) }
+  for (const t of extra.tracks) if (!tracks[t.id]) { tracks[t.id] = t; trackList.push(t) }
+}
+
+const norm = (s: string) => s.toLowerCase().replace(/\(.*?\)|\[.*?\]|- .*remaster.*$/g, '').replace(/[^a-z0-9]+/g, ' ').trim()
+/** Find a catalog song by title and main artist, ignoring case, punctuation and "(feat. …)" / "- Remastered" suffixes. */
+export const findTrack = (title: string, artist: string) => {
+  const t = norm(title), a = norm(artist)
+  return trackList.find((x) => norm(x.title) === t && norm(artists[x.artistId]?.name ?? '') === a)
+}
+export const findArtist = (name: string) => artistList.find((x) => norm(x.name) === norm(name))
+
+/**
+ * Map Spotify's free-text artist genres (e.g. "bedroom pop", "southern hip hop") onto Aux's nine genres.
+ * Rules run in order; the first genre string that matches anything wins. Unknown → pop.
+ */
+const GENRE_RULES: [RegExp, string][] = [
+  [/hyperpop|digicore|glitchcore/, 'hyperpop'],
+  [/emo|pop punk|punk|post-hardcore|screamo/, 'emo'],
+  [/hip hop|rap|trap|drill|grime/, 'hip-hop'],
+  [/r&b|rnb|soul|neo soul|funk/, 'r&b'],
+  [/folk|country|americana|bluegrass|singer-songwriter/, 'folk'],
+  [/jazz|swing|big band|motown|doo-wop|classic rock|soft rock|oldies|disco|yacht rock|classical/, 'classic'],
+  [/indie|bedroom|lo-fi|shoegaze|dream pop|chamber/, 'indie'],
+  [/rock|metal|grunge|garage|psych|alternative/, 'rock'],
+  [/pop|dance|electro|house|edm/, 'pop'],
+]
+export function mapGenre(spotifyGenres: string[] = []): string {
+  for (const g of spotifyGenres) for (const [re, id] of GENRE_RULES) if (re.test(g.toLowerCase())) return id
+  return 'pop'
+}

@@ -3,15 +3,18 @@ import { Link } from 'react-router-dom'
 import { useStore } from '../store'
 import { THEME_CATEGORIES, THEMES, Trophy, Wordmark } from '../components/Brand'
 import { Avatar, GenrePicker, Icon, Section, Toggle, TopBar } from '../components/ui'
-import { beginSpotifyAuth, recentlyPlayed, spotifyConfigured, spotifyLive, spotifyLogout, type LiveTrack } from '../services/spotify'
+import { beginSpotifyAuth, spotifyConfigured, spotifyLive, spotifyLogout } from '../services/spotify'
+import { syncSpotify } from '../services/spotifySync'
+import { timeAgo } from '../lib/select'
 import { PRIVACY_OPTIONS } from './Welcome'
 import { ProfilePhoto } from '../components/Photo'
 
 export default function Settings() {
   const s = useStore()
   const me = s.users.me
-  const [live, setLive] = useState<LiveTrack[]>([])
-  useEffect(() => { if (spotifyLive()) recentlyPlayed().then(setLive).catch(() => {}) }, [me.spotify])
+  const [syncing, setSyncing] = useState(false)
+  const [syncErr, setSyncErr] = useState('')
+  const syncNow = () => { setSyncing(true); setSyncErr(''); syncSpotify(true).catch(() => setSyncErr('Couldn’t reach Spotify. Try again, or disconnect and reconnect.')).finally(() => setSyncing(false)) }
 
   const toggleSpotify = () => {
     if (me.spotify) { s.disconnect(); spotifyLogout() }
@@ -74,15 +77,11 @@ export default function Settings() {
       <Section title="Connected account">
         <div className="card stack">
           <div className="toggle-row">
-            <span><b>Spotify</b><small>{me.spotify ? 'Connected · recently played, top artists, now playing' : 'Not connected'}</small></span>
+            <span><b>Spotify</b><small>{!me.spotify ? 'Not connected' : me.spotifySync ? `Synced ${timeAgo(me.spotifySync.at) === 'now' ? 'just now' : `${timeAgo(me.spotifySync.at)} ago`} · ${me.spotifySync.plays} real plays imported` : 'Connected · sample listening data'}</small></span>
             <button className={`btn sm ${me.spotify ? '' : 'primary'}`} onClick={toggleSpotify}>{me.spotify ? 'Disconnect' : 'Connect'}</button>
           </div>
-          {live.length > 0 && (
-            <div>
-              <div className="kicker">Live from your Spotify</div>
-              {live.slice(0, 5).map((t, i) => <p key={i} className="fine"><b>{t.title}</b> — {t.artist}</p>)}
-            </div>
-          )}
+          {me.spotify && spotifyLive() && <button className="btn block" onClick={syncNow} disabled={syncing}>{syncing ? 'Syncing…' : 'Sync now'}</button>}
+          {syncErr && <p className="error">{syncErr}</p>}
           {!spotifyConfigured && <p className="fine">Prototype mode: connections use sample listening data.</p>}
         </div>
       </Section>

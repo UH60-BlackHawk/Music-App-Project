@@ -236,7 +236,7 @@ export function useClip(track: Track, start: number) {
   useEffect(() => () => { if (spotifyLive()) stopClip() }, [])
   const toggle = () => {
     if (playing) { setPlaying(false); setProgress(0); if (spotifyLive()) stopClip() }
-    else { setPlaying(true); if (spotifyLive()) playClip(track.title, artistOf(track).name, start).catch(() => window.open(spotifyLink(track), '_blank')) }
+    else { setPlaying(true); if (spotifyLive()) playClip({ title: track.title, artist: artistOf(track).name, spotifyId: track.spotifyId }, start).catch(() => window.open(spotifyLink(track), '_blank')) }
   }
   return { playing, progress, toggle }
 }

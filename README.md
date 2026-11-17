@@ -14,6 +14,8 @@ npm install
 npm run dev
 ```
 
+The app runs at http://127.0.0.1:5173/ (Spotify requires `127.0.0.1` rather than `localhost`).
+
 Or in VS Code: open this folder and press F5 ("Run Aux"). It installs dependencies, starts the dev server and opens the app in your default browser.
 
 Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 digits work as the code. "Reset demo data" in Settings starts over.
@@ -23,7 +25,7 @@ Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 di
 | Area | Status |
 | --- | --- |
 | School-email sign-in, onboarding, privacy choice | Working (no real email is sent) |
-| Spotify connection | Sample data by default. A real Spotify PKCE adapter is included and switches on with `VITE_SPOTIFY_CLIENT_ID`; it has not been tested against a live Spotify app. Apple Music is not included for now and could be added later. |
+| Spotify connection | Sample data by default. With `VITE_SPOTIFY_CLIENT_ID` set, "Connect Spotify" signs in for real and imports recent plays, top tracks and artists, and what's playing; they feed your profile, charts and recommendations, and resync every 10 minutes or on "Sync now". Tested against simulated Spotify responses, not yet a live Spotify app. Apple Music is not included for now. |
 | Profiles (with optional uploaded photo, cropped in the app), follows (with follower / following lists), home feed, privacy (school / friends / private, pause sharing) | Working |
 | For You + Your Friends Are Into, each with a reason | Working, computed from in-app data only (`src/lib/recs.ts`); favourite genres boost picks |
 | Genre preferences (onboarding and Settings, shown on profiles) and genre filters on Charts and Discover, including a "My genres" shortcut | Working |

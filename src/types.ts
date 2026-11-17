@@ -5,9 +5,13 @@ export type ThemeId = 'nobles' | 'sleek' | 'fantasy' | 'urban' | 'fleur' | 'hype
   | 'jazz' | 'fall' | 'winter' | 'spring' | 'summer'
 export type ItemType = 'track' | 'album'
 
-export interface Artist { id: ID; name: string; genre: string }
-export interface Album { id: ID; title: string; artistId: ID; year: number }
-export interface Track { id: ID; title: string; artistId: ID; albumId: ID; dur: number }
+export interface Artist { id: ID; name: string; genre: string; spotifyId?: string }
+export interface Album { id: ID; title: string; artistId: ID; year: number; spotifyId?: string }
+export interface Track { id: ID; title: string; artistId: ID; albumId: ID; dur: number; spotifyId?: string }
+/** Songs, albums and artists added at runtime (from Spotify) on top of the built-in sample catalog. */
+export interface CatalogExtra { artists: Artist[]; albums: Album[]; tracks: Track[] }
+/** What was last pulled from the user's real Spotify account. */
+export interface SpotifySync { at: number; plays: number; topArtists: ID[]; topTracks: ID[] }
 
 export interface User {
   id: ID
@@ -28,6 +32,8 @@ export interface User {
   genres?: string[]
   badges: string[]
   nowPlaying?: ID
+  /** Set once real Spotify data has been imported; absent in sample mode. */
+  spotifySync?: SpotifySync
 }
 
 export interface Listen { id: ID; userId: ID; trackId: ID; at: number }
@@ -68,6 +74,8 @@ export interface Pick { eventId: ID; categoryId: ID; userId: ID; nominee: string
 
 export interface Data {
   seededAt: number
+  /** Real songs imported from Spotify, re-registered into the catalog on load. */
+  catalogExtra?: CatalogExtra
   signedIn: boolean
   onboarded: boolean
   theme: ThemeId

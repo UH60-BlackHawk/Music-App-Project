@@ -22,7 +22,11 @@ export default function Profile() {
   const blocked = s.blocks.includes(id)
   const visible = canSee(s, 'me', id)
   const listens = visible ? userListens(s, id) : []
-  const top = visible ? topArtists(s, id, 6) : []
+  // With real Spotify data, show Spotify's own top-artist ranking; otherwise count plays in the app.
+  const spotifyTop = u.spotifySync?.topArtists.filter((a) => artists[a]).slice(0, 6)
+  const top: [string, string][] = !visible ? [] : spotifyTop?.length
+    ? spotifyTop.map((a, i) => [a, `#${i + 1} on Spotify`])
+    : topArtists(s, id, 6).map(([a, n]) => [a, `${n} plays`])
   const ratings = visible ? s.ratings.filter((r) => r.userId === id && !r.hidden).sort((a, b) => b.at - a.at).slice(0, 6) : []
   const trophies = trophiesForUser(s, id)
   const visiblePeople = (ids: ID[]) => ids.filter((x) => s.users[x] && !s.blocks.includes(x))
@@ -83,8 +87,8 @@ export default function Profile() {
           <Section title="Top artists">
             {top.length ? (
               <div className="carousel">
-                {top.map(([aid, n]) => (
-                  <div className="tile small" key={aid}><Cover id={aid} size={84} className="round" /><b>{artists[aid].name}</b><span>{n} plays</span></div>
+                {top.map(([aid, sub]) => (
+                  <div className="tile small" key={aid}><Cover id={aid} size={84} className="round" /><b>{artists[aid].name}</b><span>{sub}</span></div>
                 ))}
               </div>
             ) : <Empty>{isMe ? 'Connect Spotify in Settings to see your top artists.' : 'Nothing yet.'}</Empty>}
