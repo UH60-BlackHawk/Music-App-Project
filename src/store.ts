@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { Data, ID, ItemType, NmaPhase, Privacy, Report, ThemeId, User } from './types'
-import { buildSeed, DAY, genListens, ME_TASTES, mulberry32, seedNominations, uid } from './data/seed'
+import { buildSeed, DAY, emptyLiveData, genListens, ME_TASTES, mulberry32, seedNominations, uid } from './data/seed'
+import { LIVE, liveHooks } from './services/mode'
 import { registerCatalog, tid, tracks } from './data/catalog'
 import type { SpotifyImport } from './services/spotify'
 
@@ -48,6 +49,7 @@ export const useStore = create<Store>()(
       const me = (patch: Partial<User>) => set((s) => ({ users: { ...s.users, me: { ...s.users.me, ...patch } } }))
       // Prototype only: a classmate sometimes sends a song back a few seconds after you message them.
       const simulateReply = (toId: ID, sentTrack: ID) => {
+        if (LIVE) return
         if (Math.random() > 0.7) return
         setTimeout(() => {
           const st = get()
@@ -64,19 +66,26 @@ export const useStore = create<Store>()(
       }
       const badge = (b: string) => { const u = get().users.me; if (!u.badges.includes(b)) me({ badges: [...u.badges, b] }) }
       return {
-        ...buildSeed(),
+        ...(LIVE ? emptyLiveData() : buildSeed()),
         signIn: (email, name, classYear) => {
+          // In live mode the account already exists (the backend created it on sign-in); just name it.
+          if (LIVE) return void (me({ name, classYear }), set({ signedIn: true }))
           const handle = email.split('@')[0].toLowerCase()
           me({ email: email.toLowerCase(), name, handle, classYear })
           set({ signedIn: true })
         },
-        signOut: () => set({ signedIn: false }),
+        signOut: () => {
+          if (!LIVE) return set({ signedIn: false })
+          const theme = get().theme
+          void liveHooks.signOut?.().then(() => set({ ...emptyLiveData(), theme }))
+        },
         finishOnboarding: () => set({ onboarded: true }),
-        resetDemo: () => set({ ...buildSeed() }),
+        resetDemo: () => { if (!LIVE) set({ ...buildSeed() }) },
         setTheme: (theme) => set({ theme }),
         setAdmin: (admin) => set({ admin }),
         updateMe: me,
         connect: () => {
+          if (LIVE) return 0 // live mode never invents listening data
           const s = get()
           let added = 0
           if (!s.listens.some((l) => l.userId === 'me')) {
@@ -95,7 +104,7 @@ export const useStore = create<Store>()(
             const add = <T extends { id: ID }>(a: T[], b: T[]) => [...a, ...b.filter((x) => !a.some((y) => y.id === x.id))]
             const catalogExtra = { artists: add(prev.artists, d.catalog.artists), albums: add(prev.albums, d.catalog.albums), tracks: add(prev.tracks, d.catalog.tracks) }
             // Real plays replace the sample ones the first time; after that new plays are merged in (Spotify only returns the latest 50).
-            const firstReal = !s.users.me.spotifySync
+            const firstReal = !s.users.me.spotifySync && !LIVE // sample plays only exist in sample mode
             const mine = firstReal ? [] : s.listens.filter((l) => l.userId === 'me')
             const known = new Set(mine.map((l) => `${l.trackId}@${l.at}`))
             const fresh = d.plays.filter((p) => !known.has(`${p.trackId}@${p.at}`)).map((p) => ({ id: `me-sp-${p.trackId}-${p.at}`, userId: 'me', trackId: p.trackId, at: p.at }))
@@ -116,7 +125,7 @@ export const useStore = create<Store>()(
         unblock: (id) => set((s) => ({ blocks: s.blocks.filter((b) => b !== id) })),
         rate: (itemType, itemId, stars, review) => set((s) => ({
           ratings: [
-            { id: uid(), userId: 'me', itemType, itemId, stars, review, at: Date.now() },
+            { id: `me:${itemType}:${itemId}`, userId: 'me', itemType, itemId, stars, review, at: Date.now() },
             ...s.ratings.filter((r) => !(r.userId === 'me' && r.itemType === itemType && r.itemId === itemId)),
           ],
         })),
@@ -134,7 +143,7 @@ export const useStore = create<Store>()(
           : {})),
         comment: (targetId, text) => set((s) => ({ comments: [...s.comments, { id: uid(), userId: 'me', targetId, text, at: Date.now() }] })),
         report: (kind, targetId, reason) => set((s) => ({ reports: [{ id: uid(), reporterId: 'me', kind, targetId, reason, at: Date.now(), status: 'open' }, ...s.reports] })),
-        resolveReport: (id, remove) => set((s) => {
+        resolveReport: (id, remove) => LIVE ? void liveHooks.resolveReport?.(id, remove) : set((s) => {
           const r = s.reports.find((x) => x.id === id)
           if (!r) return {}
           const reports = s.reports.map((x) => (x.id === id ? { ...x, status: remove ? ('removed' as const) : ('dismissed' as const) } : x))
@@ -180,6 +189,7 @@ export const useStore = create<Store>()(
         addCategory: (name, type) => set((s) => ({ nma: { ...s.nma, categories: [...s.nma.categories, { id: uid(), name, type, icon: 'sparkle', active: true }] } })),
         toggleCategory: (id) => set((s) => ({ nma: { ...s.nma, categories: s.nma.categories.map((c) => (c.id === id ? { ...c, active: !c.active } : c)) } })),
         setPhase: (phase) => {
+          if (LIVE) return void liveHooks.setPhase?.(phase)
           const s = get()
           const n = s.nma
           const cats = n.categories.filter((c) => c.active)
@@ -245,12 +255,14 @@ export const useStore = create<Store>()(
       }
     },
     {
-      name: 'aux-v3',
+      // Live mode keeps only per-device preferences in the browser; everything else comes from the backend.
+      name: LIVE ? 'aux-live-v1' : 'aux-v3',
+      partialize: (s) => (LIVE ? ({ theme: s.theme, onboarded: s.onboarded } as unknown as Store) : s),
       // Bump `version` and add a step here to upgrade saved data in place, instead of renaming the key (which wipes it).
       version: 1,
       migrate: (saved, from) => {
         const st = saved as Data
-        if (from < 1) {
+        if (!LIVE && from < 1) {
           // v1: classmates gained favourite genres.
           const fresh = buildSeed().users
           for (const id of Object.keys(st.users ?? {})) if (id !== 'me' && !st.users[id].genres) st.users[id] = { ...st.users[id], genres: fresh[id]?.genres ?? [] }
@@ -260,7 +272,7 @@ export const useStore = create<Store>()(
       // Imported Spotify songs live in saved state; put them back into the catalog before anything renders,
       // and drop any saved references to songs that are no longer known (so a lost import can't crash a screen).
       onRehydrateStorage: () => (st) => {
-        if (!st) return
+        if (!st || LIVE) return
         registerCatalog(st.catalogExtra)
         if (st.listens.some((l) => !tracks[l.trackId])) useStore.setState({ listens: st.listens.filter((l) => tracks[l.trackId]) })
       },

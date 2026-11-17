@@ -12,7 +12,8 @@ export function mulberry32(a: number) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296
   }
 }
-export const uid = () => Math.random().toString(36).slice(2, 10)
+// Random ids for new items. UUIDs, so the same id works locally and in the database.
+export const uid = (): string => (typeof globalThis.crypto?.randomUUID === 'function' ? crypto.randomUUID() : Math.random().toString(36).slice(2, 10) + Date.now().toString(36))
 
 type Tastes = Record<string, number>
 const TRENDING = ['luther', 'Juna', 'DENIAL IS A RIVER', "That's So True"].map(tid)
@@ -227,5 +228,16 @@ export function buildSeed(now = Date.now()): Data {
       const noms = { song: ['Espresso', 'Juna', 'tv off', 'Apple'].map(lbl), album: ['Charm', 'GNX', 'BRAT'].map(albl), video: ['Taste', 'DENIAL IS A RIVER', 'Sticky'].map(lbl) }
       return others.flatMap((userId) => cats.map(([categoryId, n]) => ({ eventId: 'demo26', categoryId, userId, nominee: noms[categoryId][Math.floor(r() * n)] })))
     })(),
+  }
+}
+
+/** Starting state in live mode: no sample classmates or activity; everything loads from the backend after sign-in. */
+export function emptyLiveData(): Data {
+  const base = buildSeed()
+  const me: User = { ...base.users.me, name: '', handle: '', email: '', badges: [], favoriteAlbums: [], genres: [] }
+  return {
+    ...base, admin: false, users: { me }, follows: [], blocks: [], listens: [], ratings: [], recs: [], comments: [], reports: [],
+    nma: { ...base.nma, season: '', categories: [], nominations: [], votes: [], proposals: [], ballot: {}, winners: {}, hall: [], flags: [] },
+    events: [], picks: [], catalogExtra: { artists: [], albums: [], tracks: [] },
   }
 }

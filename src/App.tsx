@@ -2,6 +2,8 @@ import { useEffect } from 'react'
 import { HashRouter, NavLink, Route, Routes, useLocation } from 'react-router-dom'
 import { useStore } from './store'
 import { Icon } from './components/ui'
+import { Wordmark } from './components/Brand'
+import { useLive } from './services/live'
 import Welcome from './screens/Welcome'
 import Home from './screens/Home'
 import Discover from './screens/Discover'
@@ -69,6 +71,8 @@ function Shell() {
 export default function App() {
   const theme = useStore((s) => s.theme)
   const ready = useStore((s) => s.signedIn && s.onboarded)
+  const connecting = useLive((s) => !s.ready)
   useEffect(() => { document.documentElement.dataset.theme = theme }, [theme])
+  if (connecting) return <div className={`app ${embed ? 'embed' : ''}`}><div className="splash"><Wordmark size={56} /><p className="muted">Connecting…</p></div></div>
   return <HashRouter>{ready ? <Shell /> : <div className={`app ${embed ? 'embed' : ''}`}><Welcome /></div>}</HashRouter>
 }

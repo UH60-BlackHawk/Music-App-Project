@@ -42,9 +42,14 @@ const liam = await signUp('lbrennan27@nobles.edu')
 const sofia = await signUp('sreyes28@nobles.edu')
 const admin = await signUp('aux.admin@nobles.edu')
 await db.query('update public.profiles set is_admin = true where id = $1', [admin])
-await db.query(`insert into public.artists values ('ar-clairo','Clairo','indie',null), ('ar-gnx','Kendrick Lamar','hip-hop',null);
-  insert into public.albums values ('al-charm','Charm','ar-clairo',2024,null), ('al-gnx','GNX','ar-gnx',2024,null);
-  insert into public.tracks values ('t-juna','Juna','ar-clairo','al-charm',197,null), ('t-luther','luther','ar-gnx','al-gnx',178,null), ('t-tvoff','tv off','ar-gnx','al-gnx',220,null);`)
+// Check the starting data before the fixtures below clear it.
+await test('starting data: sample catalog, this season and its categories exist', async () => {
+  const r = await as(maya, (q) => q(`select (select count(*) from public.tracks)::int t, (select count(*) from public.nma_categories where season_id = 'fall-2026')::int c, (select track_id from public.daily_config) d`))
+  assert.deepEqual([r.rows[0].t >= 40, r.rows[0].c, r.rows[0].d], [true, 9, 't-juna'])
+})
+
+// Sample catalog (t-juna, t-luther, t-tv-off …) comes from the 0002 migration.
+await db.query(`delete from public.nma_categories where season_id = 'fall-2026'; delete from public.nma_seasons; delete from public.pred_events;`) // tests create their own
 
 // ---------- sign-up ----------
 await test('non-school email cannot sign up', () => assert.rejects(signUp('someone@gmail.com'), /only for @nobles.edu/))
@@ -108,8 +113,20 @@ await test('leaderboard counts opted-in students only and returns totals, not pe
   await db.query('update public.profiles set leaderboard_opt_in = true where id = $1', [liam])
 })
 await test('leaderboard genre filter', async () => {
-  const r = await as(sofia, (q) => q(`select id from public.leaderboard('artists', now() - interval '7 days', 'hip-hop')`))
-  assert.deepEqual(r.rows.map((x) => x.id), ['ar-gnx'])
+  const r = await as(sofia, (q) => q(`select id from public.leaderboard('artists', now() - interval '7 days', '{hip-hop}')`))
+  assert.deepEqual(r.rows.map((x) => x.id), ['ar-kendrick-lamar'])
+})
+
+await test('trending: songs with more plays this week than last', async () => {
+  const r = await as(sofia, (q) => q('select id, delta from public.trending()'))
+  assert.ok(r.rows.some((x) => x.id === 't-luther' && Number(x.delta) === 2))
+})
+await test('Last.fm accounts can only be linked by the server, and unlinked by their owner', async () => {
+  await denied(as(maya, (q) => q(`update public.profiles set lastfm_username = 'someone_else' where id = $1`, [maya])))
+  await db.query(`update public.profiles set lastfm_username = 'maya_fm' where id = $1`, [maya]) // server-side
+  assert.equal((await db.query('select lastfm_username from public.profiles where id = $1', [maya])).rows[0].lastfm_username, 'maya_fm')
+  await as(maya, (q) => q('select public.disconnect_lastfm()'))
+  assert.equal((await db.query('select lastfm_username from public.profiles where id = $1', [maya])).rows[0].lastfm_username, null)
 })
 
 // ---------- direct messages (songs only) ----------
@@ -120,7 +137,7 @@ await test('you cannot message a stranger who never messaged you', () =>
   denied(as(sofia, (q) => q(`insert into public.songs_sent (to_id, track_id) values ($1, 't-juna')`, [maya]))))
 await test('…but you can reply once they have messaged you', async () => {
   await as(liam, (q) => q('insert into public.follows (follower, followee) values ($1, $2)', [liam, sofia]))
-  await as(liam, (q) => q(`insert into public.songs_sent (to_id, track_id) values ($1, 't-tvoff')`, [sofia]))
+  await as(liam, (q) => q(`insert into public.songs_sent (to_id, track_id) values ($1, 't-tv-off')`, [sofia]))
   // Sofia doesn't follow Liam, but may reply because he messaged her first.
   await as(sofia, (q) => q(`insert into public.songs_sent (to_id, track_id, note) values ($1, 't-juna', 'in return')`, [liam]))
 })
@@ -191,9 +208,9 @@ await test('only admins can change the phase', async () => {
   await as(admin, (q) => q(`select public.nma_set_phase('fall-2026', 'voting')`))
 })
 await test('voting: one vote each, only for items on the ballot, nominations closed', async () => {
-  await denied(as(admin, (q) => q(`insert into public.nma_nominations (season_id, category_id, item_id) values ('fall-2026', 'soty', 't-tvoff')`)))
-  await denied(as(maya, (q) => q(`update public.nma_nominations set item_id = 't-tvoff' where user_id = auth.uid()`)))
-  await denied(as(maya, (q) => q(`insert into public.nma_votes (season_id, category_id, item_id) values ('fall-2026', 'soty', 't-tvoff')`)))
+  await denied(as(admin, (q) => q(`insert into public.nma_nominations (season_id, category_id, item_id) values ('fall-2026', 'soty', 't-tv-off')`)))
+  await denied(as(maya, (q) => q(`update public.nma_nominations set item_id = 't-tv-off' where user_id = auth.uid()`)))
+  await denied(as(maya, (q) => q(`insert into public.nma_votes (season_id, category_id, item_id) values ('fall-2026', 'soty', 't-tv-off')`)))
   await as(maya, (q) => q(`insert into public.nma_votes (season_id, category_id, item_id) values ('fall-2026', 'soty', 't-juna')`))
   await denied(as(maya, (q) => q(`insert into public.nma_votes (season_id, category_id, item_id) values ('fall-2026', 'soty', 't-luther')`)))
   await as(liam, (q) => q(`insert into public.nma_votes (season_id, category_id, item_id) values ('fall-2026', 'soty', 't-juna')`))

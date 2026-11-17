@@ -5,6 +5,7 @@ import { THEME_CATEGORIES, THEMES, Trophy, Wordmark } from '../components/Brand'
 import { Avatar, GenrePicker, Icon, Section, Toggle, TopBar } from '../components/ui'
 import { beginSpotifyAuth, spotifyConfigured, spotifyLive, spotifyLogout } from '../services/spotify'
 import { syncSpotify } from '../services/spotifySync'
+import { LIVE } from '../services/mode'
 import { timeAgo } from '../lib/select'
 import { PRIVACY_OPTIONS } from './Welcome'
 import { ProfilePhoto } from '../components/Photo'
@@ -99,17 +100,17 @@ export default function Settings() {
         </Section>
       )}
 
-      <Section title="Admin">
+      {(!LIVE || s.admin) && <Section title="Admin">
         <div className="card stack">
-          <Toggle label="Admin mode" hint="Prototype switch — real admins would be assigned by the school" checked={s.admin} onChange={s.setAdmin} />
+          {!LIVE && <Toggle label="Admin mode" hint="Prototype switch — real admins would be assigned by the school" checked={s.admin} onChange={s.setAdmin} />}
           {s.admin && <Link className="btn block" to="/admin"><Icon name="shield" size={16} /> Open admin dashboard</Link>}
         </div>
-      </Section>
+      </Section>}
 
       <Section title="Account">
         <div className="card stack">
           <p className="muted">Signed in as <b>{me.email}</b></p>
-          <button className="btn block" onClick={() => { if (confirm('Reset all demo data and sign out?')) s.resetDemo() }}>Reset demo data</button>
+          {!LIVE && <button className="btn block" onClick={() => { if (confirm('Reset all demo data and sign out?')) s.resetDemo() }}>Reset demo data</button>}
           <button className="btn block danger" onClick={s.signOut}>Sign out</button>
         </div>
       </Section>

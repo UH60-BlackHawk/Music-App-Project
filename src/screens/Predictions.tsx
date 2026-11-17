@@ -1,13 +1,18 @@
 import { useState } from 'react'
 import { useStore } from '../store'
 import { POINTS_PER_PICK, predictionBoard } from '../lib/select'
+import { LIVE } from '../services/mode'
+import { useRpc } from '../services/useRemote'
+import { useLive } from '../services/live'
 import { Avatar, Icon, Section, Seg, TopBar } from '../components/ui'
 
 export default function Predictions() {
   const s = useStore()
   const [eventId, setEventId] = useState(s.events[0]?.id ?? '')
   const ev = s.events.find((e) => e.id === eventId)
-  const board = predictionBoard(s)
+  const liveBoard = useRpc<{ user_id: string; points: number }[]>('prediction_leaderboard', LIVE ? {} : null, [s.picks, s.events])
+  const myUid = useLive((l) => l.user?.id)
+  const board = LIVE ? (liveBoard ?? []).map((b) => ({ userId: b.user_id === myUid ? 'me' : b.user_id, points: Number(b.points) })).filter((b) => s.users[b.userId]) : predictionBoard(s)
   if (!ev) return <TopBar title="Predictions" />
   const locked = ev.locked || Date.now() >= ev.startsAt
   const myPoints = board.find((b) => b.userId === 'me')?.points ?? 0

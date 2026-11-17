@@ -24,8 +24,11 @@ export async function beginSpotifyAuth() {
   if (!CLIENT_ID) return
   const verifier = b64(crypto.getRandomValues(new Uint8Array(48)).buffer)
   const challenge = b64(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(verifier)))
+  const state = b64(crypto.getRandomValues(new Uint8Array(16)).buffer)
   sessionStorage.setItem('aux-pkce', verifier)
-  const q = new URLSearchParams({ client_id: CLIENT_ID, response_type: 'code', redirect_uri: REDIRECT, scope: SCOPES, code_challenge_method: 'S256', code_challenge: challenge })
+  sessionStorage.setItem('aux-spotify-state', state)
+  // `state` marks this redirect as Spotify's (a Supabase sign-in link also returns `?code=`) and guards against forged returns.
+  const q = new URLSearchParams({ client_id: CLIENT_ID, response_type: 'code', redirect_uri: REDIRECT, scope: SCOPES, code_challenge_method: 'S256', code_challenge: challenge, state })
   location.assign('https://accounts.spotify.com/authorize?' + q)
 }
 
@@ -40,10 +43,13 @@ async function tokenRequest(body: Record<string, string>) {
 
 /** Call once on startup: completes the OAuth redirect if `?code=` is present. Returns true if a login completed. */
 export async function handleSpotifyCallback() {
-  const code = new URLSearchParams(location.search).get('code')
+  const params = new URLSearchParams(location.search)
+  const code = params.get('code')
   const verifier = sessionStorage.getItem('aux-pkce')
-  if (!CLIENT_ID || !code || !verifier) return false
+  const state = sessionStorage.getItem('aux-spotify-state')
+  if (!CLIENT_ID || !code || !verifier || !state || params.get('state') !== state) return false
   sessionStorage.removeItem('aux-pkce')
+  sessionStorage.removeItem('aux-spotify-state')
   history.replaceState(null, '', location.pathname + location.hash)
   await tokenRequest({ grant_type: 'authorization_code', code, redirect_uri: REDIRECT, code_verifier: verifier })
   return true

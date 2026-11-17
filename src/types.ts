@@ -32,6 +32,8 @@ export interface User {
   genres?: string[]
   badges: string[]
   nowPlaying?: ID
+  /** Verified Last.fm username (linked by the server after Last.fm sign-in). Live mode only. */
+  lastfm?: string
   /** Set once real Spotify data has been imported; absent in sample mode. */
   spotifySync?: SpotifySync
 }
