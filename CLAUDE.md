@@ -33,11 +33,21 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 
 ## What is simulated
 
-- Everything runs in the browser; state is a Zustand store persisted to `localStorage` under `aux-v3`, saved-data version 1 (`src/store.ts`). There is no backend, so nothing is shared between devices. Suggested next step is Supabase.
+- Everything runs in the browser; state is a Zustand store persisted to `localStorage` under `aux-v3`, saved-data version 1 (`src/store.ts`). There is no backend, so nothing is shared between devices. The Supabase backend is being built (see Backend below).
 - The other students, their listens, nominations, votes and prediction picks are seeded (`src/data/seed.ts`).
 - Connecting Spotify imports sample listens unless `VITE_SPOTIFY_CLIENT_ID` is set. With it set, sign-in is real (PKCE, `src/services/spotify.ts`) and `importSpotify` pulls recent plays (Spotify only returns the last 50), top tracks and artists, and now playing. `applySpotifyImport` in `store.ts` adds unknown songs to the catalog (`catalogExtra`, ids `t-sp-…`/`al-sp-…`/`ar-sp-…`, re-registered on load), reuses catalog ids for songs already there (`findTrack` ignores case, "(feat. …)" and "- Remaster"), replaces the sample plays with real ones the first time, and merges later syncs without duplicates. Spotify's free-text genres map to Aux genres via `mapGenre` in `catalog.ts`. Sync runs on startup if older than 10 minutes and from "Sync now" in Settings (`src/services/spotifySync.ts`). This has been tested against simulated Spotify responses only, not a live Spotify app.
 - Replies in Messages are simulated: after you send someone a song, there is a 70% chance they send one back 3–7 seconds later (`simulateReply` in `store.ts`). Remove this when a real backend exists.
 - Admin mode is a Settings toggle, on by default, so the awards phases can be advanced in the demo.
+
+## Backend (Supabase)
+
+- **Status:** schema and security rules are written and tested (`supabase/migrations/0001_init.sql`, tests in `supabase/tests/rls.test.mjs`, run with `npm run test:db` against an empty local Postgres; the test wipes it). The app is **not yet connected**: it still runs entirely on the local Zustand store. Next steps: Supabase client and email-code sign-in, load/save every store action through the database, Realtime for Messages, then hosting.
+- **Waiting on the owner** for: the Spotify Client ID, and the Supabase Project URL and publishable (anon) key. Those three are safe to receive in chat. Never ask for or accept the Supabase `service_role`/secret key, the database password or the Spotify client secret; the owner keeps those. Setup steps for the owner are in `docs/SETUP.md`; keep that file current when steps change.
+- The rules mirror the app: `can_see()` = `canSee`, `can_message()` = `shareContacts`. When a product rule changes, change both, and add a test.
+- Aggregates that read across students (leaderboard, item ratings, NMA results, prediction points) are `security definer` functions that return totals only. NMA votes are unreadable by anyone, admins included, until `nma_results` works after the reveal.
+- `protect_profile_columns` blocks students from changing `is_admin`, `badges` or `email`; changes with no signed-in user (SQL editor, server code) are trusted, which is how the owner makes the first admin: `update profiles set is_admin = true where email = '…@nobles.edu';`.
+- Local testing: Postgres 16 is available in the cloud container (`pg_ctlcluster 16 main start`); `supabase/tests/stub_supabase.sql` stands in for Supabase's `auth` schema and roles.
+- The school has students under 18 (some under 13). Before real students beyond a few testers use it, the owner should check with the school; `docs/SETUP.md` says so.
 
 ## Themes
 

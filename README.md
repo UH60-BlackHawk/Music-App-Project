@@ -47,7 +47,13 @@ Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 di
 - React Router with hash routing, so the build can be hosted on any static host
 - Plain CSS driven by design tokens
 
-Suggested production backend: Supabase (Postgres, email auth restricted to the school domain, row-level security enforcing the privacy rules).
+## Backend (in progress)
+
+The backend is **Supabase** (hosted Postgres with built-in email sign-in and realtime updates). Status:
+
+- **Done:** the database schema with security rules, in `supabase/migrations/0001_init.sql`. School-email-only sign-up, privacy settings, blocking, who can message whom, sealed NMA votes, prediction lock times and admin-only moderation are enforced by the database itself. 33 automated tests cover them (`npm run test:db`, see `docs/SETUP.md`).
+- **Next:** connecting the app to it (real sign-in codes by email, saving and loading everything from the database, live messages), then hosting the app online so classmates can open it.
+- **Setup steps** for the Spotify and Supabase accounts are in [`docs/SETUP.md`](docs/SETUP.md).
 
 ## Layout
 
@@ -59,7 +65,11 @@ src/
   data/seed.ts        sample students and generated listening history
   lib/select.ts       privacy rule (canSee), feed, leaderboard, daily pick, moderation
   lib/recs.ts         recommendation scoring and reasons
-  services/           Spotify adapter (PKCE + Web Playback SDK)
+  services/           Spotify sign-in, import and playback; startup sync
+supabase/
+  migrations/         database schema and security rules
+  tests/              security-rule tests (run with npm run test:db)
+docs/SETUP.md         account setup steps for Spotify and Supabase
   components/         shared UI, wordmark, Golden Bulldog trophy
   screens/            one file per screen
   styles/themes.css   theme tokens
