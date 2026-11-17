@@ -91,7 +91,7 @@ export function TrackPage() {
         <Cover id={id} size={168} />
         <h1>{t.title}</h1>
         <p className="detail-sub">{artistOf(t).name} · <Link to={`/album/${album.id}`}>{album.title}</Link> · {fmt(t.dur)}</p>
-        <p className="fine">{plays} plays at Nobles</p>
+        <p className="fine">{plays} play{plays === 1 ? '' : 's'} at Nobles</p>
         <div className="detail-actions">
           <ShareButton trackId={id} className="btn primary" label="Share" />
           <Link className="btn" to={`/recommend/${id}`}><Icon name="star" size={16} /> Send best part</Link>

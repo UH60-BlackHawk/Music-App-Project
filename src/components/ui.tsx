@@ -9,6 +9,8 @@ import { playClip, spotifyLive, stopClip } from '../services/spotify'
 import { ShareButton } from './Share'
 import { spotifyIdFromLink, useSpotifySearch } from '../services/songSearch'
 import { LIVE } from '../services/mode'
+import { remote } from '../services/remote'
+import { SpotifyEmbed, type EmbedNote } from './SpotifyEmbed'
 
 const ICONS: Record<string, string> = {
   home: 'M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z',
@@ -245,24 +247,63 @@ export const waveform = (id: ID, n = 56) => {
 }
 
 /** Simulated 30s clip transport. With a live Spotify session it also drives the Web Playback SDK. */
+/**
+ * Plays a song's 30-second best part, picking the best way available:
+ * 1. Spotify Web Playback SDK, when this student is signed in with Spotify (owner + testers, Premium).
+ * 2. Spotify's embedded player, when the song's Spotify id is known (or, in live mode, the server can find it).
+ * 3. Otherwise a visual-only preview, with "Open in Spotify" offered in live mode.
+ */
 export function useClip(track: Track, start: number) {
   const [playing, setPlaying] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [mode, setMode] = useState<'sim' | 'sdk' | 'embed'>('sim')
+  const [spotifyId, setSpotifyId] = useState<string | null>(null)
+  const [note, setNote] = useState<EmbedNote | 'fallback'>(null)
   useEffect(() => {
-    if (!playing) return
+    if (!playing || mode === 'embed') return
     const t0 = Date.now()
     const iv = setInterval(() => {
       const p = (Date.now() - t0) / 30000
       if (p >= 1) { setPlaying(false); setProgress(0) } else setProgress(p)
     }, 100)
     return () => clearInterval(iv)
-  }, [playing])
+  }, [playing, mode])
   useEffect(() => () => { if (spotifyLive()) stopClip() }, [])
-  const toggle = () => {
-    if (playing) { setPlaying(false); setProgress(0); if (spotifyLive()) stopClip() }
-    else { setPlaying(true); if (spotifyLive()) playClip({ title: track.title, artist: artistOf(track).name, spotifyId: track.spotifyId }, start).catch(() => window.open(spotifyLink(track), '_blank')) }
+  const stop = () => { setPlaying(false); setProgress(0); setNote(null); if (mode === 'sdk' && spotifyLive()) stopClip() }
+  const toggle = async () => {
+    if (playing) return stop()
+    setProgress(0); setNote(null)
+    if (spotifyLive()) {
+      setMode('sdk'); setPlaying(true)
+      playClip({ title: track.title, artist: artistOf(track).name, spotifyId: track.spotifyId }, start).catch(() => window.open(spotifyLink(track), '_blank'))
+      return
+    }
+    let id = track.spotifyId ?? null
+    if (!id && remote) {
+      setSpotifyId(null); setMode('embed'); setPlaying(true) // shows the player area while we look the song up
+      id = await remote.invoke<{ spotifyId: string | null }>('spotify', { action: 'resolve', trackId: track.id }).then((r) => r.spotifyId).catch(() => null)
+      if (id && tracks[track.id]) tracks[track.id].spotifyId = id
+    }
+    if (id) { setSpotifyId(id); setMode('embed'); setPlaying(true) }
+    else { setMode('sim'); setPlaying(true); if (LIVE) setNote('fallback') }
   }
-  return { playing, progress, toggle }
+  const embed = playing && mode === 'embed' && spotifyId
+    ? { spotifyId, start, onProgress: setProgress, onEnd: stop, onError: () => { setMode('sim'); setNote('fallback') }, onNote: setNote }
+    : null
+  return { playing, progress, toggle, embed, note, loading: playing && mode === 'embed' && !spotifyId }
+}
+
+/** The embedded player (when used) and any message about playback, shown under a clip. */
+function ClipExtras({ track, clip }: { track: Track; clip: ReturnType<typeof useClip> }) {
+  return (
+    <>
+      {clip.embed && <SpotifyEmbed {...clip.embed} />}
+      {clip.loading && <p className="fine clip-note">Finding this song on Spotify…</p>}
+      {clip.note === 'preview' && <p className="fine clip-note">Playing Spotify’s 30-second preview. Log in to Spotify in this browser to hear the best part.</p>}
+      {clip.note === 'tap' && <p className="fine clip-note">Tap play in the Spotify player to start.</p>}
+      {clip.note === 'fallback' && <p className="fine clip-note">Couldn’t play it here. <OpenIn track={track} /></p>}
+    </>
+  )
 }
 
 export function OpenIn({ track }: { track: Track }) {
@@ -275,13 +316,15 @@ export function OpenIn({ track }: { track: Track }) {
 
 /** Compact "best part" player shown on recommendations. */
 export function ClipPlayer({ track, start }: { track: Track; start: number }) {
-  const { playing, progress, toggle } = useClip(track, start)
+  const clip = useClip(track, start)
+  const { playing, progress, toggle } = clip
   const bars = useMemo(() => waveform(track.id, 40), [track.id])
   const a = start / track.dur
   const b = Math.min(1, (start + 30) / track.dur)
   return (
+    <div className="clip-wrap">
     <div className="clip">
-      <button className="playbtn" onClick={toggle} aria-label={playing ? 'Stop clip' : 'Play best part'}><Icon name={playing ? 'pause' : 'play'} size={18} /></button>
+      <button className="playbtn" onClick={() => void toggle()} aria-label={playing ? 'Stop clip' : 'Play best part'}><Icon name={playing ? 'pause' : 'play'} size={18} /></button>
       <div className="clip-wave" aria-hidden="true">
         {bars.map((h, i) => {
           const x = i / bars.length
@@ -292,13 +335,16 @@ export function ClipPlayer({ track, start }: { track: Track; start: number }) {
       </div>
       <span className="clip-time">{fmt(start)}–{fmt(Math.min(track.dur, start + 30))}</span>
     </div>
+    <ClipExtras track={track} clip={clip} />
+    </div>
   )
 }
 
 /** Scrubber for choosing the 30-second best part. Emits a start time in seconds — no audio is stored. */
 export function ClipPicker({ track, value, onChange }: { track: Track; value: number; onChange: (v: number) => void }) {
   const ref = useRef<HTMLDivElement>(null)
-  const { playing, progress, toggle } = useClip(track, value)
+  const clip = useClip(track, value)
+  const { playing, progress, toggle } = clip
   const bars = useMemo(() => waveform(track.id, 64), [track.id])
   const max = Math.max(0, track.dur - 30)
   const a = value / track.dur
@@ -325,9 +371,10 @@ export function ClipPicker({ track, value, onChange }: { track: Track; value: nu
       </div>
       <input className="range" type="range" min={0} max={max} step={1} value={value} onChange={(e) => onChange(+e.target.value)} aria-label="Clip start time" />
       <div className="clip-meta">
-        <button className="btn sm" onClick={toggle}><Icon name={playing ? 'pause' : 'play'} size={15} /> {playing ? 'Stop' : 'Preview'}</button>
+        <button className="btn sm" onClick={() => void toggle()}><Icon name={playing ? 'pause' : 'play'} size={15} /> {playing ? 'Stop' : 'Preview'}</button>
         <span className="mono">{fmt(value)} – {fmt(Math.min(track.dur, value + 30))} <span className="muted">of {fmt(track.dur)}</span></span>
       </div>
+      <ClipExtras track={track} clip={clip} />
     </div>
   )
 }

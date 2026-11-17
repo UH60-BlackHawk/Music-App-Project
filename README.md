@@ -30,7 +30,7 @@ Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 di
 | Profiles (with optional uploaded photo, cropped in the app), follows (with follower / following lists), home feed, privacy (school / friends / private, pause sharing) | Working |
 | For You + Your Friends Are Into, each with a reason | Working, computed from in-app data only (`src/lib/recs.ts`); favourite genres boost picks |
 | Genre preferences (onboarding and Settings, shown on profiles) and genre filters on Charts and Discover, including a "My genres" shortcut | Working |
-| Recommend a song with a 30s best-part scrubber | Working. Stores track id + start second only. Playback is simulated in sample mode, with an "Open in Spotify" link. |
+| Recommend a song with a 30s best-part scrubber | Working. Stores track id + start second only. Sample mode shows a visual preview with an "Open in Spotify" link; live mode plays the clip in Spotify's embedded player. |
 | Ratings and reviews (half stars), Nobles averages | Working |
 | Share a song (pick several classmates, add a message; plus best part, post to feed, copy link, Spotify, system share) | Working |
 | Messages: direct messages that are songs only, with an optional note, unread badges and per-person chats | Working. Classmates sometimes send a song back a few seconds later (simulated). |
@@ -55,7 +55,8 @@ The backend is **Supabase** (hosted Postgres with built-in email sign-in and rea
 - **Done:** the app connects to Supabase when `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set ("live mode"): real sign-in by emailed link or code, everything loads from and saves to the database, new messages arrive live, and charts and prediction points come from server totals. Without those settings it runs on sample data as before.
 - **Done:** the database schema with security rules, in `supabase/migrations/`. School-email-only sign-up, privacy settings, blocking, who can message whom, sealed NMA votes, prediction lock times and admin-only moderation are enforced by the database itself. 33 automated tests cover them (`npm run test:db`, see `docs/SETUP.md`).
 - **Done:** server functions (Supabase Edge Functions, `supabase/functions/`) for searching all of Spotify and looking up pasted song links (app-only Spotify access, so no 5-person limit), and for Last.fm: students sign in on Last.fm to prove the account is theirs, then recent plays import every 10 minutes or on demand. Tested against stand-in Spotify and Last.fm services (`npm run test:functions`).
-- **Next:** Spotify's embedded player for clips, then hosting the app online so classmates can open it.
+- **Done:** best-part clips play through Spotify's official embedded player for anyone (jumping to the chosen 30 seconds and stopping after them); students logged in to Spotify in their browser hear the full song, others hear Spotify's 30-second preview. Testers signed in with Spotify keep full playback. Tested against a stand-in for Spotify's player script.
+- **Next:** hosting the app online so classmates can open it, and an email-sending service so students can receive sign-in emails.
 - **Setup steps** for the Spotify and Supabase accounts are in [`docs/SETUP.md`](docs/SETUP.md).
 
 ## Layout
