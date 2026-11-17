@@ -5,6 +5,7 @@ import { THEME_CATEGORIES, THEMES, Trophy, Wordmark } from '../components/Brand'
 import { Avatar, Icon, Section, Toggle, TopBar } from '../components/ui'
 import { beginSpotifyAuth, recentlyPlayed, spotifyConfigured, spotifyLive, spotifyLogout, type LiveTrack } from '../services/spotify'
 import { PRIVACY_OPTIONS } from './Welcome'
+import { ProfilePhoto } from '../components/Photo'
 
 export default function Settings() {
   const s = useStore()
@@ -21,6 +22,16 @@ export default function Settings() {
   return (
     <>
       <TopBar title="Settings" />
+
+      <Section title="Profile">
+        <div className="card profile-settings">
+          <ProfilePhoto size={64} />
+          <span className="row-text">
+            <span className="row-title">{me.name}</span>
+            <span className="row-sub">{me.photo ? 'Tap your photo to change or remove it' : 'Tap to add a profile photo'}</span>
+          </span>
+        </div>
+      </Section>
 
       <Section title="Theme" kicker="Reskins everything, instantly">
         {THEME_CATEGORIES.map((cat) => (

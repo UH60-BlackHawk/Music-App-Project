@@ -126,6 +126,8 @@ export const useStore = create<Store>()(
             comments: r.kind === 'comment' ? s.comments.map((c) => (c.id === r.targetId ? { ...c, hidden: true } : c)) : s.comments,
             ratings: r.kind === 'review' ? s.ratings.map((c) => (c.id === r.targetId ? { ...c, hidden: true } : c)) : s.ratings,
             recs: r.kind === 'rec' ? s.recs.map((c) => (c.id === r.targetId ? { ...c, hidden: true } : c)) : s.recs,
+            // For a reported profile, "remove" takes down the profile photo.
+            users: r.kind === 'user' && s.users[r.targetId] ? { ...s.users, [r.targetId]: { ...s.users[r.targetId], photo: undefined } } : s.users,
           }
         }),
         setDaily: (patch) => set((s) => ({ daily: { ...s.daily, ...patch } })),

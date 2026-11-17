@@ -128,7 +128,7 @@ export default function Admin() {
                 <p><span className="pill">{r.kind}</span> <b>{r.reason}</b> <span className="muted">· reported by {r.reporterId === 'me' ? 'you' : s.users[r.reporterId]?.name}</span></p>
                 <p className="note">“{targetText(r.kind, r.targetId) || itemTitle('track', r.targetId)}”</p>
                 {r.status === 'open'
-                  ? <span className="btn-pair">{r.kind !== 'user' && <button className="btn sm danger" onClick={() => s.resolveReport(r.id, true)}>Remove content</button>}<button className="btn sm" onClick={() => s.resolveReport(r.id, false)}>Dismiss</button></span>
+                  ? <span className="btn-pair">{(r.kind !== 'user' || s.users[r.targetId]?.photo) && <button className="btn sm danger" onClick={() => s.resolveReport(r.id, true)}>{r.kind === 'user' ? 'Remove photo' : 'Remove content'}</button>}<button className="btn sm" onClick={() => s.resolveReport(r.id, false)}>Dismiss</button></span>
                   : <span className="pill">{r.status}</span>}
               </div>
             )) : <Empty>No reports. Peaceful.</Empty>}

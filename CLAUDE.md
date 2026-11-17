@@ -23,6 +23,7 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 - **Predictions** award free points only. No money or purchasable currency, ever.
 - **No emoji reactions.** They were removed on request. Song of the Day and recommendation cards carry an inline star rating (`QuickRate`) instead; the full rating and review form stays on the song / album page.
 - **No emoji characters anywhere in the UI.** Use the `Icon` component (`ICONS` in `src/components/ui.tsx`) so icons follow the theme's stroke style. Award categories and badges store an icon name, not an emoji. The ★ rating glyphs are the one exception.
+- **Profile photos** are optional (`photo` on `User`, edited with `ProfilePhoto` in `src/components/Photo.tsx` on your profile and in Settings). The crop step saves a 320 px square JPEG data URL (about 10 KB) so it fits in browser storage; never store the original file. `Avatar` shows the photo or falls back to initials. In admin moderation, "Remove photo" on a reported profile takes the photo down.
 - **Cover art is generated** (`Cover` in `src/components/ui.tsx`). Do not add real album artwork.
 - **No school API is assumed.** `?embed=1` drops the phone frame for future embedding in the Nobles app.
 

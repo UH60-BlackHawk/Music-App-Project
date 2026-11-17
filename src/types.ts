@@ -16,6 +16,8 @@ export interface User {
   email: string
   classYear: number
   color: string
+  /** Optional profile photo: a small square JPEG data URL. Initials on `color` are shown without one. */
+  photo?: string
   bio: string
   privacy: Privacy
   sharingPaused: boolean

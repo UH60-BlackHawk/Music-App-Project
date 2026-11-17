@@ -24,7 +24,7 @@ Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 di
 | --- | --- |
 | School-email sign-in, onboarding, privacy choice | Working (no real email is sent) |
 | Spotify connection | Sample data by default. A real Spotify PKCE adapter is included and switches on with `VITE_SPOTIFY_CLIENT_ID`; it has not been tested against a live Spotify app. Apple Music is not included for now and could be added later. |
-| Profiles, follows (with follower / following lists), home feed, privacy (school / friends / private, pause sharing) | Working |
+| Profiles (with optional uploaded photo, cropped in the app), follows (with follower / following lists), home feed, privacy (school / friends / private, pause sharing) | Working |
 | For You + Your Friends Are Into, each with a reason | Working, computed from in-app data only (`src/lib/recs.ts`) |
 | Recommend a song with a 30s best-part scrubber | Working. Stores track id + start second only. Playback is simulated in sample mode, with an "Open in Spotify" link. |
 | Ratings and reviews (half stars), Nobles averages | Working |
@@ -65,7 +65,7 @@ src/
 
 ## Data model
 
-- **User**: name, handle, school email, class year, privacy (`school` / `friends` / `private`), sharingPaused, leaderboardOptIn, connected providers, favorite albums, badges
+- **User**: name, handle, school email, class year, optional photo (a small square JPEG, about 10 KB), privacy (`school` / `friends` / `private`), sharingPaused, leaderboardOptIn, connected providers, favorite albums, badges
 - **Follow**: `[from, to]`; "friends" means a mutual follow
 - **Listen**: user, track, timestamp
 - **Rating**: user, song or album, stars (0.5 to 5), optional review

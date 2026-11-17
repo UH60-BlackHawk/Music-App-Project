@@ -7,6 +7,7 @@ import type { ID } from '../types'
 import { Trophy } from '../components/Brand'
 import { Avatar, Cover, Empty, Icon, ReportButton, Section, Sheet, Stars, TopBar, TrackRow } from '../components/ui'
 import { FollowButton } from './Discover'
+import { ProfilePhoto } from '../components/Photo'
 import { BADGE_ICON } from './Awards'
 
 
@@ -37,7 +38,7 @@ export default function Profile() {
           : <button className="iconbtn" aria-label="More" onClick={() => setMenu(true)}><Icon name="more" /></button>}
       />
       <div className="profile-head">
-        <Avatar user={u} size={84} />
+        {isMe ? <ProfilePhoto size={84} /> : <Avatar user={u} size={84} />}
         <h1>{u.name}</h1>
         <p className="muted">@{u.handle} · Class of {u.classYear}</p>
         {u.bio && <p className="bio">{u.bio}</p>}

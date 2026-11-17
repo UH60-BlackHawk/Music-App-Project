@@ -35,6 +35,7 @@ const ICONS: Record<string, string> = {
   castle: 'M4 21V9l2-1V5h2v2h2V5h4v2h2V5h2v3l2 1v12zM10 21v-5a2 2 0 0 1 4 0v5',
   gem: 'M12 21L3 9l4-5h10l4 5zM3 9h18M9 4l3 17 3-17',
   comment: 'M4 5h16v11H10l-5 4v-4H4z',
+  camera: 'M4 8h3l2-3h6l2 3h3v11H4zM12 16.500a3.500 3.500 0 1 0 0-7 3.500 3.500 0 0 0 0 7z',
   link: 'M10 14a4 4 0 0 0 5.700 0l3-3a4 4 0 0 0-5.700-5.700L11.500 6.800M14 10a4 4 0 0 0-5.700 0l-3 3a4 4 0 0 0 5.700 5.700l1.500-1.500',
   share: 'M12 15V3M8 7l4-4 4 4M7 10H5v11h14V10h-2',
   disc: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z',
@@ -83,7 +84,11 @@ export function Cover({ id, size = 56, className = '' }: { id: ID; size?: number
 
 export function Avatar({ user, size = 36 }: { user: User; size?: number }) {
   const initials = user.name.split(' ').map((w) => w[0]).join('').slice(0, 2).toUpperCase()
-  return <span className="avatar" style={{ width: size, height: size, background: user.color, fontSize: size * 0.38 }}>{initials}</span>
+  return (
+    <span className="avatar" style={{ width: size, height: size, background: user.color, fontSize: size * 0.38 }}>
+      {user.photo ? <img src={user.photo} alt="" /> : initials}
+    </span>
+  )
 }
 export function UserLink({ user, children }: { user: User; children?: ReactNode }) {
   return <Link className="userlink" to={`/profile/${user.id}`}>{children ?? user.name}</Link>
