@@ -23,13 +23,10 @@ Each part takes about 10 minutes. Parts A and B can be done in either order; Par
 3. Tick the terms box and click **Save**.
 4. On your app's page, click **Settings**. Copy the **Client ID** (a long string of letters and numbers). Then click **View client secret** and copy that too, but keep it private: it only ever goes into Supabase in Part D, never into the app or our chat.
 5. Click **User Management** and add yourself, plus up to four friends who want to test (their name and the email on their Spotify account).
-6. Put the Client ID into the app:
-   1. In VS Code's file list, right-click `.env.example`, choose **Copy**, then right-click the empty space and choose **Paste**. Rename the copy to exactly `.env`.
-   2. Open `.env` and paste the Client ID after `VITE_SPOTIFY_CLIENT_ID=` (no spaces, no quotes). Save.
-   3. Restart the app: press **Shift+F5**, then **F5**.
+6. Put the Client ID into the app. **Done:** it's in `.env.development` in the project (public settings the app reads when you press F5). Pull the latest code, then restart the app: press **Shift+F5**, then **F5**.
 7. The app now opens at `http://127.0.0.1:5173/`. Your old demo was saved under `localhost`, so you'll sign in once more with the demo student. Then go to **Settings → Connected account → Connect** and log in to Spotify.
 
-You can paste the Client ID into our chat too. It isn't a secret, since it's built into the app anyway. Never share the client secret: it goes only into Supabase (Part D).
+Public values like the Client ID can go in our chat, and I'll add them to `.env.development` for you. Never share the client secret: it goes only into Supabase (Part D).
 
 ---
 
@@ -58,7 +55,7 @@ You can paste the Client ID into our chat too. It isn't a secret, since it's bui
    1. Click your organization name at the top left, then **Team**, then **Invite**.
    2. Invite your `@nobles.edu` address and accept the invite from that inbox.
    Before inviting other students, set up a free email-sending service (Supabase's guide: Authentication → Emails → SMTP Settings). I'll walk you through that when you're ready.
-7. Put the two values into the app: open `.env` (create it from `.env.example` as in Part A if you haven't) and paste them after `VITE_SUPABASE_URL=` and `VITE_SUPABASE_ANON_KEY=`. Save, then restart the app (**Shift+F5**, then **F5**). The app now shows a real sign-in screen.
+7. Put the two values into the app: send them to me in our chat and I'll add them to `.env.development` (or add the lines `VITE_SUPABASE_URL=…` and `VITE_SUPABASE_ANON_KEY=…` to that file yourself). Pull, then restart the app (**Shift+F5**, then **F5**). The app now shows a real sign-in screen.
 8. Sign in with your `@nobles.edu` email: tap the link in the email (on the same computer), or type the code if the email shows one.
 9. Make yourself the admin. Back in Supabase, open **SQL Editor → New query**, paste this with your email filled in, and click **Run**:
 
@@ -83,7 +80,7 @@ Free Supabase projects pause after a week with no activity. If that happens, ope
    - **Callback URL:** `http://127.0.0.1:5173/`
    - Leave the homepage blank. Click **Submit**.
 3. Last.fm shows an **API key** and a **Shared secret**. Copy both.
-   - The **API key** goes into `.env` after `VITE_LASTFM_API_KEY=` (it's public, and fine to paste in our chat).
+   - The **API key** is public: send it to me in our chat and I'll add it to `.env.development` as `VITE_LASTFM_API_KEY`.
    - The **Shared secret** is private: it goes only into Supabase in Part D.
 4. Save `.env` and restart the app (**Shift+F5**, then **F5**).
 
