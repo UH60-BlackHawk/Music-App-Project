@@ -54,7 +54,7 @@ Public values like the Client ID can go in our chat, and I'll add them to `.env.
 6. Let your school email receive sign-in emails while testing. Supabase's built-in email only sends to members of your Supabase team, about 2 emails an hour:
    1. Click your organization name at the top left, then **Team**, then **Invite**.
    2. Invite your `@nobles.edu` address and accept the invite from that inbox.
-   Before inviting other students, set up a free email-sending service (Supabase's guide: Authentication → Emails → SMTP Settings). I'll walk you through that when you're ready.
+   Before inviting other students, do **Part E** (sending sign-in emails to everyone).
 7. Put the two values into the app: send them to me in our chat and I'll add them to `.env.development` (or add the lines `VITE_SUPABASE_URL=…` and `VITE_SUPABASE_ANON_KEY=…` to that file yourself). Pull, then restart the app (**Shift+F5**, then **F5**). The app now shows a real sign-in screen.
 8. Sign in with your `@nobles.edu` email: tap the link in the email (on the same computer), or type the code if the email shows one.
 9. Make yourself the admin. Back in Supabase, open **SQL Editor → New query**, paste this with your email filled in, and click **Run**:
@@ -121,6 +121,59 @@ Searching all of Spotify and importing Last.fm plays run on Supabase, where the 
 4. In the app, any song picker now shows **On Spotify** results under the usual list, and you can paste a Spotify song link into it. **Settings → Connected accounts → Last.fm → Connect** links Last.fm.
 
 If you ever change code in `supabase/functions/`, run the two `deploy` lines again.
+
+---
+
+## Part E: Sending sign-in emails to everyone (custom SMTP)
+
+Supabase's built-in email only reaches your Supabase team, about 2 emails an hour. To email every student, Supabase sends through a mailbox you provide ("SMTP"). The simplest free option without owning a website domain is a Gmail account just for Aux.
+
+**1. Make a Gmail account for Aux** (about 5 minutes)
+
+1. Go to <https://accounts.google.com/signup> and create an account, for example `aux.nobles.app@gmail.com` (any free name works). Students will see this address on their sign-in emails.
+2. Turn on 2-Step Verification: <https://myaccount.google.com/security> → **2-Step Verification** → follow the steps. App passwords only exist once this is on.
+
+**2. Create an app password** (a separate password just for Supabase)
+
+1. Signed in as the Aux Gmail account, go to <https://myaccount.google.com/apppasswords>.
+2. **App name:** Supabase. Click **Create**.
+3. Google shows a 16-letter password once. Copy it (ignore the spaces). It's a secret: it goes only into Supabase in the next step, never into the app or our chat. If you lose it, delete it on that page and make a new one.
+
+**3. Put it into Supabase**
+
+1. In your Supabase project: **Authentication** → **Emails** → **SMTP Settings** (on some layouts: **Project Settings → Authentication → SMTP Settings**).
+2. Turn on **Enable Custom SMTP** and fill in:
+   - **Sender email:** your Aux Gmail address
+   - **Sender name:** Aux
+   - **Host:** `smtp.gmail.com`
+   - **Port number:** `465`
+   - **Minimum interval between emails:** leave the default
+   - **Username:** your Aux Gmail address again
+   - **Password:** the 16-letter app password (no spaces)
+3. Click **Save**.
+4. Raise the email limit: **Authentication** → **Rate Limits** → set **Rate limit for sending emails** to about `100` per hour → **Save**.
+
+**4. Put the code in the email**
+
+Some school email systems scan links in incoming mail and "click" them before you do, which uses up the sign-in link. A code avoids that, and Aux accepts either.
+
+1. **Authentication** → **Emails** → **Templates**.
+2. Open **Magic Link**. Set **Subject** to `Your Aux sign-in code` and replace the message body with:
+
+   ```html
+   <h2>Sign in to Aux</h2>
+   <p>Your code is <strong style="font-size: 22px; letter-spacing: 3px;">{{ .Token }}</strong></p>
+   <p>Or open this link on the same device: <a href="{{ .ConfirmationURL }}">Sign in to Aux</a></p>
+   <p>If you didn't ask to sign in, you can ignore this email.</p>
+   ```
+
+3. Click **Save**. Then open **Confirm signup** (used the first time someone signs in), paste the same body with the subject `Welcome to Aux: your sign-in code`, and **Save**.
+
+**5. Test it**
+
+Sign in to Aux with your `@nobles.edu` address. The email should come from your Aux Gmail within a minute. If it isn't there, check spam or quarantine; if the school's filter holds it, ask the technology office to allow the Aux Gmail address. Then ask a friend to try theirs.
+
+When Aux grows, a more official option is to buy a domain (about $10 a year) and use a sending service like Resend, or to ask the school for an address. The steps above are the same, just with that service's details.
 
 ---
 
