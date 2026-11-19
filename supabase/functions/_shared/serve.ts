@@ -15,9 +15,15 @@ const json = (body: unknown, status = 200) => new Response(JSON.stringify(body),
 export const env = (k: string) => Deno.env.get(k) ?? ''
 
 export function serve(handler: (body: Record<string, unknown>, ctx: { uid: string; db: Db }) => Promise<unknown>) {
-  // SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY are provided to every Edge Function by Supabase.
-  const admin = createClient(env('SUPABASE_URL'), env('SUPABASE_SERVICE_ROLE_KEY'), { auth: { persistSession: false } })
+  // Supabase provides SUPABASE_URL and a server key to every Edge Function: SUPABASE_SERVICE_ROLE_KEY (legacy keys)
+  // or SUPABASE_SECRET_KEYS (newer projects, a JSON object of named secret keys). Accept either.
+  const serverKey = env('SUPABASE_SERVICE_ROLE_KEY') || (() => {
+    try { const keys = JSON.parse(env('SUPABASE_SECRET_KEYS') || '{}'); return keys.default ?? Object.values(keys)[0] ?? '' } catch { return '' }
+  })()
+  const admin = createClient(env('SUPABASE_URL'), serverKey as string, { auth: { persistSession: false } })
   const db = supabaseDb(admin)
+  // Deployed with verify_jwt off: this checks the signed-in student itself (getUser below), which also works
+  // with Supabase's newer signing keys.
   Deno.serve(async (req) => {
     if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
     try {

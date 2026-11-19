@@ -17,7 +17,7 @@ export const functions = {}
 export async function resetDatabase() {
   const c = await pool.connect()
   try {
-    await c.query('drop schema if exists public cascade; drop schema if exists auth cascade; create schema public;')
+    await c.query('drop schema if exists public cascade; drop schema if exists auth cascade; drop schema if exists private cascade; create schema public;')
     await c.query(readFileSync(new URL('tests/stub_supabase.sql', dir), 'utf8'))
     for (const f of readdirSync(new URL('migrations/', dir)).sort()) await c.query(readFileSync(new URL('migrations/' + f, dir), 'utf8'))
   } finally { c.release() }

@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
+    "dev:live": "vite --host 127.0.0.1 --mode live",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test:db": "node supabase/tests/rls.test.mjs",

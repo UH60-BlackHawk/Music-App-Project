@@ -32,6 +32,8 @@ Public values like the Client ID can go in our chat, and I'll add them to `.env.
 
 ## Part B: Supabase (the backend)
 
+> **Status (done for you through the Supabase connector):** the project "Aux" exists; all four database files are applied (tables, security rules, sample songs, award season, predictions ballot, and the security hardening); the app's connection details are in `.env.live`; the two server functions are deployed. **What's left for you:** steps 5 and 6 below, the secret keys in Part D step 3, then sign in (step 8) using **Run Aux (live backend)** and tell me, and I'll make you the admin.
+
 1. Go to <https://supabase.com>, click **Start your project**, and sign in with GitHub.
 2. Click **New project**:
    - **Name:** aux
@@ -56,7 +58,7 @@ Public values like the Client ID can go in our chat, and I'll add them to `.env.
    2. Invite your `@nobles.edu` address and accept the invite from that inbox.
    Before inviting other students, do **Part E** (sending sign-in emails to everyone).
 7. Put the two values into the app: send them to me in our chat and I'll add them to `.env.development` (or add the lines `VITE_SUPABASE_URL=…` and `VITE_SUPABASE_ANON_KEY=…` to that file yourself). Pull, then restart the app (**Shift+F5**, then **F5**). The app now shows a real sign-in screen.
-8. Sign in with your `@nobles.edu` email: tap the link in the email (on the same computer), or type the code if the email shows one.
+8. In VS Code's **Run and Debug** panel (the play button with a bug, left sidebar), choose **Run Aux (live backend)** from the dropdown at the top, then press **F5**. (**Run Aux** stays the demo with sample data.) Sign in with your `@nobles.edu` email: tap the link in the email (on the same computer), or type the code if the email shows one.
 9. Make yourself the admin. Back in Supabase, open **SQL Editor → New query**, paste this with your email filled in, and click **Run**:
 
    ```sql
@@ -87,6 +89,8 @@ Free Supabase projects pause after a week with no activity. If that happens, ope
 ---
 
 ## Part D: Turn on search and Last.fm (the server functions)
+
+> **Status:** both functions are already deployed for you, so skip steps 1 and 2. You only need step 3 (the secret keys). When I trigger it, Supabase asks you for each value in its dashboard, so the values never pass through our chat.
 
 Searching all of Spotify and importing Last.fm plays run on Supabase, where the secret keys stay safe. This part uses VS Code's terminal once.
 

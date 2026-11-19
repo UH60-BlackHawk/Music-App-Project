@@ -9,6 +9,13 @@
       "cwd": "${workspaceFolder}"
     },
     {
+      "name": "Run Aux (live backend)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "(test node_modules/.package-lock.json -nt package-lock.json || npm ci --no-audit --no-fund) && npm run dev:live -- --port 5173 --strictPort --open",
+      "cwd": "${workspaceFolder}"
+    },
+    {
       "name": "Run Aux (Chrome, with debugger)",
       "type": "chrome",
       "request": "launch",

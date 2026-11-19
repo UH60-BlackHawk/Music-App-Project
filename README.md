@@ -16,6 +16,8 @@ npm run dev
 
 The app runs at http://127.0.0.1:5173/ (Spotify requires `127.0.0.1` rather than `localhost`).
 
+In VS Code there are two options in Run and Debug: **Run Aux** (sample data) and **Run Aux (live backend)** (connected to the Supabase project; settings in `.env.live`).
+
 Or in VS Code: open this folder and press F5 ("Run Aux"). It installs dependencies, starts the dev server and opens the app in your default browser.
 
 Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 digits work as the code. "Reset demo data" in Settings starts over.

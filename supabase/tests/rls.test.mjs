@@ -12,7 +12,7 @@ await db.connect()
 db.on('notice', () => {})
 
 const dir = new URL('../', import.meta.url)
-await db.query('drop schema if exists public cascade; drop schema if exists auth cascade; create schema public;')
+await db.query('drop schema if exists public cascade; drop schema if exists auth cascade; drop schema if exists private cascade; create schema public;')
 await db.query(readFileSync(new URL('tests/stub_supabase.sql', dir), 'utf8'))
 for (const f of readdirSync(new URL('migrations/', dir)).sort()) await db.query(readFileSync(new URL('migrations/' + f, dir), 'utf8'))
 
