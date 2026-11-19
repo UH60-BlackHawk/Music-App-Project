@@ -4,7 +4,7 @@
     {
       "label": "Aux: install",
       "type": "shell",
-      "command": "npm install",
+      "command": "test node_modules/.package-lock.json -nt package-lock.json || npm ci --no-audit --no-fund",
       "presentation": { "reveal": "silent", "panel": "shared" },
       "problemMatcher": []
     },

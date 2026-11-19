@@ -5,7 +5,7 @@ Aux is a social music app prototype for students at Noble and Greenough School (
 ## Working agreement
 
 - Work in this repo, on the `aux-prototype` branch. `main` only has the initial commit. Commit and push when a piece of work is done; do not open a pull request unless asked.
-- The owner is not an experienced developer. Explain things in plain language, and give exact click-by-click or copy-paste steps. They are on a Mac and run the app from VS Code with F5 (`.vscode/launch.json`).
+- The owner is not an experienced developer. Explain things in plain language, and give exact click-by-click or copy-paste steps. They are on a Mac and run the app from VS Code with F5 (`.vscode/launch.json`). F5 must never modify tracked files (a rewritten `package-lock.json` blocks their pulls), so it installs with `npm ci`, and only when `package-lock.json` is newer than `node_modules`. They can't run git commands confidently: if a pull fails, give exact VS Code clicks.
 - Keep `README.md` in step with the code whenever a feature is added or removed.
 - **Keep this file current, continuously.** The owner asked for this explicitly. Every commit that adds, removes or changes a feature, records a product decision or owner preference, renames something, changes what is simulated, bumps the storage key, or uncovers a technical gotcha must update `CLAUDE.md` in that same commit. Before committing, reread the sections you touched and fix anything that has gone stale. When you tell the owner what you did, say what changed in this file.
 
