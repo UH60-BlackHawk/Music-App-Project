@@ -112,7 +112,7 @@ export default function Welcome() {
           {LIVE
             ? <>
                 <p className="muted">We emailed a sign-in code to <b>{email}</b>. Type it below, or click the link in that email <b>on this computer</b>.</p>
-                <p className="fine">Not there after a minute? Check spam, junk or quarantine.</p>
+                <p className="fine">Not there after a minute? Check your spam or junk folder, and mark it “Not spam” so the next one arrives normally.</p>
               </>
             : <p className="muted">We sent a 6-digit code to <b>{email}</b>.</p>}
           <input className="input code" inputMode="numeric" maxLength={LIVE ? 8 : 6} placeholder="••••••" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} aria-label="Verification code" autoFocus />

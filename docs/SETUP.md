@@ -181,6 +181,12 @@ Some school email systems scan links in incoming mail and "click" them before yo
 
 Sign in to Aux with your `@nobles.edu` address. The email should come from your Aux Gmail within a minute. If it isn't there, check spam or quarantine; if the school's filter holds it, ask the technology office to allow the Aux Gmail address. Then ask a friend to try theirs.
 
+**If it lands in spam** (common at first: the sending account is brand new and the email contains a sign-in link):
+- In your inbox, open it and click **Not spam** / **Not junk**, and add the sender address to your contacts. That teaches your own inbox, not other students'.
+- If you're on **Brevo** with a Gmail sender address, that mismatch is the likely cause. Switch to sending through Gmail itself if you can get an app password.
+- For the whole school, ask the technology office to allow (allowlist) the Aux sender address.
+- The lasting fix is your own domain (below), with its sender records set up, so mail filters can verify it really comes from Aux.
+
 When Aux grows, a more official option is to buy a domain (about $10 a year) and use a sending service like Resend, or to ask the school for an address. The steps above are the same, just with that service's details.
 
 ---
