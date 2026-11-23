@@ -60,7 +60,7 @@ Public values like the Client ID can go in our chat, and I'll add them to `.env.
    2. Invite your `@nobles.edu` address and accept the invite from that inbox.
    Before inviting other students, do **Part E** (sending sign-in emails to everyone).
 7. Put the two values into the app: send them to me in our chat and I'll add them to `.env.development` (or add the lines `VITE_SUPABASE_URL=…` and `VITE_SUPABASE_ANON_KEY=…` to that file yourself). Pull, then restart the app (**Shift+F5**, then **F5**). The app now shows a real sign-in screen.
-8. In VS Code's **Run and Debug** panel (the play button with a bug, left sidebar), choose **Run Aux (live backend)** from the dropdown at the top, then press **F5**. (**Run Aux** stays the demo with sample data.) Sign in with your `@nobles.edu` email: tap the link in the email (on the same computer), or type the code if the email shows one.
+8. In VS Code's **Run and Debug** panel (the play button with a bug, left sidebar), choose **Run Aux (live backend)** from the dropdown at the top, then press **F5**. (**Run Aux** stays the demo with sample data.) Sign in with your `@nobles.edu` email and click the link in the email on the same computer. Aux opens signed in (the old tab follows along too). The email only shows a code once you've done Part E step 4; then you can press **My email has a code instead** and type it.
 9. Make yourself the admin. Back in Supabase, open **SQL Editor → New query**, paste this with your email filled in, and click **Run**:
 
    ```sql

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useStore } from '../store'
 import type { Privacy } from '../types'
 import { Trophy, Wordmark } from '../components/Brand'
@@ -37,6 +37,7 @@ export default function Welcome() {
   const [year, setYear] = useState(2027)
   const [err, setErr] = useState('')
   const [imported, setImported] = useState<number | null>(null)
+  const [showCode, setShowCode] = useState(!LIVE)
   const me = s.users.me
   const spotifyError = useSpotifyStatus((x) => x.error)
 
@@ -66,6 +67,23 @@ export default function Welcome() {
       setStep(named ? 3 : 2)
     } catch (e) { setErr(friendly(e)) } finally { setBusy(false) }
   }
+  // Live mode: the emailed link usually opens in a new tab. Watch for that sign-in so this tab moves on too.
+  useEffect(() => {
+    if (!LIVE || step !== 1 || !remote) return
+    let done = false
+    const check = async () => {
+      if (done) return
+      const user = await remote!.currentUser().catch(() => null)
+      if (!user || done) return
+      done = true
+      const named = await onSignedIn(user)
+      setStep(named ? 3 : 2)
+    }
+    const t = setInterval(check, 2500)
+    window.addEventListener('focus', check)
+    return () => { done = true; clearInterval(t); window.removeEventListener('focus', check) }
+  }, [step])
+
   const connect = () => {
     if (spotifyConfigured) return void beginSpotifyAuth()
     setImported(s.connect())
@@ -93,13 +111,21 @@ export default function Welcome() {
         <form className="card stack" onSubmit={(e) => { e.preventDefault(); submitCode() }}>
           <h2>Check your inbox</h2>
           {LIVE
-            ? <p className="muted">We emailed <b>{email}</b>. Tap the link in that email <b>on this device</b>, or type the code from it below.</p>
+            ? <>
+                <p className="muted">We emailed a sign-in link to <b>{email}</b>. Open that email <b>on this computer</b> and click the link in it. Aux opens signed in, and this page follows along.</p>
+                <p className="fine">Not there after a minute? Check spam, junk or quarantine.</p>
+              </>
             : <p className="muted">We sent a 6-digit code to <b>{email}</b>.</p>}
-          <input className="input code" inputMode="numeric" maxLength={LIVE ? 8 : 6} placeholder="••••••" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} aria-label="Verification code" autoFocus />
-          {err && <p className="error">{err}</p>}
-          <button className="btn primary block" disabled={busy}>{busy ? 'Checking…' : 'Verify'}</button>
+          {showCode ? <>
+            <input className="input code" inputMode="numeric" maxLength={LIVE ? 8 : 6} placeholder="••••••" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} aria-label="Verification code" autoFocus />
+            {err && <p className="error">{err}</p>}
+            <button className="btn primary block" disabled={busy}>{busy ? 'Checking…' : 'Verify'}</button>
+          </> : <>
+            {err && <p className="error">{err}</p>}
+            <button type="button" className="btn block" onClick={() => setShowCode(true)}>My email has a code instead</button>
+          </>}
           {LIVE
-            ? <button type="button" className="btn ghost block" disabled={busy} onClick={() => { setCode(''); setStep(0); setSent(false) }}>{sent ? 'Use a different email or resend' : 'Back'}</button>
+            ? <button type="button" className="btn ghost block" disabled={busy} onClick={() => { setCode(''); setStep(0); setSent(false); setShowCode(false) }}>{sent ? 'Use a different email or resend' : 'Back'}</button>
             : <p className="fine">Prototype: no email is actually sent — any 6 digits work.</p>}
         </form>
       )}

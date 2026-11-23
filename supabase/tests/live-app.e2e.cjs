@@ -19,7 +19,7 @@ const log = (...a) => console.log(...a);
   const signUp = async (p, email, name, genre) => {
     await p.goto(APP); await p.waitForSelector('input[type=email]');
     await p.fill('input[type=email]', email); await p.click('button:has-text("Email me a sign-in link")');
-    await p.waitForSelector('input.code'); await p.fill('input.code', '123456'); await p.click('button:has-text("Verify")');
+    await p.click('text=My email has a code instead'); await p.fill('input.code', '123456'); await p.click('button:has-text("Verify")');
     await p.waitForSelector('text=Who’s got the aux?'); await p.fill('input[aria-label="Your name"]', name); await p.click('button:has-text("Continue")');
     await p.waitForSelector('text=Connect your music'); await p.click('button:has-text("Skip for now")');
     await p.click(`.genre-picker button:has-text("${genre}")`); await p.click('button:has-text("Continue")');
@@ -103,7 +103,7 @@ const log = (...a) => console.log(...a);
   log('Called It badges:', JSON.stringify((await db.query("select handle, badges from profiles order by handle")).rows));
   // Sign out and back in
   await liam.goto(APP + '#/settings'); await liam.click('button:has-text("Sign out")'); await liam.waitForSelector('input[type=email]');
-  await liam.fill('input[type=email]', 'lbrennan27@nobles.edu'); await liam.click('button:has-text("Email me a sign-in link")'); await liam.fill('input.code', '654321'); await liam.click('button:has-text("Verify")');
+  await liam.fill('input[type=email]', 'lbrennan27@nobles.edu'); await liam.click('button:has-text("Email me a sign-in link")'); await liam.click('text=My email has a code instead'); await liam.fill('input.code', '654321'); await liam.click('button:has-text("Verify")');
   await liam.waitForSelector('.homebar', { timeout: 8000 }); log('returning student goes straight to Home:', await liam.locator('.homebar').count() === 1);
   // ---------- Spotify search, pasted links, Last.fm (needs the bridge started with --functions) ----------
   await maya.goto(APP + '#/track/t-luther'); await maya.click('.detail-actions button:has-text("Share")'); await maya.click('.share-person >> nth=0');
@@ -130,6 +130,17 @@ const log = (...a) => console.log(...a);
   log('Last.fm connected, plays imported:', (await db.query(`select count(*)::int n from listens l join profiles p on p.id = l.user_id where p.handle = 'mokafor27' and l.track_id <> 't-juna'`)).rows[0].n, '| address bar cleaned:', !maya.url().includes('token='));
   await maya.goto(APP + '#/profile/me'); await maya.waitForTimeout(500);
   log('profile now playing (from Last.fm):', (await maya.textContent('.nowplaying')).replace(/\s+/g, ' ').trim());
+  // Sign-in link opened in another tab: the tab still on "Check your inbox" follows along
+  const ctx3 = await b.newContext({ viewport: { width: 390, height: 844 } });
+  const waiting = await ctx3.newPage(), linkTab = await ctx3.newPage();
+  await waiting.goto(APP); await waiting.fill('input[type=email]', 'nchen28@nobles.edu'); await waiting.click('button:has-text("Email me a sign-in link")'); await waiting.waitForSelector('text=Check your inbox');
+  log('inbox step leads with the link, code hidden:', (await waiting.textContent('.card')).includes('sign-in link'), !(await waiting.locator('input.code').count()));
+  await linkTab.goto(APP); await linkTab.fill('input[type=email]', 'nchen28@nobles.edu'); await linkTab.click('button:has-text("Email me a sign-in link")');
+  await linkTab.click('text=My email has a code instead'); await linkTab.fill('input.code', '111111'); await linkTab.click('button:has-text("Verify")');
+  await linkTab.waitForSelector('text=Who’s got the aux?');
+  await waiting.bringToFront(); await waiting.waitForSelector('text=Who’s got the aux?', { timeout: 8000 }).catch(() => {});
+  log('waiting tab moved on after sign-in elsewhere:', await waiting.locator('text=Who’s got the aux?').count() === 1);
+  await ctx3.close();
   log(errs.length ? 'logged errors:\n  ' + errs.join('\n  ') : 'no console errors');
   await b.close(); await db.end();
 })().catch(async (e) => { console.error('FAIL', e.message); process.exit(1); });

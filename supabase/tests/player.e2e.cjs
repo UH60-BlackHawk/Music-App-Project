@@ -31,7 +31,7 @@ window.onSpotifyIframeApiReady && 0;
   const p = await ctx.newPage(); const errs = []; p.on('pageerror', (e) => errs.push(e.message));
   const shot = async () => {}
   await p.goto(APP); await p.fill('input[type=email]', 'mokafor27@nobles.edu'); await p.click('button:has-text("Email me a sign-in link")');
-  await p.fill('input.code', '123456'); await p.click('button:has-text("Verify")'); await p.waitForSelector('.homebar');
+  await p.click('text=My email has a code instead'); await p.fill('input.code', '123456'); await p.click('button:has-text("Verify")'); await p.waitForSelector('.homebar');
   // 1) Song with a known Spotify id: the clip Maya posted earlier
   await p.goto(APP + '#/track/t-sp-4xqrdfXkTW4T0RauPLv3WA'); await p.waitForSelector('.clip');
   const startText = await p.textContent('.clip-time');
