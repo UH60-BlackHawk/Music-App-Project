@@ -119,7 +119,7 @@ export const useStore = create<Store>()(
             const known = new Set(mine.map((l) => `${l.trackId}@${l.at}`))
             const fresh = d.plays.filter((p) => !known.has(`${p.trackId}@${p.at}`)).map((p) => ({ id: `me-sp-${p.trackId}-${p.at}`, userId: 'me', trackId: p.trackId, at: p.at }))
             const listens = [...s.listens.filter((l) => l.userId !== 'me'), ...mine, ...fresh].sort((a, b) => b.at - a.at)
-            const sync = { at: Date.now(), plays: (firstReal ? 0 : s.users.me.spotifySync!.plays) + fresh.length, topArtists: d.topArtists, topTracks: d.topTracks }
+            const sync = { at: Date.now(), plays: (firstReal ? 0 : s.users.me.spotifySync?.plays ?? 0) + fresh.length, topArtists: d.topArtists, topTracks: d.topTracks }
             return { catalogExtra, listens, users: { ...s.users, me: { ...s.users.me, spotify: true, nowPlaying: d.nowPlaying, spotifySync: sync } } }
           })
         },

@@ -28,7 +28,7 @@ Sign in with any `@nobles.edu` address (or tap "Use the demo student"); any 6 di
 | --- | --- |
 | School-email sign-in, onboarding, privacy choice | Working (no real email is sent) |
 | Last.fm listening history (live mode) | Students link their Last.fm account (signing in on Last.fm, with a privacy note first); plays import automatically. Works for any number of students. |
-| Spotify connection | Sample data by default. With `VITE_SPOTIFY_CLIENT_ID` set, "Connect Spotify" signs in for real and imports recent plays, top tracks and artists, and what's playing; they feed your profile, charts and recommendations, and resync every 10 minutes or on "Sync now". Tested against simulated Spotify responses, not yet a live Spotify app. Apple Music is not included for now. |
+| Spotify connection | Sample data by default. With `VITE_SPOTIFY_CLIENT_ID` set, "Connect Spotify" signs in for real and imports recent plays, top tracks and artists, and what's playing; they feed your profile, charts and recommendations, and resync every 10 minutes or on "Sync now". If Spotify refuses (for example, an account not on the app's allowed list), the app says why and how to fix it. Tested against simulated Spotify responses, not yet a live Spotify app. Apple Music is not included for now. |
 | Profiles (with optional uploaded photo, cropped in the app), follows (with follower / following lists), home feed, privacy (school / friends / private, pause sharing) | Working |
 | For You + Your Friends Are Into, each with a reason | Working, computed from in-app data only (`src/lib/recs.ts`); favourite genres boost picks |
 | Genre preferences (onboarding and Settings, shown on profiles) and genre filters on Charts and Discover, including a "My genres" shortcut | Working |

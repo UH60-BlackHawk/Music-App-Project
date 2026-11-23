@@ -8,6 +8,30 @@ import type { CatalogExtra, ID } from '../types'
 import { albums, artists, findArtist, findTrack, mapGenre, tracks } from '../data/catalog'
 
 const CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID as string | undefined
+
+/** A Spotify request that failed, with Spotify's own reason. `friendlySpotifyError` turns it into advice. */
+export class SpotifyError extends Error {
+  constructor(public status: number, public reason: string, public code?: string) { super(`Spotify ${status}: ${reason}`) }
+}
+
+/** Plain-language explanation for a failed Spotify connection, with what to do about it. */
+export function friendlySpotifyError(e: unknown): string {
+  if (!(e instanceof SpotifyError)) return 'Couldn’t reach Spotify. Check your internet connection and try again.'
+  const r = e.reason.toLowerCase()
+  if (e.status === 403 && /registered|user management|allowlist|developer\.spotify\.com/.test(r))
+    return 'Spotify says this account isn’t on the app’s allowed list. In the Spotify developer dashboard, open the Aux app → User Management, add the email of the Spotify account you signed in with, then try again.'
+  if (e.status === 403 && /premium/.test(r))
+    return 'Spotify says the app owner needs Spotify Premium for apps in Development Mode.'
+  if (e.status === 403)
+    return `Spotify refused access (${e.reason}). Check the Aux app’s User Management list in the Spotify developer dashboard, and that the app owner has Premium.`
+  if (e.code === 'access_denied') return 'Spotify sign-in was cancelled. Press Connect and choose Agree to link your account.'
+  if (e.code === 'state_mismatch') return 'The Spotify sign-in didn’t finish in this window. Press Connect again and stay in the same tab.'
+  if (e.code === 'invalid_grant') return 'That Spotify sign-in expired before Aux could use it. Press Connect again.'
+  if (e.code === 'invalid_client') return 'Spotify didn’t recognise the app. The Client ID in Aux’s settings may not match your Spotify app.'
+  if (e.status === 401) return 'Spotify signed you out. Press Connect again.'
+  if (e.status === 429) return 'Spotify is busy right now. Wait a minute and try again.'
+  return `Spotify returned an error (${e.status}: ${e.reason}).`
+}
 const REDIRECT = location.origin + location.pathname
 const SCOPES = 'user-read-recently-played user-top-read user-read-currently-playing user-read-playback-state user-modify-playback-state streaming user-read-email user-read-private'
 const KEY = 'aux-spotify'
@@ -34,8 +58,8 @@ export async function beginSpotifyAuth() {
 
 async function tokenRequest(body: Record<string, string>) {
   const res = await fetch('https://accounts.spotify.com/api/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams({ client_id: CLIENT_ID!, ...body }) })
-  if (!res.ok) throw new Error('Spotify token request failed')
-  const j = await res.json()
+  const j = await res.json().catch(() => ({}))
+  if (!res.ok) throw new SpotifyError(res.status, j.error_description || j.error || 'token request failed', j.error)
   const tok: Tok = { access: j.access_token, refresh: j.refresh_token ?? load()?.refresh ?? '', exp: Date.now() + j.expires_in * 1000 - 60e3 }
   localStorage.setItem(KEY, JSON.stringify(tok))
   return tok
@@ -47,7 +71,17 @@ export async function handleSpotifyCallback() {
   const code = params.get('code')
   const verifier = sessionStorage.getItem('aux-pkce')
   const state = sessionStorage.getItem('aux-spotify-state')
-  if (!CLIENT_ID || !code || !verifier || !state || params.get('state') !== state) return false
+  const denied = params.get('error')
+  if (denied && params.get('state')) {
+    history.replaceState(null, '', location.pathname + location.hash)
+    throw new SpotifyError(400, denied === 'access_denied' ? 'you pressed Cancel' : denied, denied)
+  }
+  if (!CLIENT_ID || !code || !params.get('state')) return false
+  if (!verifier || !state || params.get('state') !== state) {
+    // Came back from Spotify, but this tab didn't start the sign-in (or the browser cleared it).
+    history.replaceState(null, '', location.pathname + location.hash)
+    throw new SpotifyError(400, 'sign-in started in another tab or window', 'state_mismatch')
+  }
   sessionStorage.removeItem('aux-pkce')
   sessionStorage.removeItem('aux-spotify-state')
   history.replaceState(null, '', location.pathname + location.hash)
@@ -63,7 +97,13 @@ async function token() {
 }
 async function api(path: string, init: RequestInit = {}) {
   const res = await fetch('https://api.spotify.com/v1' + path, { ...init, headers: { Authorization: `Bearer ${await token()}`, 'Content-Type': 'application/json' } })
-  if (!res.ok) throw new Error(`Spotify ${res.status}`)
+  if (!res.ok) {
+    // Spotify sends JSON errors, except some Development Mode refusals, which are plain text.
+    const text = await res.text().catch(() => '')
+    let j: any = null
+    try { j = JSON.parse(text) } catch { /* plain text */ }
+    throw new SpotifyError(res.status, j?.error?.message || j?.error_description || text.trim().slice(0, 200) || res.statusText || 'request failed')
+  }
   return res.status === 204 ? null : res.json().catch(() => null)
 }
 
@@ -87,12 +127,17 @@ export interface SpotifyImport {
  * reuse the existing id so charts, ratings and classmates' data line up.
  */
 export async function importSpotify(): Promise<SpotifyImport> {
+  // Each request may fail on its own (Spotify can refuse one endpoint); keep whatever works, but if
+  // everything fails, report the first reason so the student sees why.
+  let firstError: unknown = null
+  const keep = (e: unknown) => { firstError ??= e; return null }
   const [recent, topT, topA, current] = await Promise.all([
-    api('/me/player/recently-played?limit=50'),
-    api('/me/top/tracks?limit=50&time_range=short_term').catch(() => null),
-    api('/me/top/artists?limit=20&time_range=short_term').catch(() => null),
-    api('/me/player/currently-playing').catch(() => null),
+    api('/me/player/recently-played?limit=50').catch(keep),
+    api('/me/top/tracks?limit=50&time_range=short_term').catch(keep),
+    api('/me/top/artists?limit=20&time_range=short_term').catch(keep),
+    api('/me/player/currently-playing').catch(keep),
   ])
+  if (firstError && !recent && !topT && !topA) throw firstError
   const recentItems: { track: SpTrack; played_at: string }[] = (recent?.items ?? []).filter((i: any) => i?.track?.id)
   const topTracks: SpTrack[] = (topT?.items ?? []).filter((t: any) => t?.id)
   const topArtists: SpArtist[] = topA?.items ?? []

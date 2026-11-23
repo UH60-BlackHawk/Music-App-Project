@@ -5,6 +5,7 @@ import { albums, artists, tracks } from '../data/catalog'
 import { avgRating, dailyPick, feed, inbox, timeAgo, unreadCount, type FeedItem } from '../lib/select'
 import { ShareButton } from '../components/Share'
 import { useLive } from '../services/live'
+import { useSpotifyStatus } from '../services/spotifySync'
 import { LIVE } from '../services/mode'
 import { spotifyConfigured } from '../services/spotify'
 import { forYou } from '../lib/recs'
@@ -92,6 +93,7 @@ export default function Home() {
   const unread = useMemo(() => unreadCount(s), [s.recs, s.blocks])
   const me = s.users.me
   const syncError = useLive((l) => l.error)
+  const spotifyError = useSpotifyStatus((x) => x.error)
   return (
     <>
       <header className="homebar">
@@ -106,8 +108,9 @@ export default function Home() {
       </header>
 
       {syncError && <p className="banner static" role="alert">Couldn’t save a change: {syncError} <button className="btn sm" onClick={() => useLive.setState({ error: '' })}>Dismiss</button></p>}
+      {spotifyError && <Link to="/settings" className="banner" role="alert">Spotify didn’t connect: {spotifyError} <b>Settings</b></Link>}
       {me.sharingPaused && <Link to="/settings" className="banner">Sharing is paused — friends can’t see your listening. <b>Resume</b></Link>}
-      {!me.spotify && (!LIVE || spotifyConfigured) && <Link to="/settings" className="banner">Connect Spotify to share what you’re playing. <b>Connect</b></Link>}
+      {!me.spotify && !spotifyError && (!LIVE || spotifyConfigured) && <Link to="/settings" className="banner">Connect Spotify to share what you’re playing. <b>Connect</b></Link>}
 
       <Daily />
 

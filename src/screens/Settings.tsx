@@ -4,7 +4,7 @@ import { useStore } from '../store'
 import { THEME_CATEGORIES, THEMES, Trophy, Wordmark } from '../components/Brand'
 import { Avatar, GenrePicker, Icon, Section, Toggle, TopBar } from '../components/ui'
 import { beginSpotifyAuth, spotifyConfigured, spotifyLive, spotifyLogout } from '../services/spotify'
-import { syncSpotify } from '../services/spotifySync'
+import { syncSpotify, useSpotifyStatus } from '../services/spotifySync'
 import { LIVE } from '../services/mode'
 import { LastfmConnect } from '../components/Lastfm'
 import { lastfmConfigured } from '../services/lastfm'
@@ -16,11 +16,11 @@ export default function Settings() {
   const s = useStore()
   const me = s.users.me
   const [syncing, setSyncing] = useState(false)
-  const [syncErr, setSyncErr] = useState('')
-  const syncNow = () => { setSyncing(true); setSyncErr(''); syncSpotify(true).catch(() => setSyncErr('Couldn’t reach Spotify. Try again, or disconnect and reconnect.')).finally(() => setSyncing(false)) }
+  const spotifyError = useSpotifyStatus((x) => x.error)
+  const syncNow = () => { setSyncing(true); syncSpotify(true).catch(() => {}).finally(() => setSyncing(false)) }
 
   const toggleSpotify = () => {
-    if (me.spotify) { s.disconnect(); spotifyLogout() }
+    if (me.spotify || spotifyLive()) { s.disconnect(); spotifyLogout(); useSpotifyStatus.setState({ error: '' }) }
     else if (spotifyConfigured) void beginSpotifyAuth()
     else s.connect()
   }
@@ -81,13 +81,13 @@ export default function Settings() {
         <div className="card stack">
           <LastfmConnect />
           {(!LIVE || spotifyConfigured) && <div className="toggle-row">
-            <span><b>Spotify</b><small>{!me.spotify ? 'Not connected' : me.spotifySync ? `Synced ${timeAgo(me.spotifySync.at) === 'now' ? 'just now' : `${timeAgo(me.spotifySync.at)} ago`} · ${me.spotifySync.plays} real plays imported` : 'Connected · sample listening data'}</small></span>
-            <button className={`btn sm ${me.spotify ? '' : 'primary'}`} onClick={toggleSpotify}>{me.spotify ? 'Disconnect' : 'Connect'}</button>
+            <span><b>Spotify</b><small>{!me.spotify ? 'Not connected' : me.spotifySync ? `Synced ${timeAgo(me.spotifySync.at) === 'now' ? 'just now' : `${timeAgo(me.spotifySync.at)} ago`} · ${me.spotifySync.plays} real plays imported` : LIVE ? 'Connected' : 'Connected · sample listening data'}</small></span>
+            <button className={`btn sm ${me.spotify ? '' : 'primary'}`} onClick={toggleSpotify}>{me.spotify || spotifyLive() ? 'Disconnect' : 'Connect'}</button>
           </div>}
           {LIVE && spotifyConfigured && !me.spotify && <p className="fine">Spotify sign-in is limited to a few testers for now.</p>}
           {LIVE && !spotifyConfigured && !lastfmConfigured && <p className="fine">No music services are set up yet. Everything else works without one.</p>}
-          {me.spotify && spotifyLive() && <button className="btn block" onClick={syncNow} disabled={syncing}>{syncing ? 'Syncing…' : 'Sync now'}</button>}
-          {syncErr && <p className="error">{syncErr}</p>}
+          {spotifyLive() && (me.spotify || spotifyError) && <button className="btn block" onClick={syncNow} disabled={syncing}>{syncing ? 'Syncing…' : spotifyError && !me.spotify ? 'Try again' : 'Sync now'}</button>}
+          {spotifyError && <p className="error">{spotifyError}</p>}
           {!LIVE && !spotifyConfigured && <p className="fine">Prototype mode: connections use sample listening data.</p>}
         </div>
       </Section>

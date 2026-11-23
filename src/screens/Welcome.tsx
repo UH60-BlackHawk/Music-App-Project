@@ -8,6 +8,7 @@ import { LIVE } from '../services/mode'
 import { remote } from '../services/remote'
 import { onSignedIn } from '../services/live'
 import { LastfmConnect } from '../components/Lastfm'
+import { useSpotifyStatus } from '../services/spotifySync'
 import { lastfmConfigured } from '../services/lastfm'
 
 export const SCHOOL_DOMAIN = 'nobles.edu'
@@ -37,6 +38,7 @@ export default function Welcome() {
   const [err, setErr] = useState('')
   const [imported, setImported] = useState<number | null>(null)
   const me = s.users.me
+  const spotifyError = useSpotifyStatus((x) => x.error)
 
   const submitEmail = async () => {
     if (!new RegExp(`^[a-z0-9._-]+@${SCHOOL_DOMAIN.replace('.', '\\.')}$`, 'i').test(email.trim()))
@@ -122,6 +124,7 @@ export default function Welcome() {
               <Icon name={me.spotify ? 'check' : 'headphones'} size={18} /> {me.spotify ? 'Spotify connected' : 'Connect Spotify'}
             </button>
           )}
+          {spotifyError && <p className="error">{spotifyError}</p>}
           {LIVE && <LastfmConnect compact />}
           {LIVE && spotifyConfigured && <p className="fine">Spotify sign-in is limited to a few testers for now. Everyone can still share, rate and message songs.</p>}
           {LIVE && !spotifyConfigured && !lastfmConfigured && <p className="fine">You can connect a music account later in Settings. Everything else works without one.</p>}

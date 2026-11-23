@@ -26,6 +26,8 @@ Each part takes about 10 minutes. Parts A and B can be done in either order; Par
 6. Put the Client ID into the app. **Done:** it's in `.env.development` in the project (public settings the app reads when you press F5). Pull the latest code, then restart the app: press **Shift+F5**, then **F5**.
 7. The app now opens at `http://127.0.0.1:5173/`. Your old demo was saved under `localhost`, so you'll sign in once more with the demo student. Then go to **Settings → Connected account → Connect** and log in to Spotify.
 
+**If Connect Spotify doesn't stick:** Aux now says why, in a box on the Home screen and in Settings. If it says the account isn't on the allowed list, go to <https://developer.spotify.com/dashboard> → click the **Aux** app → **User Management** → **Add user**, and enter the name and the **email of the Spotify account you log in to Spotify with** (that can be different from your school email). Then press **Try again** in Aux's Settings. The app owner's Spotify account also needs an active **Premium** plan.
+
 Public values like the Client ID can go in our chat, and I'll add them to `.env.development` for you. Never share the client secret: it goes only into Supabase (Part D).
 
 ---
