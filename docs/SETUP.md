@@ -60,7 +60,7 @@ Public values like the Client ID can go in our chat, and I'll add them to `.env.
    2. Invite your `@nobles.edu` address and accept the invite from that inbox.
    Before inviting other students, do **Part E** (sending sign-in emails to everyone).
 7. Put the two values into the app: send them to me in our chat and I'll add them to `.env.development` (or add the lines `VITE_SUPABASE_URL=…` and `VITE_SUPABASE_ANON_KEY=…` to that file yourself). Pull, then restart the app (**Shift+F5**, then **F5**). The app now shows a real sign-in screen.
-8. In VS Code's **Run and Debug** panel (the play button with a bug, left sidebar), choose **Run Aux (live backend)** from the dropdown at the top, then press **F5**. (**Run Aux** stays the demo with sample data.) Sign in with your `@nobles.edu` email and click the link in the email on the same computer. Aux opens signed in (the old tab follows along too). The email only shows a code once you've done Part E step 4; then you can press **My email has a code instead** and type it.
+8. In VS Code's **Run and Debug** panel (the play button with a bug, left sidebar), choose **Run Aux (live backend)** from the dropdown at the top, then press **F5**. (**Run Aux** stays the demo with sample data.) Sign in with your `@nobles.edu` email and click the link in the email on the same computer. Aux opens signed in (the old tab follows along too). Or type the code from the email (once Part E is done).
 9. Make yourself the admin. Back in Supabase, open **SQL Editor → New query**, paste this with your email filled in, and click **Run**:
 
    ```sql
@@ -131,6 +131,8 @@ If you ever change code in `supabase/functions/`, run the two `deploy` lines aga
 ---
 
 ## Part E: Sending sign-in emails to everyone (custom SMTP)
+
+> **Status: done** (custom SMTP and the code in the email).
 
 Supabase's built-in email only reaches your Supabase team, about 2 emails an hour. To email every student, Supabase sends through a mailbox you provide ("SMTP"). The simplest free option without owning a website domain is a Gmail account just for Aux.
 

@@ -37,7 +37,6 @@ export default function Welcome() {
   const [year, setYear] = useState(2027)
   const [err, setErr] = useState('')
   const [imported, setImported] = useState<number | null>(null)
-  const [showCode, setShowCode] = useState(!LIVE)
   const me = s.users.me
   const spotifyError = useSpotifyStatus((x) => x.error)
 
@@ -112,20 +111,15 @@ export default function Welcome() {
           <h2>Check your inbox</h2>
           {LIVE
             ? <>
-                <p className="muted">We emailed a sign-in link to <b>{email}</b>. Open that email <b>on this computer</b> and click the link in it. Aux opens signed in, and this page follows along.</p>
+                <p className="muted">We emailed a sign-in code to <b>{email}</b>. Type it below, or click the link in that email <b>on this computer</b>.</p>
                 <p className="fine">Not there after a minute? Check spam, junk or quarantine.</p>
               </>
             : <p className="muted">We sent a 6-digit code to <b>{email}</b>.</p>}
-          {showCode ? <>
-            <input className="input code" inputMode="numeric" maxLength={LIVE ? 8 : 6} placeholder="••••••" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} aria-label="Verification code" autoFocus />
-            {err && <p className="error">{err}</p>}
-            <button className="btn primary block" disabled={busy}>{busy ? 'Checking…' : 'Verify'}</button>
-          </> : <>
-            {err && <p className="error">{err}</p>}
-            <button type="button" className="btn block" onClick={() => setShowCode(true)}>My email has a code instead</button>
-          </>}
+          <input className="input code" inputMode="numeric" maxLength={LIVE ? 8 : 6} placeholder="••••••" value={code} onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))} aria-label="Verification code" autoFocus />
+          {err && <p className="error">{err}</p>}
+          <button className="btn primary block" disabled={busy}>{busy ? 'Checking…' : 'Verify'}</button>
           {LIVE
-            ? <button type="button" className="btn ghost block" disabled={busy} onClick={() => { setCode(''); setStep(0); setSent(false); setShowCode(false) }}>{sent ? 'Use a different email or resend' : 'Back'}</button>
+            ? <button type="button" className="btn ghost block" disabled={busy} onClick={() => { setCode(''); setStep(0); setSent(false) }}>{sent ? 'Use a different email or resend' : 'Back'}</button>
             : <p className="fine">Prototype: no email is actually sent — any 6 digits work.</p>}
         </form>
       )}
